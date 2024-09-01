@@ -1,5 +1,7 @@
 # Card-Tab
 ✨一个部署在CF的轻量化导航页面，可移动卡片式书签，方便管理
+
+
 五步即可完成部署：
 1. 登录 Cloudflare：   https://www.cloudflare.com/  创建workers，复制workers-js 的代码，编辑
    好自定义的网站分类，部署即可
