@@ -1,6 +1,6 @@
 # Card-Tab 书签卡片式管理，进入管理模式可以自由移动书签位置，添加和删除书签，支持自定义网站分类，支持切换黑暗色主题
 
-演示站点： https://demo.usgk.us.kg    密码：admin
+演示站点： https://demo.usgk.us.kg    密码：admin  （如果无法移动卡片，请在网页空白处按住鼠标左键滑动一下，再尝试移动卡片）
 
 ![image](https://github.com/user-attachments/assets/27ed657c-5b88-4793-9c9d-76bb1ba93b81)
 
