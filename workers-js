@@ -3,7 +3,7 @@ const HTML_CONTENT = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>导航网页</title>
+<title>Card Tab</title>
 <style>
 body {
 font-family: Arial, sans-serif;
@@ -13,48 +13,14 @@ margin: 0;
 padding: 20px;
 display: flex;
 flex-direction: column;
-align-items: center; /* 恢复页面内容居中 */
+align-items: center;
 transition: background-color 0.3s ease;
 }
 .card-container {
 display: grid;
 grid-template-columns: repeat(6, 1fr);
-gap: 10px; /* 设置卡片之间的间距 */
+gap: 10px;
 }
-// .card {
-// display: flex;
-// flex-direction: column;
-// align-items: center;
-// padding: 20px;
-// border-radius: 10px;
-// box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-// width: 200px;
-// text-align: center;
-// }
-
-// .card-header {
-// display: flex;
-// align-items: center;
-// justify-content: center;
-// }
-
-// .card-icon {
-// width: 24px;
-// height: 24px;
-// margin-right: 12px;
-// }
-
-// .card-title {
-// font-size: 18px;
-// font-weight: bold;
-// }
-
-// .card-url {
-// color: #555;
-// font-size: 14px;
-// word-break: break-all;
-// margin-top: 8px; /* 为 URL 和标题之间添加间距 */
-// }
 .card {
 display: flex;
 flex-direction: column;
@@ -115,7 +81,7 @@ text-align: center;
 font-size: 14px;
 line-height: 20px;
 cursor: pointer;
-display: none; /* 默认隐藏 */
+display: none;
 }
 .admin-controls {
 position: fixed;
@@ -145,7 +111,7 @@ width: 40px;
 height: 40px;
 text-align: center;
 font-size: 24px;
-line-height: 40px; /* 确保符号垂直居中 */
+line-height: 40px;
 cursor: pointer;
 margin: 0 10px;
 }
@@ -242,12 +208,12 @@ margin-bottom: 10px;
 </div>
 
 <script>
-let isAdmin = false; // 管理模式标志
-let removeMode = false; // 删除模式标志
-let isDarkTheme = false; // 主题模式
-let links = []; // 存储所有链接
+let isAdmin = false; 
+let removeMode = false; 
+let isDarkTheme = false; 
+let links = []; 
 const categories = {
-"常用网站": [],
+"常用网站": [],                   // **编辑自己的网站分类**
 "工具导航": [],
 "游戏娱乐": [],
 "影音视听": [],
@@ -258,12 +224,10 @@ async function loadLinks() {
 const response = await fetch('/api/getLinks?userId=testUser');
 links = await response.json();
 
-// 重置 categories 对象
 Object.keys(categories).forEach(key => {
 categories[key] = [];
 });
 
-// 将链接分类到 categories 对象
 links.forEach(link => {
 if (categories[link.category]) {
 categories[link.category].push(link);
@@ -289,7 +253,7 @@ title.textContent = category;
 
 const cardContainer = document.createElement('div');
 cardContainer.className = 'card-container';
-cardContainer.id = category; // 将 id 设置为与 category 相同的值
+cardContainer.id = category;
 
 section.appendChild(title);
 section.appendChild(cardContainer);
@@ -330,7 +294,7 @@ url.textContent = link.url;
 card.appendChild(cardTop);
 card.appendChild(url);
 
-// 简化版本的 URL 检查和修正
+//  URL 检查和修正
 function correctUrl(url) {
 if (url.startsWith('http://') || url.startsWith('https://')) {
 return url;
@@ -416,7 +380,7 @@ categories[category] = [];
 }
 categories[category].push(newLink);
 
-const container = document.getElementById(category); // 直接使用 category 获取容器元素
+const container = document.getElementById(category);
 createCard(newLink, container);
 
 saveLinks();
@@ -448,7 +412,7 @@ let draggedCard = null;
 function dragStart(event) {
 if (!isAdmin) return;
 draggedCard = event.target;
-draggedCard.classList.add('dragging'); // 添加拖拽中的样式
+draggedCard.classList.add('dragging');
 event.dataTransfer.effectAllowed = "move";
 }
 
@@ -472,13 +436,13 @@ container.insertBefore(draggedCard, target.nextSibling);
 function drop(event) {
 if (!isAdmin) return;
 event.preventDefault();
-draggedCard.classList.remove('dragging'); // 移除拖拽中的样式
+draggedCard.classList.remove('dragging');
 draggedCard = null;
-saveCardOrder(); // 拖拽完成后保存卡片顺序
+saveCardOrder();
 }
 
 // function dragEnd(event) {
-// draggedCard.classList.remove('dragging'); // 移除拖拽中的样式
+// draggedCard.classList.remove('dragging');
 function dragEnd(event) {
 if (draggedCard) {
 draggedCard.classList.remove('dragging');
@@ -502,7 +466,7 @@ newLinks.push(link);
 });
 });
 
-links = newLinks; // 更新全局 links 数组
+links = newLinks;
 
 await fetch('/api/saveOrder', {
 method: 'POST',
@@ -518,42 +482,39 @@ const adminBtn = document.getElementById('admin-mode-btn');
 const addRemoveControls = document.querySelector('.add-remove-controls');
 
 if (!isAdmin) {
-// 验证密码
 verifyPassword(passwordInput.value)
 .then(isValid => {
 if (isValid) {
 isAdmin = true;
-adminBtn.textContent = "退出管理模式"; // 按钮文字切换
+adminBtn.textContent = "退出管理模式";
 alert('已进入管理模式');
-addRemoveControls.style.display = 'block'; // 显示加号和减号按钮
+addRemoveControls.style.display = 'block';
 reloadCardsAsAdmin();
 } else {
 alert('密码错误');
 }
 });
 } else {
-// 退出管理模式
 isAdmin = false;
-removeMode = false; // 重置删除模式
-adminBtn.textContent = "进入管理模式"; // 按钮文字切换
+removeMode = false;
+adminBtn.textContent = "进入管理模式";
 alert('已退出管理模式');
-addRemoveControls.style.display = 'none'; // 隐藏加号和减号按钮
+addRemoveControls.style.display = 'none';
 const deleteButtons = document.querySelectorAll('.delete-btn');
-deleteButtons.forEach(btn => btn.style.display = 'none'); // 隐藏删除按钮
+deleteButtons.forEach(btn => btn.style.display = 'none');
 reloadCardsAsAdmin();
 }
 
-// 清空密码输入框
 passwordInput.value = '';
 }
 
 function reloadCardsAsAdmin() {
 document.querySelectorAll('.card-container').forEach(container => {
-container.innerHTML = ''; // 清空现有卡片
+container.innerHTML = '';
 });
 loadLinks().then(() => {
 if (isDarkTheme) {
-applyDarkTheme(); // 在加载卡片后重新应用黑暗主题
+applyDarkTheme();
 }
 });
 }
@@ -579,10 +540,10 @@ document.getElementById('dialog-overlay').style.display = 'none';
 
 
 function toggleRemoveMode() {
-removeMode = !removeMode; // 切换删除模式
+removeMode = !removeMode;
 const deleteButtons = document.querySelectorAll('.delete-btn');
 deleteButtons.forEach(btn => {
-btn.style.display = removeMode ? 'block' : 'none'; // 根据删除模式显示/隐藏删除按钮
+btn.style.display = removeMode ? 'block' : 'none';
 });
 }
 
@@ -639,25 +600,24 @@ async fetch(request, env) {
 const url = new URL(request.url);
 
 if (url.pathname === '/') {
-// 返回 HTML 内容
 return new Response(HTML_CONTENT, {
 headers: { 'Content-Type': 'text/html' }
 });
 }
 
-if (url.pathname === '/api/getLinks') { // 修改为 getLinks
+if (url.pathname === '/api/getLinks') {
 const userId = url.searchParams.get('userId');
-const links = await env.CARD_ORDER.get(userId); // 获取 links 而非 order
+const links = await env.CARD_ORDER.get(userId); 
 return new Response(links || JSON.stringify([]), { status: 200 });
 }
 
-if (url.pathname === '/api/saveOrder' && request.method === 'POST') { // 保留此路径用于保存 links
-const { userId, links } = await request.json(); // 保存 links 而非 order
+if (url.pathname === '/api/saveOrder' && request.method === 'POST') {
+const { userId, links } = await request.json();
 await env.CARD_ORDER.put(userId, JSON.stringify(links));
 return new Response(JSON.stringify({ success: true }), { status: 200 });
 }
 
-if (url.pathname === '/api/verifyPassword' && request.method === 'POST') { // 新增路径用于验证密码
+if (url.pathname === '/api/verifyPassword' && request.method === 'POST') { 
 const { password } = await request.json();
 const isValid = password === env.ADMIN_PASSWORD; // 从环境变量中获取密码
 return new Response(JSON.stringify({ valid: isValid }), {
@@ -669,3 +629,4 @@ headers: { 'Content-Type': 'application/json' },
 return new Response('Not Found', { status: 404 });
 }
 };
+
