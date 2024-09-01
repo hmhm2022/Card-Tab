@@ -9,6 +9,7 @@
 ![image](https://github.com/user-attachments/assets/aff36d9a-4f02-443d-8d3b-f76f8bd41849)
 
 
+#部署方法：
 五步即可完成部署：
 1. 登录 Cloudflare：   https://www.cloudflare.com/  创建workers，复制workers-js 的代码，编辑
    好自定义的网站分类，然后部署
