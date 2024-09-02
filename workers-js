@@ -206,6 +206,10 @@ margin-bottom: 10px;
 <button onclick="hideAddDialog()">取消</button>
 </div>
 </div>
+<div class="copyright">
+    <!--    请不要删除 -->
+    <p>   项目地址： <a href="https://github.com/hmhm2022/Card-Tab" target="_blank">GitHub</a>   烦请点个star！
+</div>
 
 <script>
 let isAdmin = false; 
