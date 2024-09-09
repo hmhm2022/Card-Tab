@@ -5,24 +5,24 @@
 2、增加网站分类管理，现在你无需通过改动代码即可在页面进行网站分类的添加和删除操作
 3、增加搜索框和一言接口
 
-#注意：如果你已经部署过前版导航，更新workes代码后讲无法看到之前保存的书签，需重新添加书签，望知悉！
+## 注意：如果你已经部署过前版导航，更新workes代码后讲无法看到之前保存的书签，需重新添加书签，望知悉！
 
 演示站点： https://demo.usgk.us.kg    密码：admin
 
+未登录界面
 ![image](https://github.com/user-attachments/assets/dd0cad75-11ce-4691-804f-b4dff5ae2cde)
 
+已登录界面（黑暗主题）
 ![image](https://github.com/user-attachments/assets/c18f0df4-8e00-45e6-84db-30f81b545d15)
 
+设置界面
 ![image](https://github.com/user-attachments/assets/dc91458a-840c-41f9-9e50-261471320f81)
-
-
 
 
 
 # 部署方法：
 五步即可完成部署：
-1. 登录 Cloudflare：   https://www.cloudflare.com/  创建workers，复制workers-js 的代码，编辑
-   好自定义的网站分类，然后部署
+1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制update-workers的代码，然后部署
 ![image](https://github.com/user-attachments/assets/dc7996e6-2631-46d1-9c0c-c6999fc1e1ce)
 
 2. 新建一个KV存储
