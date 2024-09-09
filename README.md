@@ -27,13 +27,13 @@
 #### 1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制update-workers的代码，然后部署
 ![image](https://github.com/user-attachments/assets/c067105b-91ee-43d5-90a9-806e5de5fe16)
 
-#### 2. 新建一个KV存储
+#### 2. 新建一个名为KV存储
 ![image](https://github.com/user-attachments/assets/706a7735-b47a-4f66-bdb4-827c38be692b)
 
-#### 3. 添加环境变量，用于设置后台管理密码
+#### 3. 添加环境变量，用于设置后台管理密码。变量名为ADMIN_PASSWORD，值your_password换成你自己的密码
 ![image](https://github.com/user-attachments/assets/532dcb8f-dc30-4ca9-aac9-21ef546bf367)
 
-#### 4. 将workers与新建的KV存储绑定，用于存储书签
+#### 4. 将workers的CARD_ORDER变量与新建的KV存储绑定，用于存储书签
 ![image](https://github.com/user-attachments/assets/9b166809-5b1e-451e-be99-253f6e60be54)
 
 #### 5. 添加域名
