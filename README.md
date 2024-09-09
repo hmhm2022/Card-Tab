@@ -7,9 +7,9 @@
 
 ### 注意：如果你已经部署过前版导航，更新workes代码后讲无法看到之前保存的书签，需重新添加书签，望知悉！
 
-### 2024.09.02 发布（第一版代码保留在worker-js文件）
+### 2024.09.02 发布 （第一版代码保留在worker-js文件）
 
-演示站点： https://demo.usgk.us.kg    密码：admin
+### 演示站点： https://demo.usgk.us.kg    密码：admin
 
 #### 未登录界面
 ![image](https://github.com/user-attachments/assets/dd0cad75-11ce-4691-804f-b4dff5ae2cde)
@@ -23,18 +23,18 @@
 
 
 # 部署方法：
-五步即可完成部署：
-1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制update-workers的代码，然后部署
+#### 五步即可完成部署：
+#### 1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制update-workers的代码，然后部署
 ![image](https://github.com/user-attachments/assets/c067105b-91ee-43d5-90a9-806e5de5fe16)
 
-2. 新建一个KV存储
+#### . 新建一个KV存储
 ![image](https://github.com/user-attachments/assets/706a7735-b47a-4f66-bdb4-827c38be692b)
 
-3. 添加环境变量，用于设置后台管理密码
+#### . 添加环境变量，用于设置后台管理密码
 ![image](https://github.com/user-attachments/assets/532dcb8f-dc30-4ca9-aac9-21ef546bf367)
 
-4. 将workers与新建的KV存储绑定，用于存储书签
+#### . 将workers与新建的KV存储绑定，用于存储书签
 ![image](https://github.com/user-attachments/assets/9b166809-5b1e-451e-be99-253f6e60be54)
 
-5. 添加域名
+#### 5. 添加域名
 ![image](https://github.com/user-attachments/assets/4f23eab6-e94c-49b1-9198-3c8e05dffa8a)
