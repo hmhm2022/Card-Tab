@@ -1,12 +1,22 @@
 # Card-Tab 书签卡片式管理，进入管理模式可以自由移动书签位置，添加和删除书签，支持自定义网站分类，支持切换黑暗色主题
 
-演示站点： https://demo.usgk.us.kg    密码：admin  （如果无法移动卡片，请在网页空白处按住鼠标左键滑动一下，再尝试移动卡片）
+2024.09.09 更新：
+1、增加隐私书签，登录后可见
+2、增加网站分类管理，现在你无需通过改动代码即可在页面进行网站分类的添加和删除操作
+3、增加搜索框和一言接口
 
-![image](https://github.com/user-attachments/assets/27ed657c-5b88-4793-9c9d-76bb1ba93b81)
+#注意：如果你已经部署过前版导航，更新workes代码后讲无法看到之前保存的书签，需重新添加书签，望知悉！
 
-![image](https://github.com/user-attachments/assets/e8d49bee-7102-48b6-aabc-8722378302c3)
+演示站点： https://demo.usgk.us.kg    密码：admin
 
-![image](https://github.com/user-attachments/assets/aff36d9a-4f02-443d-8d3b-f76f8bd41849)
+![image](https://github.com/user-attachments/assets/dd0cad75-11ce-4691-804f-b4dff5ae2cde)
+
+![image](https://github.com/user-attachments/assets/c18f0df4-8e00-45e6-84db-30f81b545d15)
+
+![image](https://github.com/user-attachments/assets/dc91458a-840c-41f9-9e50-261471320f81)
+
+
+
 
 
 # 部署方法：
