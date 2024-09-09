@@ -1,9 +1,9 @@
 # Card-Tab 书签卡片式管理，进入管理模式可以自由移动书签位置，添加和删除书签，支持自定义网站分类，支持切换黑暗色主题
 
-2024.09.09 更新：
-1、增加隐私书签，登录后可见
-2、增加网站分类管理，现在你无需通过改动代码即可在页面进行网站分类的添加和删除操作
-3、增加搜索框和一言接口
+### 2024.09.09 更新：
+### 1、增加隐私书签，登录后可见
+### 2、增加网站分类管理，现在你无需通过改动代码即可在页面进行网站分类的添加和删除操作
+### 3、增加搜索框和一言接口
 
 ## 注意：如果你已经部署过前版导航，更新workes代码后讲无法看到之前保存的书签，需重新添加书签，望知悉！
 
@@ -23,7 +23,7 @@
 # 部署方法：
 五步即可完成部署：
 1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制update-workers的代码，然后部署
-![image](https://github.com/user-attachments/assets/dc7996e6-2631-46d1-9c0c-c6999fc1e1ce)
+![image](https://github.com/user-attachments/assets/c067105b-91ee-43d5-90a9-806e5de5fe16)
 
 2. 新建一个KV存储
 ![image](https://github.com/user-attachments/assets/706a7735-b47a-4f66-bdb4-827c38be692b)
