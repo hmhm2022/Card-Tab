@@ -322,7 +322,7 @@ const HTML_CONTENT = `
             <div class="search-container">
                 <div class="search-bar">
                     <input type="text" id="search-input" placeholder="">
-                    <button id="search-button">??</button>
+                    <button id="search-button">🔍</button>
                 </div>
                 <div class="search-engines">
                     <button class="search-engine" data-engine="baidu">百度</button>
