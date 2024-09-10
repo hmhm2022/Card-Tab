@@ -351,7 +351,7 @@ const HTML_CONTENT = `
         <!-- 分类和卡片容器 -->
         <div id="sections-container"></div>
         <!-- 主题切换按钮 -->
-        <button id="theme-toggle" onclick="toggleTheme()">?</button>
+        <button id="theme-toggle" onclick="toggleTheme()">◑</button>
         <!-- 添加链接对话框 -->
         <div id="dialog-overlay">
             <div id="dialog-box">
