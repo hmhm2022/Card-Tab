@@ -490,30 +490,30 @@ const HTML_CONTENT = `
             publicLinks = publicLinks.filter(link => link.category !== category);
             privateLinks = privateLinks.filter(link => link.category !== category);
             updateCategorySelect();
-            renderCategories();
             saveLinks();
+            renderCategories();
             logAction('删除分类', { category });
         }
-    }
+    }    
 
     // 渲染分类(不重新加载链接)
     function renderCategories() {
         const container = document.getElementById('sections-container');
         container.innerHTML = '';
-
+    
         Object.keys(categories).forEach(category => {
             const section = document.createElement('div');
             section.className = 'section';
-
+    
             const titleContainer = document.createElement('div');
             titleContainer.className = 'section-title-container';
-
+    
             const title = document.createElement('div');
             title.className = 'section-title';
             title.textContent = category;
-
+    
             titleContainer.appendChild(title);
-
+    
             if (isAdmin) {
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = '删除分类';
@@ -522,28 +522,25 @@ const HTML_CONTENT = `
                 deleteBtn.onclick = () => deleteCategory(category);
                 titleContainer.appendChild(deleteBtn);
             }
-
+    
             const cardContainer = document.createElement('div');
             cardContainer.className = 'card-container';
             cardContainer.id = category;
-
+    
             section.appendChild(titleContainer);
             section.appendChild(cardContainer);
-
+    
             container.appendChild(section);
+    
+            // 只渲染属于当前分类的链接
+            const categoryLinks = links.filter(link => link.category === category);
+            categoryLinks.forEach(link => {
+                createCard(link, cardContainer);
+            });
         });
-
-        links.forEach(link => {
-            const container = document.getElementById(link.category);
-            if (container) {
-                createCard(link, container);
-            } else {
-                console.warn("Category " + link.category + " not found for link " + link.name);
-            }
-        });
-
+    
         logAction('渲染分类', { categoryCount: Object.keys(categories).length, linkCount: links.length });
-    }
+    }    
     
     // 读取链接数据
     async function loadLinks() {
@@ -562,6 +559,7 @@ const HTML_CONTENT = `
         updateUIState();
         logAction('读取链接', { publicCount: publicLinks.length, privateCount: privateLinks.length });
     }
+    
     
     // 更新UI状态
     function updateUIState() {
@@ -821,6 +819,8 @@ const HTML_CONTENT = `
         const name = card.querySelector('.card-title').textContent;
         const url = card.querySelector('.card-url').textContent;
         const isPrivate = card.dataset.isPrivate === 'true';
+        
+        links = links.filter(link => link.url !== url);
         if (isPrivate) {
             privateLinks = privateLinks.filter(link => link.url !== url);
         } else {
@@ -872,11 +872,28 @@ const HTML_CONTENT = `
         event.preventDefault();
         draggedCard.classList.remove('dragging');
         const targetCategory = event.target.closest('.card-container').id;
+        // 更新卡片的分类信息
+        const cardTitle = draggedCard.querySelector('.card-title').textContent;
+        const cardUrl = draggedCard.querySelector('.card-url').textContent;
+        const isPrivate = draggedCard.dataset.isPrivate === 'true';
+        // 在 links 数组中更新卡片信息
+        const linkIndex = links.findIndex(link => link.url === cardUrl);
+        if (linkIndex !== -1) {
+            links[linkIndex].category = targetCategory;
+        }
+        
+        // 在 publicLinks 或 privateLinks 中更新卡片信息
+        const linkArray = isPrivate ? privateLinks : publicLinks;
+        const arrayIndex = linkArray.findIndex(link => link.url === cardUrl);
+        if (arrayIndex !== -1) {
+            linkArraycategory = targetCategory;
+        }
+        
         draggedCard.dataset.category = targetCategory;
-        logAction('放下卡片', { name: draggedCard.querySelector('.card-title').textContent, category: targetCategory });
+        logAction('放下卡片', { name: cardTitle, category: targetCategory });
         draggedCard = null;
         saveCardOrder();
-    }      
+    }        
     
     function dragEnd(event) {
         if (draggedCard) {
