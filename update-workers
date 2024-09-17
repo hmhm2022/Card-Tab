@@ -225,6 +225,7 @@ const HTML_CONTENT = `
         cursor: pointer;
         transition: transform 0.2s;
         position: relative;
+        user-select: none;
     }
     
     .card:hover {
@@ -258,7 +259,7 @@ const HTML_CONTENT = `
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     .private-tag {
         background-color: #ff9800;
         color: white;
@@ -315,7 +316,62 @@ const HTML_CONTENT = `
     #copyright a:hover {
         text-decoration: underline;
     }
+    
+    /* 响应式设计 */
+    @media (max-width: 480px) {
+        .fixed-elements {
+            position: relative;
+            padding: 5px;
+        }
+        .content {
+            margin-top: 10px;
+        }
+
+        .admin-controls input,
+        .admin-controls button {
+            height: 30%;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .card {
+            width: 80%;
+            max-width: 100%;
+            padding: 5px;
+        }
+        .card-title {
+            font-size: 12px;
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            max-width: 130px; 
+        }
+        .card-url {
+            font-size: 10px;
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            max-width: 130px;
+        }
         
+        .add-remove-controls {
+            right: 2px;
+          }
+
+        .round-btn, 
+        #theme-toggle {
+            right: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            font-size: 24px;
+        }
+    }
     </style>
 </head>
 
@@ -532,7 +588,6 @@ const HTML_CONTENT = `
     
             container.appendChild(section);
     
-            // 只渲染属于当前分类的链接
             const categoryLinks = links.filter(link => link.category === category);
             categoryLinks.forEach(link => {
                 createCard(link, cardContainer);
@@ -544,7 +599,7 @@ const HTML_CONTENT = `
     
     // 读取链接数据
     async function loadLinks() {
-        const response = await fetch('/api/getLinks?userId=testUser');
+        const response = await fetch('/api/getLinks?userId=tempUser');
         const data = await response.json();
         if (data.categories) {
             Object.assign(categories, data.categories);
@@ -714,6 +769,7 @@ const HTML_CONTENT = `
         card.addEventListener('dragover', dragOver);
         card.addEventListener('dragend', dragEnd);
         card.addEventListener('drop', drop);
+        card.addEventListener('touchstart', touchStart, { passive: false });
     
         if (isAdmin && removeMode) {
             deleteBtn.style.display = 'block';
@@ -762,7 +818,7 @@ const HTML_CONTENT = `
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    userId: 'testUser', 
+                    userId: 'tempUser', 
                     links: allLinks,
                     categories: categories
                 }),
@@ -840,17 +896,88 @@ const HTML_CONTENT = `
     
     // 拖拽卡片
     let draggedCard = null;
+    let touchStartX, touchStartY;
     
+    // 触屏端拖拽卡片
+    function touchStart(event) {
+        if (!isAdmin) return;
+        draggedCard = event.target.closest('.card');
+        if (!draggedCard) return;
+    
+        event.preventDefault();
+        const touch = event.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+    
+        draggedCard.classList.add('dragging');
+        
+        document.addEventListener('touchmove', touchMove, { passive: false });
+        document.addEventListener('touchend', touchEnd);
+    
+    }
+    
+    function touchMove(event) {
+        if (!draggedCard) return;
+        event.preventDefault();
+    
+        const touch = event.touches[0];
+        const currentX = touch.clientX;
+        const currentY = touch.clientY;
+
+        const deltaX = currentX - touchStartX;
+        const deltaY = currentY - touchStartY;
+        draggedCard.style.transform = "translate(" + deltaX + "px, " + deltaY + "px)";
+    
+        const target = findCardUnderTouch(currentX, currentY);
+        if (target && target !== draggedCard) {
+            const container = target.parentElement;
+            const targetRect = target.getBoundingClientRect();
+    
+            if (currentX < targetRect.left + targetRect.width / 2) {
+                container.insertBefore(draggedCard, target);
+            } else {
+                container.insertBefore(draggedCard, target.nextSibling);
+            }
+        }
+    }
+    
+    function touchEnd(event) {
+        if (!draggedCard) return;
+    
+        document.removeEventListener('touchmove', touchMove);
+        document.removeEventListener('touchend', touchEnd);
+    
+        draggedCard.classList.remove('dragging');
+        draggedCard.style.transform = '';
+    
+        const targetCategory = draggedCard.closest('.card-container').id;
+        updateCardCategory(draggedCard, targetCategory);
+        saveCardOrder();
+    
+        draggedCard = null;
+    }
+    
+    function findCardUnderTouch(x, y) {
+        const cards = document.querySelectorAll('.card:not(.dragging)');
+        return Array.from(cards).find(card => {
+            const rect = card.getBoundingClientRect();
+            return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+        });
+    }
+
+    // PC端拖拽卡片
     function dragStart(event) {
         if (!isAdmin) return;
-        draggedCard = event.target;
+        draggedCard = event.target.closest('.card');
+        if (!draggedCard) return;
+    
         draggedCard.classList.add('dragging');
         event.dataTransfer.effectAllowed = "move";
         logAction('开始拖拽卡片', { name: draggedCard.querySelector('.card-title').textContent });
     }
     
     function dragOver(event) {
-        if (!isAdmin) return;
+        if (!isAdmin || !draggedCard) return;
         event.preventDefault();
         const target = event.target.closest('.card');
         if (target && target !== draggedCard) {
@@ -858,49 +985,60 @@ const HTML_CONTENT = `
             const mousePositionX = event.clientX;
             const targetRect = target.getBoundingClientRect();
     
-            if (mousePositionX < targetRect.left + targetRect.width /2) {
+            if (mousePositionX < targetRect.left + targetRect.width / 2) {
                 container.insertBefore(draggedCard, target);
             } else {
                 container.insertBefore(draggedCard, target.nextSibling);
             }
         }
-        //logAction('拖拽卡片中', { over: target ? target.querySelector('.card-title').textContent : 'unknown' });
     }
     
     function drop(event) {
-        if (!isAdmin) return;
+        if (!isAdmin || !draggedCard) return;
         event.preventDefault();
         draggedCard.classList.remove('dragging');
         const targetCategory = event.target.closest('.card-container').id;
-        // 更新卡片的分类信息
-        const cardTitle = draggedCard.querySelector('.card-title').textContent;
-        const cardUrl = draggedCard.querySelector('.card-url').textContent;
-        const isPrivate = draggedCard.dataset.isPrivate === 'true';
-        // 在 links 数组中更新卡片信息
-        const linkIndex = links.findIndex(link => link.url === cardUrl);
-        if (linkIndex !== -1) {
-            links[linkIndex].category = targetCategory;
-        }
-        
-        // 在 publicLinks 或 privateLinks 中更新卡片信息
-        const linkArray = isPrivate ? privateLinks : publicLinks;
-        const arrayIndex = linkArray.findIndex(link => link.url === cardUrl);
-        if (arrayIndex !== -1) {
-            linkArraycategory = targetCategory;
-        }
-        
-        draggedCard.dataset.category = targetCategory;
-        logAction('放下卡片', { name: cardTitle, category: targetCategory });
+        updateCardCategory(draggedCard, targetCategory);
+        logAction('放下卡片', { name: draggedCard.querySelector('.card-title').textContent, category: targetCategory });
         draggedCard = null;
         saveCardOrder();
-    }        
+    }
     
     function dragEnd(event) {
         if (draggedCard) {
             draggedCard.classList.remove('dragging');
             logAction('拖拽卡片结束');
+            draggedCard = null;
         }
     }
+  
+    // 更新卡片分类
+    function updateCardCategory(card, newCategory) {
+        const cardTitle = card.querySelector('.card-title').textContent;
+        const cardUrl = card.querySelector('.card-url').textContent;
+        const isPrivate = card.dataset.isPrivate === 'true';
+    
+        const linkIndex = links.findIndex(link => link.url === cardUrl);
+        if (linkIndex !== -1) {
+            links[linkIndex].category = newCategory;
+        }
+    
+        const linkArray = isPrivate ? privateLinks : publicLinks;
+        const arrayIndex = linkArray.findIndex(link => link.url === cardUrl);
+        if (arrayIndex !== -1) {
+            linkArray[arrayIndex].category = newCategory;
+        }
+    
+        card.dataset.category = newCategory;
+    }
+
+    // 在页面加载完成后添加触摸事件监听器
+    document.addEventListener('DOMContentLoaded', function() {
+        const cardContainers = document.querySelectorAll('.card-container');
+        cardContainers.forEach(container => {
+            container.addEventListener('touchstart', touchStart, { passive: false });
+        });
+    });    
     
     // 保存卡片顺序
     async function saveCardOrder() {
@@ -947,7 +1085,7 @@ const HTML_CONTENT = `
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    userId: 'testUser', 
+                    userId: 'tempUser', 
                     links: [...newPublicLinks, ...newPrivateLinks],
                     categories: newCategories
                 }),
@@ -1003,7 +1141,7 @@ const HTML_CONTENT = `
             addRemoveControls.style.display = 'none';
             alert('设置已保存');
             reloadCardsAsAdmin();
-            logAction('离开');
+            logAction('离开设置');
         }
     
         updateUIState();
