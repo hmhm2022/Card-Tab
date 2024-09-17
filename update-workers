@@ -599,7 +599,7 @@ const HTML_CONTENT = `
     
     // 读取链接数据
     async function loadLinks() {
-        const response = await fetch('/api/getLinks?userId=tempUser');
+        const response = await fetch('/api/getLinks?userId=testUser');
         const data = await response.json();
         if (data.categories) {
             Object.assign(categories, data.categories);
@@ -818,7 +818,7 @@ const HTML_CONTENT = `
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    userId: 'tempUser', 
+                    userId: 'testUser', 
                     links: allLinks,
                     categories: categories
                 }),
@@ -1085,7 +1085,7 @@ const HTML_CONTENT = `
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    userId: 'tempUser', 
+                    userId: 'testUser', 
                     links: [...newPublicLinks, ...newPrivateLinks],
                     categories: newCategories
                 }),
