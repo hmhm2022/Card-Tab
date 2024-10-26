@@ -719,10 +719,43 @@ const HTML_CONTENT = `
         const cardTop = document.createElement('div');
         cardTop.className = 'card-top';
     
+        // const icon = document.createElement('img');
+        // icon.className = 'card-icon';
+        // icon.src = 'https://favicon.zhusl.com/ico?url=' + link.url;
+        // icon.alt = 'Website Icon';
+        // 定义默认的 SVG 图标
+        const defaultIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>' +
+        '<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>' +
+        '</svg>';
+        
+        // 创建图标元素
         const icon = document.createElement('img');
         icon.className = 'card-icon';
-        icon.src = 'https://favicon.zhusl.com/ico?url=' + link.url;
+        icon.src = 'https://api.iowen.cn/favicon/' + extractDomain(link.url) + '.png';
         icon.alt = 'Website Icon';
+        
+        // 错误处理：如果图片加载失败，使用默认的 SVG 图标
+        icon.onerror = function() {
+            const svgBlob = new Blob([defaultIconSVG], {type: 'image/svg+xml'});
+            const svgUrl = URL.createObjectURL(svgBlob);
+            this.src = svgUrl;
+            
+            // 清理：当图片不再需要时，撤销对象 URL
+            this.onload = () => URL.revokeObjectURL(svgUrl);
+        };
+        
+        // 辅助函数：从 URL 中提取域名
+        function extractDomain(url) {
+            let domain;
+            try {
+                domain = new URL(url).hostname;
+            } catch (e) {
+                // 如果 URL 无效，返回原始输入
+                domain = url;
+            }
+            return domain;
+        }
     
         const title = document.createElement('div');
         title.className = 'card-title';
