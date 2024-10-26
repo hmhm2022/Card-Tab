@@ -1,6 +1,6 @@
 # Card-Tab 书签卡片式管理，进入管理模式可以自由移动书签位置，添加和删除书签，支持自定义网站分类，支持切换暗色主题
 #### 2024.10.26 修复:  
-##### 原获取网站图标的接口https://favicon.zhusl.com/ico?url= 好像失效了，现更换成一为接口https://www.faviconextractor.com/favicon/  项目地址：[Github](https://github.com/seadfeng/favicon-downloader) ；另一个备份接口为https://api.iowen.cn/favicon  项目地址：[github](https://github.com/owen0o0/getFavicon)  感谢上述接口作者提供的服务
+##### 原获取网站图标的接口https://favicon.zhusl.com/ico?url= 好像失效了，现更换接口https://www.faviconextractor.com/favicon/  项目地址：[【Github】](https://github.com/seadfeng/favicon-downloader) ；另一个备份接口为https://api.iowen.cn/favicon  项目地址：[【Github】](https://github.com/owen0o0/getFavicon)  感谢上述接口作者提供的服务
 #### 2024.09.17 更新:  
 ##### 对手机端进行了适配
 #### 2024.09.14 更新: 
