@@ -732,7 +732,8 @@ const HTML_CONTENT = `
         // 创建图标元素
         const icon = document.createElement('img');
         icon.className = 'card-icon';
-        icon.src = 'https://api.iowen.cn/favicon/' + extractDomain(link.url) + '.png';
+        // icon.src = 'https://api.iowen.cn/favicon/' + extractDomain(link.url) + '.png';
+        icon.src = 'https://www.faviconextractor.com/favicon/' + extractDomain(link.url);
         icon.alt = 'Website Icon';
         
         // 错误处理：如果图片加载失败，使用默认的 SVG 图标
