@@ -12,7 +12,7 @@ const HTML_CONTENT = `
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        background-color: #d8eac4;
+        background-color: #e8f4ea;
         transition: background-color 0.3s ease;
     }
     
@@ -22,7 +22,7 @@ const HTML_CONTENT = `
         top: 0;
         left: 0;
         right: 0;
-        background-color: #d8eac4;
+        background-color: #e8f4ea;
         z-index: 1000;
         padding: 10px;
         transition: background-color 0.3s ease;
@@ -129,7 +129,7 @@ const HTML_CONTENT = `
     .search-engine {
         padding: 5px 10px;
         border: 1px solid #ccc;
-        background-color: #f0f0;
+        background-color: #f0f0f0;
         border-radius: 5px;
         cursor: pointer;
     }
@@ -139,7 +139,7 @@ const HTML_CONTENT = `
         position: fixed;
         bottom: 50px;
         right: 20px;
-        background-color: #007bff;
+        background-color: #b8c9d9;
         color: white;
         border: none;
         border-radius: 50%;
@@ -149,16 +149,14 @@ const HTML_CONTENT = `
         font-size: 24px;
         line-height: 40px;
         cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
     }
 
-    /* 显示日志按钮样式 */
-    #view-logs-btn {
-        position: fixed;
-        top: 100px; 
-        right: 10px;
-        z-index: 1000; 
-    }    
-    
+    #theme-toggle:hover {
+        background-color: #007bff;
+    }
+
     /* 对话框样式 */
     #dialog-overlay {
         display: none;
@@ -202,7 +200,7 @@ const HTML_CONTENT = `
     }
     
     .delete-category-btn {
-        background-color: pink;
+        background-color: #ff9800;
         color: white;
         border: none;
         padding: 5px 10px;
@@ -217,7 +215,7 @@ const HTML_CONTENT = `
     }
     
     .card {
-        background-color: #a0c9e5;
+        background-color: #b8c9d9;
         border-radius: 5px;
         padding: 10px;
         width: 150px;
@@ -418,8 +416,6 @@ const HTML_CONTENT = `
         <div id="sections-container"></div>
         <!-- 主题切换按钮 -->
         <button id="theme-toggle" onclick="toggleTheme()">◑</button>
-        <!-- 显示日志按钮 用于调试-->
-        <!--<button id="view-logs-btn" onclick="viewLogs()">显示日志</button>-->
         <!-- 添加链接对话框 -->
         <div id="dialog-overlay">
             <div id="dialog-box">
@@ -458,25 +454,7 @@ const HTML_CONTENT = `
     function logAction(action, details) {
         const timestamp = new Date().toISOString();
         const logEntry = timestamp + ': ' + action + ' - ' + JSON.stringify(details);
-        
-        let logs = JSON.parse(localStorage.getItem('cardTabLogs') || '[]');
-        logs.push(logEntry);
-        
-        // 保留最新的1000条日志
-        if (logs.length > 1000) {
-            logs = logs.slice(-1000);
-        }
-        
-        localStorage.setItem('cardTabLogs', JSON.stringify(logs));
-        console.log(logEntry); // 同时在控制台输出日志
-    }
-    
-    // 查看日志的函数
-    function viewLogs() {
-        const logs = JSON.parse(localStorage.getItem('cardTabLogs') || '[]');
-        console.log('Card Tab Logs:');
-        logs.forEach(log => console.log(log));
-        alert('日志已在控制台输出，请按F12打开开发者工具查看。');
+        console.log(logEntry); 
     }
     
     // 设置当前搜索引擎
@@ -524,7 +502,10 @@ const HTML_CONTENT = `
     const categories = {};
     
     // 添加新分类
-    function addCategory() {
+    async function addCategory() {
+        if (!await validateToken()) {
+            return; 
+        }
         const categoryName = prompt('请输入新分类名称:');
         if (categoryName && !categories[categoryName]) {
             categories[categoryName] = [];
@@ -539,7 +520,10 @@ const HTML_CONTENT = `
     }
 
     // 删除分类
-    function deleteCategory(category) {
+    async function deleteCategory(category) {
+        if (!await validateToken()) {
+            return; 
+        }
         if (confirm('确定要删除 "' + category + '" 分类吗？这将删除该分类下的所有链接。')) {
             delete categories[category];
             links = links.filter(link => link.category !== category);
@@ -599,20 +583,52 @@ const HTML_CONTENT = `
     
     // 读取链接数据
     async function loadLinks() {
-        const response = await fetch('/api/getLinks?userId=testUser');
-        const data = await response.json();
-        if (data.categories) {
-            Object.assign(categories, data.categories);
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        
+        // 如果已登录，从 localStorage 获取 token 并添加到请求头
+        if (isLoggedIn) {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                headers['Authorization'] = token; 
+            }
         }
         
-        publicLinks = data.links ? data.links.filter(link => !link.isPrivate) : [];
-        privateLinks = data.links ? data.links.filter(link => link.isPrivate) : [];
-        links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
-    
-        loadSections();
-        updateCategorySelect();
-        updateUIState();
-        logAction('读取链接', { publicCount: publicLinks.length, privateCount: privateLinks.length });
+        try {
+            const response = await fetch('/api/getLinks?userId=tempUser', {
+                headers: headers
+            });
+            
+            if (!response.ok) {
+                throw new Error("HTTP error! status: " + response.status);
+            }
+            
+            
+            const data = await response.json();
+            console.log('Received data:', data); 
+            
+            if (data.categories) {
+                Object.assign(categories, data.categories);
+            }
+            
+            publicLinks = data.links ? data.links.filter(link => !link.isPrivate) : [];
+            privateLinks = data.links ? data.links.filter(link => link.isPrivate) : [];
+            links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
+
+            loadSections();
+            updateCategorySelect();
+            updateUIState();
+            logAction('读取链接', { 
+                publicCount: publicLinks.length, 
+                privateCount: privateLinks.length,
+                isLoggedIn: isLoggedIn,
+                hasToken: !!localStorage.getItem('authToken')
+            });
+        } catch (error) {
+            console.error('Error loading links:', error);
+            alert('加载链接时出错，请刷新页面重试');
+        }
     }
     
     
@@ -719,10 +735,6 @@ const HTML_CONTENT = `
         const cardTop = document.createElement('div');
         cardTop.className = 'card-top';
     
-        // const icon = document.createElement('img');
-        // icon.className = 'card-icon';
-        // icon.src = 'https://favicon.zhusl.com/ico?url=' + link.url;
-        // icon.alt = 'Website Icon';
         // 定义默认的 SVG 图标
         const defaultIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
         '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>' +
@@ -736,23 +748,20 @@ const HTML_CONTENT = `
         icon.src = 'https://www.faviconextractor.com/favicon/' + extractDomain(link.url);
         icon.alt = 'Website Icon';
         
-        // 错误处理：如果图片加载失败，使用默认的 SVG 图标
+        // 如果图片加载失败，使用默认的 SVG 图标
         icon.onerror = function() {
             const svgBlob = new Blob([defaultIconSVG], {type: 'image/svg+xml'});
             const svgUrl = URL.createObjectURL(svgBlob);
             this.src = svgUrl;
             
-            // 清理：当图片不再需要时，撤销对象 URL
             this.onload = () => URL.revokeObjectURL(svgUrl);
         };
         
-        // 辅助函数：从 URL 中提取域名
         function extractDomain(url) {
             let domain;
             try {
                 domain = new URL(url).hostname;
             } catch (e) {
-                // 如果 URL 无效，返回原始输入
                 domain = url;
             }
             return domain;
@@ -822,7 +831,7 @@ const HTML_CONTENT = `
             card.style.color = '#ffffff';
             card.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.5)';
         } else {
-            card.style.backgroundColor = '#a0c9e5';
+            card.style.backgroundColor = '#b8c9d9';
             card.style.color = '#333';
             card.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
         }
@@ -845,28 +854,37 @@ const HTML_CONTENT = `
     
     // 保存链接数据
     async function saveLinks() {
+        if (isAdmin && !(await validateToken())) {
+            return;
+        }
+
         let allLinks = [...publicLinks, ...privateLinks];
     
         try {
             await fetch('/api/saveOrder', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('authToken')
+                },
                 body: JSON.stringify({ 
-                    userId: 'testUser', 
+                    userId: 'tempUser', 
                     links: allLinks,
                     categories: categories
                 }),
             });
             logAction('保存链接', { linkCount: allLinks.length, categoryCount: Object.keys(categories).length });
         } catch (error) {
-            console.error('Error saving links:', error);
             logAction('保存链接失败', { error: error.message });
             alert('保存链接失败，请重试');
         }
     }
     
     // 添加卡片弹窗
-    function addLink() {
+    async function addLink() {
+        if (!await validateToken()) {
+            return; 
+        }
         const name = document.getElementById('name-input').value;
         const url = document.getElementById('url-input').value;
         const category = document.getElementById('category-select').value;
@@ -905,7 +923,10 @@ const HTML_CONTENT = `
     }
 
     // 删除卡片
-    function removeCard(card) {
+    async function removeCard(card) {
+        if (!await validateToken()) {
+            return; 
+        }
         const name = card.querySelector('.card-title').textContent;
         const url = card.querySelector('.card-url').textContent;
         const isPrivate = card.dataset.isPrivate === 'true';
@@ -934,7 +955,9 @@ const HTML_CONTENT = `
     
     // 触屏端拖拽卡片
     function touchStart(event) {
-        if (!isAdmin) return;
+        if (!isAdmin || !validateToken()) {
+            return;
+        }
         draggedCard = event.target.closest('.card');
         if (!draggedCard) return;
     
@@ -1001,7 +1024,10 @@ const HTML_CONTENT = `
 
     // PC端拖拽卡片
     function dragStart(event) {
-        if (!isAdmin) return;
+        if (!isAdmin || !validateToken()) {
+            event.preventDefault();
+            return;
+        }
         draggedCard = event.target.closest('.card');
         if (!draggedCard) return;
     
@@ -1011,7 +1037,10 @@ const HTML_CONTENT = `
     }
     
     function dragOver(event) {
-        if (!isAdmin || !draggedCard) return;
+        if (!isAdmin || !validateToken()) {
+            event.preventDefault();
+            return;
+        }
         event.preventDefault();
         const target = event.target.closest('.card');
         if (target && target !== draggedCard) {
@@ -1028,7 +1057,10 @@ const HTML_CONTENT = `
     }
     
     function drop(event) {
-        if (!isAdmin || !draggedCard) return;
+        if (!isAdmin || !validateToken()) {
+            event.preventDefault();
+            return;
+        }
         event.preventDefault();
         draggedCard.classList.remove('dragging');
         const targetCategory = event.target.closest('.card-container').id;
@@ -1076,7 +1108,9 @@ const HTML_CONTENT = `
     
     // 保存卡片顺序
     async function saveCardOrder() {
-        if (!isAdmin) return;
+        if (!await validateToken()) {
+            return; 
+        }
         const containers = document.querySelectorAll('.card-container');
         let newPublicLinks = [];
         let newPrivateLinks = [];
@@ -1117,9 +1151,12 @@ const HTML_CONTENT = `
         try {
             const response = await fetch('/api/saveOrder', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('authToken')
+                },
                 body: JSON.stringify({ 
-                    userId: 'testUser', 
+                    userId: 'tempUser', 
                     links: [...newPublicLinks, ...newPrivateLinks],
                     categories: newCategories
                 }),
@@ -1130,7 +1167,6 @@ const HTML_CONTENT = `
             }
             logAction('保存卡片顺序', { publicCount: newPublicLinks.length, privateCount: newPrivateLinks.length, categoryCount: Object.keys(newCategories).length });
         } catch (error) {
-            console.error('Error saving order:', error);
             logAction('保存顺序失败', { error: error.message });
             alert('保存顺序失败，请重试');
         }
@@ -1157,11 +1193,41 @@ const HTML_CONTENT = `
     });
     
     // 切换设置状态
-    function toggleAdminMode() {
+    async function toggleAdminMode() {
         const adminBtn = document.getElementById('admin-mode-btn');
         const addRemoveControls = document.querySelector('.add-remove-controls');
     
         if (!isAdmin && isLoggedIn) {
+            if (!await validateToken()) {
+                return; 
+            }
+
+            // 在进入设置模式之前进行备份
+            try {
+                const response = await fetch('/api/backupData', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem('authToken')
+                    },
+                    body: JSON.stringify({ 
+                        sourceUserId: 'tempUser', 
+                        backupUserId: 'backup' 
+                    }),
+                });
+                const result = await response.json();
+                if (result.success) {
+                    logAction('数据备份成功');
+                } else {
+                    throw new Error('备份失败');
+                }
+            } catch (error) {
+                logAction('数据备份失败', { error: error.message });
+                if (!confirm('备份失败，是否仍要继续进入设置模式？')) {
+                    return;
+                }
+            }
+
             isAdmin = true;
             adminBtn.textContent = "退出设置";
             addRemoveControls.style.display = 'flex';
@@ -1179,28 +1245,35 @@ const HTML_CONTENT = `
         }
     
         updateUIState();
-    }      
+    }
     
     // 切换到登录状态
     function toggleSecretGarden() {
         const passwordInput = document.getElementById('admin-password');
         if (!isLoggedIn) {
-            verifyPassword(passwordInput.value).then(isValid => {
-                if (isValid) {
-                    isLoggedIn = true;
-                    links = [...publicLinks, ...privateLinks];
-                    loadSections();
-                    alert('登录成功！');
-                    logAction('登录成功');
-                } else {
-                    alert('密码错误');
-                    logAction('登录失败', { reason: '密码错误' });
-                }
-                updateUIState();
-            });
+            verifyPassword(passwordInput.value)
+                .then(result => {
+                    if (result.valid) {
+                        isLoggedIn = true;
+                        localStorage.setItem('authToken', result.token);
+                        console.log('Token saved:', result.token); 
+                        loadLinks(); 
+                        alert('登录成功！');
+                        logAction('登录成功');
+                    } else {
+                        alert('密码错误');
+                        logAction('登录失败', { reason: result.error || '密码错误' });
+                    }
+                    updateUIState();
+                })
+                .catch(error => {
+                    console.error('Login error:', error);
+                    alert('登录过程出错，请重试');
+                });
         } else {
             isLoggedIn = false;
             isAdmin = false;
+            localStorage.removeItem('authToken');
             links = publicLinks;
             loadSections();
             alert('退出登录！');
@@ -1259,12 +1332,12 @@ const HTML_CONTENT = `
     function toggleTheme() {
         isDarkTheme = !isDarkTheme;
     
-        document.body.style.backgroundColor = isDarkTheme ? '#121212' : '#d8eac4';
+        document.body.style.backgroundColor = isDarkTheme ? '#121212' : '#e8f4ea';
         document.body.style.color = isDarkTheme ? '#ffffff' : '#333';
     
         const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
-            card.style.backgroundColor = isDarkTheme ? '#1e1e1e' : '#a0c9e5';
+            card.style.backgroundColor = isDarkTheme ? '#1e1e1e' : '#b8c9d9';
             card.style.color = isDarkTheme ? '#ffffff' : '#333';
             card.style.boxShadow = isDarkTheme
                 ? '0 4px 8px rgba(0, 0, 0, 0.5)'
@@ -1273,7 +1346,7 @@ const HTML_CONTENT = `
     
         const fixedElements = document.querySelectorAll('.fixed-elements');
         fixedElements.forEach(element => {
-            element.style.backgroundColor = isDarkTheme ? '#121212' : '#d8eac4';
+            element.style.backgroundColor = isDarkTheme ? '#121212' : '#e8f4ea';
             element.style.color = isDarkTheme ? '#ffffff' : '#333';
         });
     
@@ -1299,11 +1372,81 @@ const HTML_CONTENT = `
             body: JSON.stringify({ password: inputPassword }),
         });
         const result = await response.json();
-        return result.valid;
+        return result;
     }
     
-    // 初始化加载链接
-    loadLinks();
+    // 初始化加载
+    document.addEventListener('DOMContentLoaded', async () => {
+        await validateToken(); 
+        loadLinks(); 
+    });
+
+
+    // 前端检查是否有 token
+    async function validateToken() {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            isLoggedIn = false;
+            updateUIState();
+            return false;
+        }
+
+        try {
+            const response = await fetch('/api/getLinks?userId=tempUser', {
+                headers: { 'Authorization': token }
+            });
+            
+            if (response.status === 401) {
+                await resetToLoginState('token已过期，请重新登录'); 
+                return false;
+            }
+            
+            isLoggedIn = true;
+            updateUIState();
+            return true;
+        } catch (error) {
+            console.error('Token validation error:', error);
+            return false;
+        }
+    }
+
+    // 重置状态
+    async function resetToLoginState(message) {
+        alert(message);
+        
+        localStorage.removeItem('authToken');
+        isLoggedIn = false;
+        isAdmin = false;
+        removeMode = false;
+        isRemoveCategoryMode = false;
+        
+        const passwordInput = document.getElementById('admin-password');
+        if (passwordInput) {
+            passwordInput.value = '';
+        }
+        
+        updateUIState();
+        links = publicLinks;
+        loadSections();
+        
+        const addRemoveControls = document.querySelector('.add-remove-controls');
+        if (addRemoveControls) {
+            addRemoveControls.style.display = 'none';
+        }
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.style.display = 'none';
+        });
+        
+        document.querySelectorAll('.delete-category-btn').forEach(btn => {
+            btn.style.display = 'none';
+        });
+        
+        const dialogOverlay = document.getElementById('dialog-overlay');
+        if (dialogOverlay) {
+            dialogOverlay.style.display = 'none';
+        }
+    }
 
     </script>
 </body>
@@ -1311,37 +1454,241 @@ const HTML_CONTENT = `
 </html>
 `;
 
+// 服务端 token 验证
+async function validateServerToken(authToken, env) {
+    if (!authToken) {
+        return {
+            isValid: false,
+            status: 401,
+            response: { error: 'Unauthorized', message: '未登录或登录已过期' }
+        };
+    }
+
+    try {
+        const [timestamp, hash] = authToken.split('.');
+        const tokenTimestamp = parseInt(timestamp);
+        const now = Date.now();
+        
+        const FIFTEEN_MINUTES = 15 * 60 * 1000;
+        if (now - tokenTimestamp > FIFTEEN_MINUTES) {
+            return {
+                isValid: false,
+                status: 401,
+                response: { 
+                    error: 'Token expired',
+                    tokenExpired: true,
+                    message: '登录已过期，请重新登录'
+                }
+            };
+        }
+        
+        const tokenData = timestamp + "_" + env.ADMIN_PASSWORD;
+        const encoder = new TextEncoder();
+        const data = encoder.encode(tokenData);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const expectedHash = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
+        
+        if (hash !== expectedHash) {
+            return {
+                isValid: false,
+                status: 401,
+                response: { 
+                    error: 'Invalid token',
+                    tokenInvalid: true,
+                    message: '登录状态无效，请重新登录'
+                }
+            };
+        }
+
+        return { isValid: true };
+    } catch (error) {
+        return {
+            isValid: false,
+            status: 401,
+            response: { 
+                error: 'Invalid token',
+                tokenInvalid: true,
+                message: '登录验证失败，请重新登录'
+            }
+        };
+    }
+}
+
 export default {
-async fetch(request, env) {
-const url = new URL(request.url);
+    async fetch(request, env) {
+      const url = new URL(request.url);
+  
+      if (url.pathname === '/') {
+        return new Response(HTML_CONTENT, {
+          headers: { 'Content-Type': 'text/html' }
+        });
+      }
+  
+      if (url.pathname === '/api/getLinks') {
+        const userId = url.searchParams.get('userId');
+        const authToken = request.headers.get('Authorization');
+        const data = await env.CARD_ORDER.get(userId);
+  
+        if (data) {
+            const parsedData = JSON.parse(data);
+            
+            // 验证 token
+            if (authToken) {
+                const validation = await validateServerToken(authToken, env);
+                if (!validation.isValid) {
+                    return new Response(JSON.stringify(validation.response), {
+                        status: validation.status,
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
 
-if (url.pathname === '/') {
-return new Response(HTML_CONTENT, {
-headers: { 'Content-Type': 'text/html' }
-});
-}
+                // Token 有效，返回完整数据
+                return new Response(JSON.stringify(parsedData), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+            
+            // 未提供 token，只返回公开数据
+            const filteredLinks = parsedData.links.filter(link => !link.isPrivate);
+            const filteredCategories = {};
+            Object.keys(parsedData.categories).forEach(category => {
+                filteredCategories[category] = parsedData.categories[category].filter(link => !link.isPrivate);
+            });
+  
+            return new Response(JSON.stringify({
+                links: filteredLinks,
+                categories: filteredCategories
+            }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+  
+        return new Response(JSON.stringify({
+            links: [],
+            categories: {}
+        }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+      }
+  
+      if (url.pathname === '/api/saveOrder' && request.method === 'POST') {
+        const authToken = request.headers.get('Authorization');
+        const validation = await validateServerToken(authToken, env);
+        
+        if (!validation.isValid) {
+            return new Response(JSON.stringify(validation.response), {
+                status: validation.status,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
-if (url.pathname === '/api/getLinks') {
-const userId = url.searchParams.get('userId');
-const links = await env.CARD_ORDER.get(userId); 
-return new Response(links || JSON.stringify([]), { status: 200 });
-}
-
-if (url.pathname === '/api/saveOrder' && request.method === 'POST') {
-    const { userId, links, categories } = await request.json(); 
-    await env.CARD_ORDER.put(userId, JSON.stringify({ links, categories })); //保存链接和分类
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
-}
-
-if (url.pathname === '/api/verifyPassword' && request.method === 'POST') { 
-const { password } = await request.json();
-const isValid = password === env.ADMIN_PASSWORD; // 从环境变量中获取密码
-return new Response(JSON.stringify({ valid: isValid }), {
-status: isValid ? 200 : 403,
-headers: { 'Content-Type': 'application/json' },
-});
-}
-
-return new Response('Not Found', { status: 404 });
-}
-};
+        const { userId, links, categories } = await request.json();
+        await env.CARD_ORDER.put(userId, JSON.stringify({ links, categories }));
+        return new Response(JSON.stringify({ 
+            success: true,
+            message: '保存成功'
+        }), { 
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+      }
+  
+      if (url.pathname === '/api/verifyPassword' && request.method === 'POST') { 
+        try {
+            const { password } = await request.json();
+            const isValid = password === env.ADMIN_PASSWORD;
+            
+            if (isValid) {
+                // 生成包含时间戳的加密 token
+                const timestamp = Date.now();
+                const tokenData = timestamp + "_" + env.ADMIN_PASSWORD; 
+                const encoder = new TextEncoder();
+                const data = encoder.encode(tokenData);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                
+                // 使用指定格式：timestamp.hash
+                const token = timestamp + "." + btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
+                
+                return new Response(JSON.stringify({ 
+                    valid: true,
+                    token: token 
+                }), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            }
+            
+            return new Response(JSON.stringify({ 
+                valid: false,
+                error: 'Invalid password'
+            }), {
+                status: 403,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        } catch (error) {
+            return new Response(JSON.stringify({ 
+                valid: false,
+                error: error.message 
+            }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+      }
+  
+      if (url.pathname === '/api/backupData' && request.method === 'POST') {
+        const { sourceUserId } = await request.json();
+        const result = await this.backupData(env, sourceUserId);
+        return new Response(JSON.stringify(result), {
+          status: result.success ? 200 : 404,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }  
+  
+      return new Response('Not Found', { status: 404 });
+    },
+  
+    async backupData(env, sourceUserId) {
+        const MAX_BACKUPS = 5;
+        const sourceData = await env.CARD_ORDER.get(sourceUserId);
+        
+        if (sourceData) {
+            try {
+                const timestamp = new Date().toISOString();
+                const backupId = `backup_${timestamp}`;
+                
+                const backups = await env.CARD_ORDER.list({ prefix: 'backup_' });
+                const backupKeys = backups.keys
+                    .map(key => key.name)
+                    .sort((a, b) => b.localeCompare(a)); 
+                
+                await env.CARD_ORDER.put(backupId, sourceData);
+                
+                const allBackups = [...backupKeys, backupId].sort((a, b) => b.localeCompare(a));
+                const backupsToDelete = allBackups.slice(MAX_BACKUPS);
+                
+                await Promise.all(
+                    backupsToDelete.map(key => env.CARD_ORDER.delete(key))
+                );
+    
+                return { 
+                    success: true, 
+                    backupId,
+                    remainingBackups: MAX_BACKUPS,
+                    deletedCount: backupsToDelete.length 
+                };
+            } catch (error) {
+                console.error('Backup error:', error);
+                return { 
+                    success: false, 
+                    error: 'Backup operation failed',
+                    details: error.message 
+                };
+            }
+        }
+        return { success: false, error: 'Source data not found' };
+    }
+  };
