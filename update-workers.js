@@ -596,7 +596,7 @@ const HTML_CONTENT = `
         }
         
         try {
-            const response = await fetch('/api/getLinks?userId=tempUser', {
+            const response = await fetch('/api/getLinks?userId=testUser', {
                 headers: headers
             });
             
@@ -868,7 +868,7 @@ const HTML_CONTENT = `
                     'Authorization': localStorage.getItem('authToken')
                 },
                 body: JSON.stringify({ 
-                    userId: 'tempUser', 
+                    userId: 'testUser', 
                     links: allLinks,
                     categories: categories
                 }),
@@ -1156,7 +1156,7 @@ const HTML_CONTENT = `
                     'Authorization': localStorage.getItem('authToken')
                 },
                 body: JSON.stringify({ 
-                    userId: 'tempUser', 
+                    userId: 'testUser', 
                     links: [...newPublicLinks, ...newPrivateLinks],
                     categories: newCategories
                 }),
@@ -1211,7 +1211,7 @@ const HTML_CONTENT = `
                         'Authorization': localStorage.getItem('authToken')
                     },
                     body: JSON.stringify({ 
-                        sourceUserId: 'tempUser', 
+                        sourceUserId: 'testUser', 
                         backupUserId: 'backup' 
                     }),
                 });
@@ -1392,7 +1392,7 @@ const HTML_CONTENT = `
         }
 
         try {
-            const response = await fetch('/api/getLinks?userId=tempUser', {
+            const response = await fetch('/api/getLinks?userId=testUser', {
                 headers: { 'Authorization': token }
             });
             
