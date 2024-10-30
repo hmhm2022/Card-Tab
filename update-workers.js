@@ -1657,22 +1657,41 @@ export default {
         
         if (sourceData) {
             try {
-                const timestamp = new Date().toISOString();
-                const backupId = `backup_${timestamp}`;
+                const currentDate = new Date().toLocaleString('zh-CN', {
+                    timeZone: 'Asia/Shanghai',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                }).replace(/\//g, '-'); 
+                
+                const backupId = `backup_${currentDate}`;
                 
                 const backups = await env.CARD_ORDER.list({ prefix: 'backup_' });
-                const backupKeys = backups.keys
-                    .map(key => key.name)
-                    .sort((a, b) => b.localeCompare(a)); 
+                const backupKeys = backups.keys.map(key => key.name).sort((a, b) => {
+                    const timeA = new Date(a.split('_')[1].replace(/-/g, '/')).getTime();
+                    const timeB = new Date(b.split('_')[1].replace(/-/g, '/')).getTime();
+                    return timeB - timeA;  // 降序排序，最新的在前
+                });
                 
                 await env.CARD_ORDER.put(backupId, sourceData);
                 
-                const allBackups = [...backupKeys, backupId].sort((a, b) => b.localeCompare(a));
+                const allBackups = [...backupKeys, backupId].sort((a, b) => {
+                    const timeA = new Date(a.split('_')[1].replace(/-/g, '/')).getTime();
+                    const timeB = new Date(b.split('_')[1].replace(/-/g, '/')).getTime();
+                    return timeB - timeA;
+                });
+                
                 const backupsToDelete = allBackups.slice(MAX_BACKUPS);
                 
-                await Promise.all(
-                    backupsToDelete.map(key => env.CARD_ORDER.delete(key))
-                );
+                if (backupsToDelete.length > 0) {
+                    await Promise.all(
+                        backupsToDelete.map(key => env.CARD_ORDER.delete(key))
+                    );
+                }
     
                 return { 
                     success: true, 
@@ -1681,7 +1700,6 @@ export default {
                     deletedCount: backupsToDelete.length 
                 };
             } catch (error) {
-                console.error('Backup error:', error);
                 return { 
                     success: false, 
                     error: 'Backup operation failed',
