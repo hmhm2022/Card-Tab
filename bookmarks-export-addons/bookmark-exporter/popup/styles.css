@@ -1,0 +1,14 @@
+body {
+    width: 300px;
+    padding: 15px;
+}
+
+#app {
+    text-align: center;
+}
+
+button {
+    padding: 8px 16px;
+    margin: 10px;
+    cursor: pointer;
+} 

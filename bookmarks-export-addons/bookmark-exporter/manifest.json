@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Bookmarks Exporter for Card-Tab",
+  "version": "0.0.1",
+  "description": "Export Chrome bookmarks with customizable JSON format",
+  "author": "Linux.do user705",
+  "homepage_url": "https://github.com/hmhm2022/Card-Tab/bookmarks-export-addons",
+  "permissions": [
+    "bookmarks"
+  ],
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+} 
