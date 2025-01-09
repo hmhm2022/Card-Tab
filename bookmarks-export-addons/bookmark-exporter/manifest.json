@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "Export Chrome bookmarks with customizable JSON format",
   "author": "Linux.do user705",
-  "homepage_url": "https://github.com/hmhm2022/Card-Tab/bookmarks-export-addons",
+  "homepage_url": "https://github.com/hmhm2022/Card-Tab",
   "permissions": [
     "bookmarks"
   ],
