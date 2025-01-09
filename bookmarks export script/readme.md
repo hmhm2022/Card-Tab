@@ -6,6 +6,7 @@
 3、随便打开一个网页比如baidu.com, 点击Tampermonkey 找到图中位置并点击，弹窗中选中之前保存的 html 格式书签打开；
 
 ![image](https://github.com/user-attachments/assets/fe0bcd89-fea8-4c7e-9726-42255dfcdf99)
+
 4、书签自动转换成json格式保存到Chrome浏览器的下载目录,；
 
 5、打开得到的 bookmarks.json文件，将内容复制到 KV存储中即可
