@@ -1,4 +1,4 @@
-1、下载扩展 [【releases】](https://github.com/hmhm2022/Card-Tab/releases) 解压缩;
+1、下载扩展 [【bookmarks-export-addons.zip】](https://github.com/hmhm2022/Card-Tab/releases) 解压缩;
 
 2、Chrome浏览器访问 “chrome://extensions/”，打开“开发者模式选项”;
 
