@@ -1,4 +1,5 @@
 一、使用方法：仅测试Chrome浏览器
+
 1、Chrome浏览器中打开 "chrome://bookmarks/",点击 书签 页面右上角三个点，导出 html 格式书签保存；
 
 2、Tampermonkey 添加新脚本，复制 bookmarks-exporter.js 内容保存；
