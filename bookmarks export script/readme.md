@@ -7,9 +7,9 @@
 
 ![image](https://github.com/user-attachments/assets/fe0bcd89-fea8-4c7e-9726-42255dfcdf99)
 
-4、书签自动转换成json格式保存到Chrome浏览器的下载目录,；
+4、书签自动转换成json格式保存到Chrome浏览器的下载目录；
 
-5、打开得到的 bookmarks.json文件，将内容复制到 KV存储中即可
+5、打开得到的 bookmarks.json文件，将内容复制到 KV存储中即可。
 
 二、书签处理逻辑如下：
 1、处理书签栏：
