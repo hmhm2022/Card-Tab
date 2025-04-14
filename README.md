@@ -22,7 +22,7 @@
 
 #### 2024.09.02 发布 （第一版很轻便，代码保留在worker-js文件, 后续更新放在update-workers.js文件）
 
-#### 演示站点：  https://demo.usgk.us.kg   备用网址：https://demo.linuxdo.nyc.mn   密码：admin
+#### 演示站点：  https://demo.usgk.dpdns.org   备用网址：https://demo.linuxdo.nyc.mn   密码：admin
 
 #### 未登录界面
 ![image](https://github.com/user-attachments/assets/dd0cad75-11ce-4691-804f-b4dff5ae2cde)
