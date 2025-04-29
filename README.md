@@ -1,4 +1,7 @@
 # Card-Tab 书签卡片式管理，进入管理模式可以自由移动书签位置，添加和删除书签，支持自定义网站分类，支持切换暗色主题
+#### 2025.04.29 更新：
+#### 1、增加分类快捷按钮，书签较多的情况下可一键直达所选分类；
+#### 2、大幅更改界面，增加 DuckDuckGo 搜索。
 #### 2025.01.09 增加:
 ##### 1、bookmarks-export-addons（在bookmarks-export-addons目录）；
 ##### 2、Tampermonkey脚本（在bookmarks export script目录）；
@@ -20,9 +23,12 @@
 
 ### 注意：如果你已经部署过第一版（20240902）导航，更新workes代码后将无法看到之前保存的书签，需重新添加书签，望知悉！
 
-#### 2024.09.02 发布 （第一版很轻便，代码保留在worker-js文件, 后续更新放在update-workers.js文件）
+#### 2024.09.02 发布 （第一版很轻便，代码保留在history下）
 
 #### 演示站点：  https://demo.usgk.dpdns.org   备用网址：https://demo.linuxdo.nyc.mn   密码：admin
+
+#### 20250429 更新界面：
+![1745910265848](https://github.com/user-attachments/assets/bce632fc-d61c-4efe-a74e-e416cab085b8)
 
 #### 未登录界面
 ![image](https://github.com/user-attachments/assets/dd0cad75-11ce-4691-804f-b4dff5ae2cde)
@@ -37,7 +43,7 @@
 
 # 部署方法：
 #### 五步即可完成部署：
-#### 1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制update-workers的代码，然后部署
+#### 1. 登录 Cloudflare：  https://www.cloudflare.com  创建workers，复制 workers.js 的代码，然后部署
 ![image](https://github.com/user-attachments/assets/c067105b-91ee-43d5-90a9-806e5de5fe16)
 
 #### 2. 新建一个名为CARD_ORDER的KV存储
