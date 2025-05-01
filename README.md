@@ -5,7 +5,7 @@
 #### 2025.01.09 增加:
 ##### 1、bookmarks-export-addons（在bookmarks-export-addons目录）；
 ##### 2、Tampermonkey脚本（在bookmarks export script目录）；
-##### 两种途径将Chrome浏览器导出书签转换为json格式，保存到 KV存储
+##### 两种途径将Chrome浏览器导出书签转换为json格式，保存到 KV存储。 下载：[releases](https://github.com/hmhm2022/Card-Tab/releases/download/v0.0.1/bookmark-exporter-addons.zip)
 #### 2024.10.30 更新：
 ##### 1、增加了前端验证，并取消了在浏览器中保存日志。现在超过15分钟需重新登录，及时退出登录能让你的隐私更安全；
 ##### 2、进入设置之前会在自动备份书签，KV里将保存最近10次的备份；
