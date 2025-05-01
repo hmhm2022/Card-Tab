@@ -153,7 +153,7 @@ const HTML_CONTENT = `
     /* 管理员控制面板样式 */
     .admin-controls {
         position: fixed;
-        top: 10px;
+        top: 45px;
         right: 10px;
         display: flex;
         gap: 8px;
@@ -203,6 +203,197 @@ const HTML_CONTENT = `
     body.dark-theme .admin-controls button:hover {
         background-color: #5d7fb9;
         color: white;
+    }
+
+    /* 书签搜索框样式 */
+    .bookmark-search {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        width: 245px;
+        display: flex;
+        gap: 0;
+        z-index: 1001;
+    }
+
+    .bookmark-search input {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px 0 0 4px;
+        padding: 5px 10px;
+        font-size: 13px;
+        width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .bookmark-search input:focus {
+        border-color: #43b883;
+        box-shadow: 0 0 0 2px rgba(67, 184, 131, 0.2);
+        outline: none;
+    }
+
+    .bookmark-search button {
+        background-color: #43b883;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        padding: 5px 10px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bookmark-search button:hover {
+        background-color: #35a674;
+    }
+
+    .bookmark-search button svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    body.dark-theme .bookmark-search input {
+        background-color: #323642;
+        color: #e3e3e3;
+        border-color: #444;
+    }
+
+    body.dark-theme .bookmark-search button {
+        background-color: #5d7fb9;
+    }
+
+    body.dark-theme .bookmark-search button:hover {
+        background-color: #4a6fa5;
+    }
+
+    /* 搜索结果样式 */
+    .search-results-container {
+        margin-top: 20px;
+        padding: 10px;
+        max-width: 1600px;
+        margin-left: auto;
+        margin-right: auto;
+        transition: opacity 0.3s ease;
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 2px solid #43b883;
+        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    /* 遮罩层样式 */
+    .search-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        display: none;
+    }
+
+    body.dark-theme .search-results-container {
+        border-color: #5d7fb9;
+        background-color: rgba(37, 40, 48, 0.95);
+    }
+
+    .search-results-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #43b883;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .search-results-title .close-search {
+        cursor: pointer;
+        font-size: 24px;
+        color: #fff;
+        transition: all 0.2s ease;
+        background-color: #43b883;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-results-title .close-search:hover {
+        background-color: #35a674;
+        transform: scale(1.1);
+    }
+
+    body.dark-theme .search-results-title {
+        color: #5d7fb9;
+    }
+
+    body.dark-theme .search-results-title .close-search {
+        background-color: #5d7fb9;
+        color: #fff;
+    }
+
+    body.dark-theme .search-results-title .close-search:hover {
+        background-color: #4a6fa5;
+        transform: scale(1.1);
+    }
+
+    .search-results-section {
+        margin-bottom: 20px;
+    }
+
+    .search-results-section .search-section-title {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 10px;
+        color: #555;
+        border-left: 3px solid #43b883;
+        padding-left: 8px;
+    }
+
+    body.dark-theme .search-results-section .search-section-title {
+        color: #a0a0a0;
+        border-left-color: #5d7fb9;
+    }
+
+    .no-search-results {
+        text-align: center;
+        padding: 30px;
+        color: #888;
+        font-size: 16px;
+    }
+
+    body.dark-theme .no-search-results {
+        color: #a0a0a0;
+    }
+
+    .search-results-notice {
+        text-align: center;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #f8f8f8;
+        border-radius: 4px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    body.dark-theme .search-results-notice {
+        background-color: #323642;
+        color: #a0a0a0;
     }
 
     /* 添加/删除控制按钮样式 */
@@ -1021,6 +1212,19 @@ const HTML_CONTENT = `
             </div>
             <div id="category-buttons-container" class="category-buttons-container"></div>
         </div>
+        <!-- 书签搜索框 -->
+        <div class="bookmark-search">
+            <input type="text" id="bookmark-search-input" placeholder="搜索书签">
+            <button id="bookmark-search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+            </button>
+        </div>
+        <!-- 搜索结果容器已移至content区域 -->
         <!-- 管理员控制面板 -->
         <div class="admin-controls">
             <input type="password" id="admin-password" placeholder="输入密码">
@@ -1035,6 +1239,20 @@ const HTML_CONTENT = `
             <button class="round-btn remove-btn" onclick="toggleRemoveMode()">-</button>
             <button class="round-btn category-btn" onclick="addCategory()">C+</button>
             <button class="round-btn remove-category-btn" onclick="toggleRemoveCategory()">C-</button>
+        </div>
+
+        <!-- 搜索遮罩层 -->
+        <div id="search-overlay" class="search-overlay"></div>
+
+        <!-- 搜索结果容器 -->
+        <div id="search-results-container" class="search-results-container">
+            <div class="search-results-title">
+                搜索结果 <span class="close-search" onclick="hideSearchResults()">×</span>
+            </div>
+            <div id="search-results-content"></div>
+            <div class="search-results-notice">
+                请点击右上角关闭按钮返回主页面
+            </div>
         </div>
 
         <!-- 分类和卡片容器 -->
@@ -1210,14 +1428,19 @@ const HTML_CONTENT = `
 
     // 渲染分类快捷按钮
     function renderCategoryButtons() {
+        // 如果正在显示搜索结果，不重新渲染分类按钮
+        if (isShowingSearchResults) {
+            return;
+        }
+
         const buttonsContainer = document.getElementById('category-buttons-container');
         buttonsContainer.innerHTML = '';
 
         // 只有当有分类时才显示按钮容器
         if (Object.keys(categories).length > 0) {
-            // 获取页面上实际显示的分类顺序
+            // 获取页面上实际显示的分类顺序（只从sections-container中获取，不包括搜索结果）
             const displayedCategories = [];
-            document.querySelectorAll('.section-title').forEach(titleElement => {
+            document.querySelectorAll('#sections-container .section-title').forEach(titleElement => {
                 displayedCategories.push(titleElement.textContent);
             });
 
@@ -1236,6 +1459,11 @@ const HTML_CONTENT = `
                     button.textContent = category;
                     button.dataset.category = category;
                     button.onclick = () => {
+                        // 如果正在显示搜索结果，先隐藏搜索结果
+                        if (isShowingSearchResults) {
+                            hideSearchResults();
+                        }
+
                         // 清除所有按钮的active类
                         document.querySelectorAll('.category-button').forEach(btn => {
                             btn.classList.remove('active');
@@ -1266,6 +1494,11 @@ const HTML_CONTENT = `
 
     // 根据可见性设置活跃的分类按钮
     function setActiveCategoryButtonByVisibility() {
+        // 如果正在显示搜索结果，不更新分类按钮的活跃状态
+        if (isShowingSearchResults) {
+            return;
+        }
+
         // 获取所有分类区域
         const sections = document.querySelectorAll('.section');
         if (!sections.length) return;
@@ -1295,18 +1528,21 @@ const HTML_CONTENT = `
         });
 
         if (closestSection) {
-            const categoryId = closestSection.querySelector('.card-container').id;
-            const buttons = document.querySelectorAll('.category-button');
+            const cardContainer = closestSection.querySelector('.card-container');
+            if (cardContainer && cardContainer.id) {
+                const categoryId = cardContainer.id;
+                const buttons = document.querySelectorAll('.category-button');
 
-            // 移除所有活跃状态
-            buttons.forEach(btn => btn.classList.remove('active'));
+                // 移除所有活跃状态
+                buttons.forEach(btn => btn.classList.remove('active'));
 
-            // 为匹配的分类按钮添加活跃状态
-            buttons.forEach(btn => {
-                if (btn.dataset.category === categoryId) {
-                    btn.classList.add('active');
-                }
-            });
+                // 为匹配的分类按钮添加活跃状态
+                buttons.forEach(btn => {
+                    if (btn.dataset.category === categoryId) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
         }
     }
 
@@ -2130,6 +2366,125 @@ const HTML_CONTENT = `
         const result = await response.json();
         return result;
     }
+
+    // 全局变量，标记是否正在显示搜索结果
+    let isShowingSearchResults = false;
+
+    // 书签搜索功能
+    function searchBookmarks(query) {
+        if (!query || query.trim() === '') {
+            hideSearchResults();
+            return;
+        }
+
+        query = query.toLowerCase().trim();
+        const resultsContainer = document.getElementById('search-results-container');
+        const resultsContent = document.getElementById('search-results-content');
+        const searchOverlay = document.getElementById('search-overlay');
+        resultsContent.innerHTML = '';
+
+        // 只搜索当前可见的链接（公开链接或已登录状态下的所有链接）
+        const visibleLinks = links;
+        const matchedLinks = visibleLinks.filter(link =>
+            link.name.toLowerCase().includes(query) ||
+            link.url.toLowerCase().includes(query)
+        );
+
+        if (matchedLinks.length === 0) {
+            resultsContent.innerHTML = '<div class="no-search-results">没有找到匹配的书签</div>';
+        } else {
+            // 按分类组织搜索结果
+            const categorizedResults = {};
+
+            matchedLinks.forEach(link => {
+                if (!categorizedResults[link.category]) {
+                    categorizedResults[link.category] = [];
+                }
+                categorizedResults[link.category].push(link);
+            });
+
+            // 为每个分类创建一个区域
+            Object.keys(categorizedResults).forEach(category => {
+                const categoryLinks = categorizedResults[category];
+
+                const section = document.createElement('div');
+                section.className = 'search-results-section';
+
+                const sectionTitle = document.createElement('div');
+                sectionTitle.className = 'search-section-title'; // 使用不同的类名，避免与主页面的分类标题混淆
+                sectionTitle.textContent = category;
+                section.appendChild(sectionTitle);
+
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'card-container';
+
+                // 为每个链接创建卡片
+                categoryLinks.forEach(link => {
+                    createCard(link, cardContainer);
+                });
+
+                section.appendChild(cardContainer);
+                resultsContent.appendChild(section);
+            });
+        }
+
+        // 显示遮罩层和搜索结果容器
+        searchOverlay.style.display = 'block';
+        resultsContainer.style.display = 'block';
+
+        // 设置标记，表示正在显示搜索结果
+        isShowingSearchResults = true;
+
+        // 禁用页面滚动
+        document.body.style.overflow = 'hidden';
+
+        logAction('搜索书签', { query, resultCount: matchedLinks.length });
+    }
+
+    // 隐藏搜索结果
+    function hideSearchResults() {
+        const resultsContainer = document.getElementById('search-results-container');
+        const searchOverlay = document.getElementById('search-overlay');
+
+        // 隐藏搜索结果和遮罩层
+        resultsContainer.style.display = 'none';
+        searchOverlay.style.display = 'none';
+
+        // 重置标记
+        isShowingSearchResults = false;
+
+        // 恢复页面滚动
+        document.body.style.overflow = 'auto';
+
+        // 清空搜索框
+        document.getElementById('bookmark-search-input').value = '';
+
+        // 清空搜索结果内容，避免影响下次搜索
+        document.getElementById('search-results-content').innerHTML = '';
+
+        // 重新渲染分类按钮，确保分类按钮的正确显示
+        renderCategoryButtons();
+    }
+
+    // 书签搜索按钮点击事件
+    document.getElementById('bookmark-search-button').addEventListener('click', () => {
+        const query = document.getElementById('bookmark-search-input').value;
+        searchBookmarks(query);
+    });
+
+    // 书签搜索输入框回车事件
+    document.getElementById('bookmark-search-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const query = document.getElementById('bookmark-search-input').value;
+            searchBookmarks(query);
+        }
+    });
+
+    // 不再允许点击遮罩层关闭搜索结果
+    // 防止点击搜索结果区域时的事件冒泡
+    document.getElementById('search-results-container').addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
 
     // 初始化加载
     document.addEventListener('DOMContentLoaded', async () => {
