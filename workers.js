@@ -150,224 +150,416 @@ const HTML_CONTENT = `
         padding: 0 10px; /* 添加左右内边距 */
     }
 
-    /* 管理员控制面板样式 */
-    .admin-controls {
-        position: fixed;
-        top: 45px;
-        right: 10px;
-        display: flex;
-        gap: 8px;
-    }
-
-    .admin-controls input {
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        padding: 5px 10px;
-        font-size: 13px;
-        transition: all 0.3s ease;
-    }
-
-    .admin-controls input:focus {
-        border-color: #43b883;
-        box-shadow: 0 0 0 2px rgba(67, 184, 131, 0.2);
-        outline: none;
-    }
-
-    .admin-controls button {
-        background-color: #f9fafb;
-        color: #43b883;
-        border: none;
-        border-radius: 4px;
-        padding: 5px 10px;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .admin-controls button:hover {
-        background-color: #43b883;
-        color: white;
-    }
-
-    body.dark-theme .admin-controls input {
-        background-color: #323642;
-        color: #e3e3e3;
-        border-color: #444;
-    }
-
-    body.dark-theme .admin-controls button {
-        background-color: #323642;
-        color: #a0b7d4;
-    }
-
-    body.dark-theme .admin-controls button:hover {
-        background-color: #5d7fb9;
-        color: white;
-    }
-
-    /* 书签搜索框样式 */
-    .bookmark-search {
+    /* 右上角控制区域样式 */
+    .top-right-controls {
         position: fixed;
         top: 10px;
         right: 10px;
-        width: 245px;
         display: flex;
-        gap: 0;
+        align-items: center;
+        gap: 10px;
         z-index: 1001;
     }
 
-    .bookmark-search input {
-        border: 1px solid #e0e0e0;
-        border-radius: 4px 0 0 4px;
-        padding: 5px 10px;
-        font-size: 13px;
-        width: 180px;
-        transition: all 0.3s ease;
-    }
-
-    .bookmark-search input:focus {
-        border-color: #43b883;
-        box-shadow: 0 0 0 2px rgba(67, 184, 131, 0.2);
-        outline: none;
-    }
-
-    .bookmark-search button {
+    /* 设置按钮样式 */
+    .admin-btn {
         background-color: #43b883;
         color: white;
         border: none;
-        border-radius: 0 4px 4px 0;
-        padding: 5px 10px;
+        border-radius: 4px;
+        padding: 8px 16px;
         font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .admin-btn:hover {
+        background-color: #35a674;
+        transform: translateY(-1px);
+    }
+
+    body.dark-theme .admin-btn {
+        background-color: #5d7fb9;
+    }
+
+    body.dark-theme .admin-btn:hover {
+        background-color: #4a6fa5;
+    }
+
+    /* 登录按钮样式 */
+    .login-btn {
+        background-color: #43b883;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .login-btn:hover {
+        background-color: #35a674;
+        transform: translateY(-1px);
+    }
+
+    body.dark-theme .login-btn {
+        background-color: #5d7fb9;
+    }
+
+    body.dark-theme .login-btn:hover {
+        background-color: #4a6fa5;
+    }
+
+    /* GitHub图标按钮样式 */
+    .github-btn {
+        background: none;
+        border: none;
         cursor: pointer;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        padding: 0;
     }
 
-    .bookmark-search button:hover {
+    .github-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .github-btn svg {
+        width: 24px;
+        height: 24px;
+        fill: #43b883;
+        transition: fill 0.3s ease;
+    }
+
+    body.dark-theme .github-btn svg {
+        fill: #5d7fb9;
+    }
+
+    /* 书签搜索图标按钮样式 */
+    .bookmark-search-toggle {
+        background-color: #43b883;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        position: relative;
+    }
+
+    .bookmark-search-toggle:hover {
         background-color: #35a674;
+        transform: translateY(-2px);
     }
 
-    .bookmark-search button svg {
-        width: 16px;
-        height: 16px;
+    .bookmark-search-toggle svg {
+        width: 20px;
+        height: 20px;
+        stroke: white;
     }
 
-    body.dark-theme .bookmark-search input {
+    body.dark-theme .bookmark-search-toggle {
+        background-color: #5d7fb9;
+    }
+
+    body.dark-theme .bookmark-search-toggle:hover {
+        background-color: #4a6fa5;
+    }
+
+    /* 下拉书签搜索框样式 */
+    .bookmark-search-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 140px;
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 8px;
+        margin-top: 4px;
+        display: none;
+        z-index: 1002;
+    }
+
+    .bookmark-search-dropdown.show {
+        display: block;
+    }
+
+    .bookmark-search-dropdown input {
+        width: 100%;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 13px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .bookmark-search-dropdown input:focus {
+        border-color: #43b883;
+        box-shadow: 0 0 0 2px rgba(67, 184, 131, 0.2);
+        outline: none;
+    }
+
+    .bookmark-search-dropdown input::placeholder {
+        color: #999;
+    }
+
+    body.dark-theme .bookmark-search-dropdown {
         background-color: #323642;
+        border-color: #444;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-theme .bookmark-search-dropdown input {
+        background-color: #252830;
         color: #e3e3e3;
         border-color: #444;
     }
 
-    body.dark-theme .bookmark-search button {
-        background-color: #5d7fb9;
+    body.dark-theme .bookmark-search-dropdown input::placeholder {
+        color: #888;
     }
 
-    body.dark-theme .bookmark-search button:hover {
-        background-color: #4a6fa5;
-    }
-
-    /* 搜索结果样式 */
-    .search-results-container {
-        margin-top: 20px;
-        padding: 10px;
-        max-width: 1600px;
-        margin-left: auto;
-        margin-right: auto;
-        transition: opacity 0.3s ease;
+    /* 登录弹窗样式 */
+    .login-modal {
         display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border: 2px solid #43b883;
-        border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        z-index: 9999;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-    }
-
-    /* 遮罩层样式 */
-    .search-overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 9998;
-        display: none;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        backdrop-filter: blur(3px);
     }
 
-    body.dark-theme .search-results-container {
-        border-color: #5d7fb9;
-        background-color: rgba(37, 40, 48, 0.95);
+    .login-modal-content {
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        width: 300px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-modal h3 {
+        margin: 0 0 20px 0;
+        color: #333;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .login-modal input {
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .login-modal input:focus {
+        border-color: #43b883;
+        box-shadow: 0 0 0 2px rgba(67, 184, 131, 0.2);
+        outline: none;
+    }
+
+    .login-modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    .login-modal button {
+        background-color: #43b883;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 13px;
+    }
+
+    .login-modal button:hover {
+        background-color: #35a674;
+    }
+
+    .login-modal button.cancel {
+        background-color: #f0f0f0;
+        color: #333;
+    }
+
+    .login-modal button.cancel:hover {
+        background-color: #e0e0e0;
+    }
+
+    body.dark-theme .login-modal-content {
+        background-color: #252830;
+        color: #e3e3e3;
+    }
+
+    body.dark-theme .login-modal h3 {
+        color: #e3e3e3;
+    }
+
+    body.dark-theme .login-modal input {
+        background-color: #323642;
+        color: #e3e3e3;
+        border-color: #444;
+    }
+
+    /* 悬浮提示样式 */
+    @media (hover: hover) and (pointer: fine) {
+        .has-tooltip {
+            position: relative;
+        }
+
+        .has-tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .has-tooltip::before {
+            content: "";
+            position: absolute;
+            border: 6px solid transparent;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .has-tooltip:hover::after,
+        .has-tooltip:hover::before {
+            opacity: 1;
+        }
+
+        /* 下方提示框和箭头 */
+        .tooltip-bottom::after {
+            top: 100%;
+            left: 50%;
+            margin-top: 12px;
+            transform: translateX(-50%);
+        }
+        .tooltip-bottom::before {
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-color: rgba(0, 0, 0, 0.75);
+        }
+
+        /* 绿底样式 */
+        .tooltip-green::after {
+            background: #43b883;
+            color: white;
+        }
+        .tooltip-green::before {
+            border-bottom-color: #43b883;
+        }
+
+        /* 暗色主题 */
+        body.dark-theme .has-tooltip::after {
+            background: rgba(151, 151, 151, 0.9);
+            color: #eee;
+        }
+        body.dark-theme .has-tooltip::before {
+            border-bottom-color: rgba(151, 151, 151, 0.9);
+        }
+        body.dark-theme .tooltip-green::after {
+            background: #5d7fb9;
+            color: white;
+        }
+        body.dark-theme .tooltip-green::before {
+            border-bottom-color: #5d7fb9;
+        }
+    }
+
+    /* 搜索结果样式 - 简化版 */
+    .search-results-section {
+        margin-bottom: 30px;
+    }
+
+    .search-results-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #43b883;
+    }
+
+    body.dark-theme .search-results-header {
+        background-color: #2d3748;
+        border-left-color: #5d7fb9;
     }
 
     .search-results-title {
         font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 15px;
-        color: #43b883;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .search-results-title .close-search {
-        cursor: pointer;
-        font-size: 24px;
-        color: #fff;
-        transition: all 0.2s ease;
-        background-color: #43b883;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .search-results-title .close-search:hover {
-        background-color: #35a674;
-        transform: scale(1.1);
+        font-weight: bold;
+        color: #333;
     }
 
     body.dark-theme .search-results-title {
-        color: #5d7fb9;
+        color: #e2e8f0;
     }
 
-    body.dark-theme .search-results-title .close-search {
+    .back-to-main {
+        background-color: #43b883;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .back-to-main:hover {
+        background-color: #35a674;
+    }
+
+    body.dark-theme .back-to-main {
         background-color: #5d7fb9;
-        color: #fff;
     }
 
-    body.dark-theme .search-results-title .close-search:hover {
+    body.dark-theme .back-to-main:hover {
         background-color: #4a6fa5;
-        transform: scale(1.1);
-    }
-
-    .search-results-section {
-        margin-bottom: 20px;
-    }
-
-    .search-results-section .search-section-title {
-        font-size: 16px;
-        font-weight: 500;
-        margin-bottom: 10px;
-        color: #555;
-        border-left: 3px solid #43b883;
-        padding-left: 8px;
-    }
-
-    body.dark-theme .search-results-section .search-section-title {
-        color: #a0a0a0;
-        border-left-color: #5d7fb9;
     }
 
     .no-search-results {
@@ -381,22 +573,7 @@ const HTML_CONTENT = `
         color: #a0a0a0;
     }
 
-    .search-results-notice {
-        text-align: center;
-        padding: 10px;
-        margin-top: 10px;
-        background-color: #f8f8f8;
-        border-radius: 4px;
-        color: #666;
-        font-size: 14px;
-    }
-
-    body.dark-theme .search-results-notice {
-        background-color: #323642;
-        color: #a0a0a0;
-    }
-
-    /* 添加/删除控制按钮样式 */
+    /* 管理控制按钮样式 - 严格按照佬友修改版设计 */
     .add-remove-controls {
         display: none;
         flex-direction: column;
@@ -423,6 +600,13 @@ const HTML_CONTENT = `
         cursor: pointer;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
         transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .round-btn svg {
+        pointer-events: none;
+        display: block;
+        margin: auto;
     }
 
     .round-btn:hover {
@@ -626,38 +810,54 @@ const HTML_CONTENT = `
         height: 4px;
     }
 
-    /* 主题切换按钮样式 */
-    #theme-toggle {
+    /* 浮动按钮组样式 */
+    .floating-button-group {
         position: fixed;
         bottom: 50px;
         right: 20px;
-        background-color: #43b883;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        text-align: center;
-        font-size: 24px;
-        line-height: 40px;
-        cursor: pointer;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
         z-index: 1000;
     }
 
-    #theme-toggle:hover {
-        background-color: #35a674;
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    .floating-button-group button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #43b883;
+        color: white;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
     }
 
-    body.dark-theme #theme-toggle {
+    .floating-button-group button:hover {
+        transform: translateY(-2px);
+        background-color: #369f6b;
+    }
+
+    #back-to-top-btn {
+        display: none;
+    }
+
+    body.dark-theme .floating-button-group button {
         background-color: #5d7fb9;
     }
 
-    body.dark-theme #theme-toggle:hover {
+    body.dark-theme .floating-button-group button:hover {
         background-color: #4a6fa5;
+    }
+
+    /* 主题切换按钮样式 */
+    #theme-toggle {
+        font-size: 24px;
+        line-height: 40px;
     }
 
     /* 对话框样式 */
@@ -914,43 +1114,14 @@ const HTML_CONTENT = `
         padding: 2px 5px;
         border-radius: 3px;
         position: absolute;
-        top: 5px;
+        top: 18px;
         right: 5px;
+        z-index: 5;
     }
 
-    .delete-btn {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background-color: rgba(255, 82, 82, 0.85);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        cursor: pointer;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-        transition: all 0.2s ease;
-        display: none;
-        z-index: 10;
-        opacity: 0.7;
-    }
 
-    .delete-btn:hover {
-        background-color: #ff1a1a;
-        transform: scale(1.1);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        opacity: 1;
-    }
 
-    body.dark-theme .delete-btn {
-        background-color: rgba(255, 82, 82, 0.75);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    }
+
 
     /* 版权信息样式 */
     #copyright {
@@ -1013,10 +1184,21 @@ const HTML_CONTENT = `
     }
 
     /* 响应式设计 */
+    @media (max-width: 1400px) and (min-width: 1201px) {
+        .card-container {
+            grid-template-columns: repeat(auto-fit, 150px);
+            justify-content: start;
+            column-gap: 40px;
+            row-gap: 15px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+    }
+
     @media (max-width: 1200px) and (min-width: 769px) {
         .card-container {
-            grid-template-columns: repeat(6, 150px);
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, 150px);
+            justify-content: start;
             column-gap: 35px;
             row-gap: 12px;
             padding: 15px;
@@ -1026,8 +1208,8 @@ const HTML_CONTENT = `
 
     @media (max-width: 768px) and (min-width: 481px) {
         .card-container {
-            grid-template-columns: repeat(4, 150px);
-            justify-content: center;
+            grid-template-columns: repeat(auto-fit, 150px);
+            justify-content: start;
             column-gap: 30px;
             row-gap: 12px;
             padding: 15px;
@@ -1037,9 +1219,10 @@ const HTML_CONTENT = `
 
     @media (max-width: 480px) {
         .fixed-elements {
-            position: relative;
-            padding: 8px;
+            position: fixed; /* 恢复固定定位，确保分类按钮位置正确 */
+            padding: 8px 12px 5px 12px; /* 紧凑的内边距 */
             height: auto;
+            min-height: 140px; /* 增加最小高度，确保有足够空间 */
             box-shadow: none; /* 移除阴影 */
         }
 
@@ -1047,14 +1230,22 @@ const HTML_CONTENT = `
             box-shadow: none; /* 移除阴影 */
         }
 
+        /* 移动端一言样式调整 - 紧凑显示 */
+        #hitokoto {
+            margin: 3px 0 6px 0; /* 紧凑的上下边距 */
+            font-size: 12px; /* 减小字体 */
+            line-height: 1.3; /* 紧凑行高 */
+            padding: 0 8px; /* 左右内边距 */
+        }
+
         .category-buttons-container {
             width: 100%;
             max-width: none;
-            padding: 8px;
+            padding: 6px;
             overflow-x: auto; /* 允许水平滚动 */
             flex-wrap: nowrap; /* 不允许按钮换行 */
-            justify-content: center; /* 居中排列按钮 */
-            margin: 10px auto 0; /* 顶部增加间距 */
+            justify-content: flex-start; /* 左对齐排列按钮 */
+            margin: 8px auto 5px; /* 紧凑的分类按钮边距 */
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* IE and Edge */
             background-color: transparent; /* 移动端也透明 */
@@ -1073,24 +1264,41 @@ const HTML_CONTENT = `
         }
 
         .content {
-            margin-top: 15px;
+            margin-top: 150px; /* 增加顶部边距，适配更高的固定元素 */
             margin-bottom: 100px; /* 为底部的分类按钮和版权信息留出空间 */
-            padding: 10px;
+            padding: 15px; /* 保持内边距 */
             transition: opacity 0.3s ease;
+        }
+
+        /* 移动端center-content布局优化 */
+        .center-content {
+            position: static; /* 移动端使用静态定位 */
+            transform: none; /* 取消变换 */
+            width: 100%;
+            text-align: center;
+            padding: 0 8px; /* 减少左右内边距 */
         }
 
         .loading .content {
             opacity: 0.6;
         }
 
+        /* 移动端搜索容器样式 */
+        .search-container {
+            margin-top: 15px; /* 增加上边距，与右上角按钮拉开距离 */
+        }
+
         .search-bar {
             flex-wrap: nowrap;
-            max-width: 100%;
+            max-width: 320px; /* 限制移动端搜索栏宽度 */
+            width: 90%; /* 相对宽度 */
+            margin: 6px auto 8px auto; /* 居中显示 */
         }
 
         .search-bar select {
-            width: 120px;
+            width: 80px; /* 缩小选择框宽度，参考佬友修改版 */
             flex: 0 0 auto;
+            font-size: 12px; /* 减小字体以适应更小宽度 */
         }
 
         .search-bar input {
@@ -1152,15 +1360,14 @@ const HTML_CONTENT = `
 
         .add-remove-controls {
             right: 5px;
-            bottom: 20px;
+            bottom: 150px;
             top: auto;
             transform: none;
-            flex-direction: row;
+            flex-direction: column;
             gap: 15px;
         }
 
-        .round-btn,
-        #theme-toggle {
+        .round-btn {
             right: 10px;
             display: flex;
             align-items: center;
@@ -1170,8 +1377,15 @@ const HTML_CONTENT = `
             font-size: 20px;
         }
 
-        #theme-toggle {
+        .floating-button-group {
             bottom: 20px;
+            right: 10px;
+        }
+
+        .floating-button-group button {
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
         }
 
         #dialog-box {
@@ -1185,6 +1399,429 @@ const HTML_CONTENT = `
             min-width: 100px;
         }
     }
+
+    /* 自定义对话框样式 */
+    .dialog-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .dialog-box {
+        background-color: #ffffff;
+        padding: 24px;
+        border-radius: 12px;
+        width: 340px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-20px);
+        animation: slideUp 0.3s ease forwards;
+    }
+
+    .dialog-title {
+        margin: 0 0 15px 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .dialog-content {
+        padding: 15px 0;
+        margin-bottom: 16px;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #333;
+    }
+
+    .dialog-box input[type="text"] {
+        width: 100%;
+        margin-bottom: 16px;
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+        box-sizing: border-box;
+        background-color: #ffffff !important;
+    }
+
+    .dialog-box input[type="text"]:focus {
+        border-color: #4a90e2 !important;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    }
+
+    .dialog-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .dialog-box button {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .dialog-confirm-btn {
+        background-color: #43b883;
+        color: white;
+    }
+
+    .dialog-confirm-btn:hover {
+        background-color: #3aa876;
+    }
+
+    .dialog-cancel-btn {
+        background-color: #f0f0f0;
+        color: #555;
+    }
+
+    .dialog-cancel-btn:hover {
+        background-color: #e0e0e0;
+    }
+
+    .top-z-index {
+        z-index: 9999;
+    }
+
+    /* 动画效果 */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* 暗色主题对话框样式 */
+    body.dark-theme .dialog-box {
+        background-color: #2d3748;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-theme .dialog-title {
+        color: #f8f9fa;
+    }
+
+    body.dark-theme .dialog-content {
+        color: #f8f9fa;
+    }
+
+    body.dark-theme .dialog-box input[type="text"] {
+        background-color: #3c4658 !important;
+        color: #e3e3e3 !important;
+        border-color: #4a5568 !important;
+    }
+
+    body.dark-theme .dialog-box input[type="text"]:focus {
+        border-color: #5a9cec !important;
+        box-shadow: 0 0 0 3px rgba(90, 156, 236, 0.3);
+    }
+
+    body.dark-theme .dialog-cancel-btn {
+        background-color: #4a5568;
+        color: #e3e3e3;
+    }
+
+    body.dark-theme .dialog-cancel-btn:hover {
+        background-color: #3c4658;
+    }
+
+    body.dark-theme .dialog-confirm-btn {
+        background-color: #5d7fb9;
+        color: white;
+    }
+
+    body.dark-theme .dialog-confirm-btn:hover {
+        background-color: #5473a9;
+    }
+
+    /* 加载遮罩样式 */
+    #loading-mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        backdrop-filter: blur(4px);
+        z-index: 7000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loading-content {
+        background-color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 10px #0003;
+        font-size: 16px;
+        color: #333;
+    }
+
+    /* 加载动画 */
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ccc;
+        border-top-color: #3498db;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    body.dark-theme .loading-content {
+        background-color: #2d3748;
+        color: #f8f9fa;
+    }
+
+    /* 分类管理按钮样式 */
+    .edit-category-btn, .move-category-btn {
+        background-color: #43b883;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        margin-left: 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: none;
+    }
+
+    .edit-category-btn:hover {
+        background-color: #3aa876;
+    }
+
+    .move-category-btn {
+        background-color: #5d7fb9;
+        padding: 4px 6px;
+        min-width: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .move-category-btn:hover {
+        background-color: #5473a9;
+    }
+
+    .move-category-btn svg {
+        width: 16px;
+        height: 16px;
+        fill: white;
+    }
+
+    .delete-category-btn {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        margin-left: 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: none;
+    }
+
+    .delete-category-btn:hover {
+        background-color: #c0392b;
+    }
+
+    /* 暗色主题下的分类管理按钮 */
+    body.dark-theme .edit-category-btn {
+        background-color: #5d7fb9;
+    }
+
+    body.dark-theme .edit-category-btn:hover {
+        background-color: #5473a9;
+    }
+
+    body.dark-theme .move-category-btn {
+        background-color: #43b883;
+    }
+
+    body.dark-theme .move-category-btn:hover {
+        background-color: #3aa876;
+    }
+
+    body.dark-theme .delete-category-btn {
+        background-color: #e74c3c;
+    }
+
+    body.dark-theme .delete-category-btn:hover {
+        background-color: #c0392b;
+    }
+
+    /* 按钮顺序控制 */
+    .add-btn { order: 1; }
+    .remove-btn { order: 2; }
+    .category-add-btn { order: 3; }
+    .category-manage-btn { order: 4; }
+
+    /* 分类管理按钮激活状态 */
+    .category-manage-btn.active {
+        background-color: #e74c3c;
+    }
+
+    .category-manage-btn.active:hover {
+        background-color: #c0392b;
+    }
+
+    /* 卡片描述样式 */
+    .card-tip {
+        font-size: 12px;
+        color: #666;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 14px;
+        max-height: 28px;
+        margin-top: 5px;
+    }
+
+    body.dark-theme .card-tip {
+        color: #a0a0a0;
+    }
+
+    /* 卡片按钮容器 */
+    .card-actions {
+        position: absolute;
+        top: -12px;
+        right: -12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        z-index: 15;
+        height: 24px;
+    }
+
+    /* 卡片按钮通用样式 */
+    .card-btn {
+        position: relative;
+        z-index: 1;
+        width: 24px;
+        height: 24px;
+        border: none;
+        border-radius: 50%;
+        background: #43b883;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+        padding: 0;
+        margin: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        flex-shrink: 0;
+        vertical-align: top;
+    }
+
+    .card-btn:hover {
+        z-index: 2;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-btn svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        display: block;
+        margin: auto;
+    }
+
+    .edit-btn {
+        background: #43b883;
+    }
+
+    .delete-btn {
+        background: #e74c3c;
+    }
+
+    body.dark-theme .edit-btn {
+        background: #5d7fb9;
+    }
+
+    body.dark-theme .delete-btn {
+        background: #e74c3c;
+    }
+
+    /* 自定义提示框样式 */
+    #custom-tooltip {
+        position: absolute;
+        display: none;
+        z-index: 700;
+        background: #43b883;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        pointer-events: none;
+        max-width: 300px;
+        white-space: pre-wrap;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.2s ease;
+    }
+
+    body.dark-theme #custom-tooltip {
+        background: #5d7fb9;
+        color: #fff;
+    }
+
+    /* 卡片悬停效果 */
+    @media (hover: hover) and (pointer: fine) {
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.no-hover:hover {
+            transform: none !important;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        body.dark-theme .card.no-hover:hover {
+            transform: none !important;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2) !important;
+        }
+    }
+
+
     </style>
 </head>
 
@@ -1212,76 +1849,152 @@ const HTML_CONTENT = `
             </div>
             <div id="category-buttons-container" class="category-buttons-container"></div>
         </div>
-        <!-- 书签搜索框 -->
-        <div class="bookmark-search">
-            <input type="text" id="bookmark-search-input" placeholder="搜索书签">
-            <button id="bookmark-search-button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- 右上角控制区域 -->
+        <div class="top-right-controls">
+            <button class="admin-btn" id="admin-btn" onclick="toggleAdminMode()" style="display: none;">设置</button>
+            <button class="login-btn" id="login-btn" onclick="handleLoginClick()">登录</button>
+            <button class="github-btn has-tooltip tooltip-bottom tooltip-green" onclick="openGitHub()" data-tooltip="喜欢请点个star">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </button>
+            <div class="bookmark-search-toggle" onclick="toggleBookmarkSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <path d="m21 21-4.35-4.35"></path>
                     <line x1="11" y1="8" x2="11" y2="14"></line>
                     <line x1="8" y1="11" x2="14" y2="11"></line>
                 </svg>
-            </button>
-        </div>
-        <!-- 搜索结果容器已移至content区域 -->
-        <!-- 管理员控制面板 -->
-        <div class="admin-controls">
-            <input type="password" id="admin-password" placeholder="输入密码">
-            <button id="admin-mode-btn" onclick="toggleAdminMode()">设  置</button>
-            <button id="secret-garden-btn" onclick="toggleSecretGarden()">登  录</button>
+                <div class="bookmark-search-dropdown" id="bookmark-search-dropdown">
+                    <input type="text" id="bookmark-search-input" placeholder="搜索书签...">
+                </div>
+            </div>
         </div>
     </div>
     <div class="content">
-        <!-- 添加/删除控制按钮 -->
+        <!-- 管理控制按钮 -->
         <div class="add-remove-controls">
-            <button class="round-btn add-btn" onclick="showAddDialog()">+</button>
-            <button class="round-btn remove-btn" onclick="toggleRemoveMode()">-</button>
-            <button class="round-btn category-btn" onclick="addCategory()">C+</button>
-            <button class="round-btn remove-category-btn" onclick="toggleRemoveCategory()">C-</button>
+            <button class="round-btn add-btn" onclick="showAddDialog()" title="添加链接">
+                <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 6H8a2 2 0 0 0-2 2v8M16 42H8a2 2 0 0 1-2-2v-8M32 42h8a2 2 0 0 0 2-2v-8M32 6h8a2 2 0 0 1 2 2v8" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M32 24H16M24 16v16" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </button>
+
+            <button class="round-btn remove-btn" onclick="toggleRemoveMode()" title="编辑链接">
+                <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M42 26v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M14 26.72V34h7.32L42 13.31 34.7 6 14 26.72Z" stroke="white" stroke-width="4" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </button>
+
+            <button class="round-btn category-add-btn" onclick="addCategory()" title="添加分类">
+                <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 8c0-1.1.9-2 2-2h12l5 6h17c1.1 0 2 .9 2 2v26c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V8Z" stroke="white" stroke-width="4" stroke-linejoin="round" fill="none"/>
+                    <path d="M18 27h12M24 21v12" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+            </button>
+
+            <button class="round-btn category-manage-btn" onclick="toggleEditCategory()" title="编辑分类">
+                <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 8c0-1.1.9-2 2-2h12l5 6h17c1.1 0 2 .9 2 2v26c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V8Z" stroke="white" stroke-width="4" stroke-linejoin="round" fill="none"/>
+                    <circle cx="24" cy="28" r="4" stroke="white" stroke-width="4" fill="none"/>
+                    <path d="M24 21v3m0 8v3m4.8-12-2.1 2.1M20.8 31l-2.1 2.1M19 23l2.1 2.1M27 31l2.1 2.1M17 28h3M28 28h3" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </div>
 
-        <!-- 搜索遮罩层 -->
-        <div id="search-overlay" class="search-overlay"></div>
 
-        <!-- 搜索结果容器 -->
-        <div id="search-results-container" class="search-results-container">
-            <div class="search-results-title">
-                搜索结果 <span class="close-search" onclick="hideSearchResults()">×</span>
-            </div>
-            <div id="search-results-content"></div>
-            <div class="search-results-notice">
-                请点击右上角关闭按钮返回主页面
-            </div>
-        </div>
 
         <!-- 分类和卡片容器 -->
         <div id="sections-container"></div>
-        <!-- 主题切换按钮 -->
-        <button id="theme-toggle" onclick="toggleTheme()">◑</button>
+        <!-- 浮动按钮组 -->
+        <div class="floating-button-group">
+            <button id="back-to-top-btn" onclick="scrollToTop()" style="display: none;">
+                <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 24l12-12 12 12m-24 12 12-12 12 12" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button id="theme-toggle" onclick="toggleTheme()">◑</button>
+        </div>
         <!-- 添加链接对话框 -->
         <div id="dialog-overlay">
             <div id="dialog-box">
                 <label for="name-input">名称</label>
-                <input type="text" id="name-input">
+                <input type="text" id="name-input" placeholder="必填">
                 <label for="url-input">地址</label>
-                <input type="text" id="url-input">
+                <input type="text" id="url-input" placeholder="必填">
+                <label for="tips-input">描述</label>
+                <input type="text" id="tips-input" placeholder="可选">
+                <label for="icon-input">图标</label>
+                <input type="text" id="icon-input" placeholder="可选">
                 <label for="category-select">选择分类</label>
                 <select id="category-select"></select>
                 <div class="private-link-container">
                     <label for="private-checkbox">私密链接</label>
                     <input type="checkbox" id="private-checkbox">
                 </div>
-                <button onclick="addLink()">确定</button>
-                <button onclick="hideAddDialog()">取消</button>
+                <div class="dialog-buttons">
+                    <button class="dialog-cancel-btn" id="dialog-cancel-btn">取消</button>
+                    <button class="dialog-confirm-btn" id="dialog-confirm-btn">确定</button>
+                </div>
             </div>
         </div>
-        <!-- 版权信息 -->
-        <div id="copyright" class="copyright">
-            <!--请不要删除-->
-            <p>项目地址：<a href="https://github.com/hmhm2022/Card-Tab" target="_blank">GitHub</a> 如果喜欢，烦请点个star！</p>
+        <!-- 登录弹窗 -->
+        <div id="login-modal" class="login-modal">
+            <div class="login-modal-content">
+                <h3>登录</h3>
+                <input type="password" id="login-password" placeholder="请输入密码">
+                <div class="login-modal-buttons">
+                    <button class="cancel" onclick="hideLoginModal()">取消</button>
+                    <button onclick="performLogin()">确定</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自定义Alert对话框 -->
+        <div class="dialog-overlay top-z-index" id="custom-alert-overlay" style="display: none;">
+            <div class="dialog-box" id="custom-alert-box">
+                <h3 class="dialog-title" id="custom-alert-title">提示</h3>
+                <div class="dialog-content" id="custom-alert-content">这里是提示内容</div>
+                <div class="dialog-buttons">
+                    <button class="dialog-confirm-btn" id="custom-alert-confirm">确定</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自定义Confirm对话框 -->
+        <div class="dialog-overlay top-z-index" id="custom-confirm-overlay" style="display: none;">
+            <div class="dialog-box">
+                <div class="dialog-content" id="custom-confirm-message"></div>
+                <div class="dialog-buttons">
+                    <button id="custom-confirm-cancel" class="dialog-cancel-btn">取消</button>
+                    <button id="custom-confirm-ok" class="dialog-confirm-btn">确定</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分类名称输入对话框 -->
+        <div class="dialog-overlay" id="category-dialog" style="display: none;">
+            <div class="dialog-box">
+                <h3 id="category-dialog-title" class="dialog-title">新建分类</h3>
+                <input type="text" id="category-name-input" class="category-dialog-input" placeholder="请输入分类名称">
+                <div class="dialog-buttons">
+                    <button id="category-cancel-btn" class="dialog-cancel-btn">取消</button>
+                    <button id="category-confirm-btn" class="dialog-confirm-btn">确定</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载遮罩 -->
+        <div id="loading-mask" style="display:none;">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p>加载中，请稍候...</p>
+            </div>
         </div>
     </div>
+    <div id="custom-tooltip"></div>
 
     <script>
     // 搜索引擎配置
@@ -1339,6 +2052,7 @@ const HTML_CONTENT = `
     let isLoggedIn = false;
     let removeMode = false;
     let isRemoveCategoryMode = false;
+    let isEditCategoryMode = false;
     let isDarkTheme = false;
     let links = [];
     const categories = {};
@@ -1348,15 +2062,15 @@ const HTML_CONTENT = `
         if (!await validateToken()) {
             return;
         }
-        const categoryName = prompt('请输入新分类名称:');
+        const categoryName = await showCategoryDialog('请输入新分类名称');
         if (categoryName && !categories[categoryName]) {
             categories[categoryName] = [];
             updateCategorySelect();
-            renderCategories();
+            renderSections();
             saveLinks();
             logAction('添加分类', { categoryName, currentLinkCount: links.length });
         } else if (categories[categoryName]) {
-            alert('该分类已存在');
+            await customAlert('该分类已存在', '添加分类');
             logAction('添加分类失败', { categoryName, reason: '分类已存在' });
         }
     }
@@ -1366,65 +2080,133 @@ const HTML_CONTENT = `
         if (!await validateToken()) {
             return;
         }
-        if (confirm('确定要删除 "' + category + '" 分类吗？这将删除该分类下的所有链接。')) {
+        const message = '确定要删除 "' + category + '" 分类吗？这将删除该分类下的所有链接。';
+        const confirmed = await customConfirm(message, '确定', '取消');
+
+        if (confirmed) {
             delete categories[category];
             links = links.filter(link => link.category !== category);
             publicLinks = publicLinks.filter(link => link.category !== category);
             privateLinks = privateLinks.filter(link => link.category !== category);
             updateCategorySelect();
+            renderSections();
+            renderCategoryButtons();
             saveLinks();
-            renderCategories();
             logAction('删除分类', { category });
         }
     }
 
-    // 渲染分类(不重新加载链接)
-    function renderCategories() {
-        const container = document.getElementById('sections-container');
-        container.innerHTML = '';
+    // 编辑分类名称
+    async function editCategoryName(oldName) {
+        if (!await validateToken()) return;
 
-        Object.keys(categories).forEach(category => {
-            const section = document.createElement('div');
-            section.className = 'section';
+        const newName = await showCategoryDialog('请输入新的分类名称', oldName);
+        if (!newName || newName === oldName) return;
 
-            const titleContainer = document.createElement('div');
-            titleContainer.className = 'section-title-container';
+        if (categories[newName]) {
+            await customAlert('该名称已存在，请重新命名', '编辑分类');
+            return;
+        }
 
-            const title = document.createElement('div');
-            title.className = 'section-title';
-            title.textContent = category;
+        // 1. 重命名分类对象
+        categories[newName] = categories[oldName];
+        delete categories[oldName];
 
-            titleContainer.appendChild(title);
-
-            if (isAdmin) {
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = '删除分类';
-                deleteBtn.className = 'delete-category-btn';
-                deleteBtn.style.display = isRemoveCategoryMode ? 'inline-block' : 'none';
-                deleteBtn.onclick = () => deleteCategory(category);
-                titleContainer.appendChild(deleteBtn);
+        // 2. 更新所有链接的 category 字段
+        [...publicLinks, ...privateLinks].forEach(link => {
+            if (link.category === oldName) {
+                link.category = newName;
             }
-
-            const cardContainer = document.createElement('div');
-            cardContainer.className = 'card-container';
-            cardContainer.id = category;
-
-            section.appendChild(titleContainer);
-            section.appendChild(cardContainer);
-
-            container.appendChild(section);
-
-            const categoryLinks = links.filter(link => link.category === category);
-            categoryLinks.forEach(link => {
-                createCard(link, cardContainer);
-            });
         });
 
-        // 渲染分类快捷按钮
-        renderCategoryButtons();
+        links.forEach(link => {
+            if (link.category === oldName) {
+                link.category = newName;
+            }
+        });
 
-        logAction('渲染分类', { categoryCount: Object.keys(categories).length, linkCount: links.length });
+        // 3. 保存并刷新
+        renderSections();
+        renderCategoryButtons();
+        updateCategorySelect();
+        saveLinks();
+
+        logAction('编辑分类名称', { oldName, newName });
     }
+
+    // 移动分类
+    async function moveCategory(categoryName, direction) {
+        if (!await validateToken()) {
+            return;
+        }
+        const keys = Object.keys(categories);
+        const index = keys.indexOf(categoryName);
+        if (index < 0) return;
+
+        const newIndex = index + direction;
+        if (newIndex < 0 || newIndex >= keys.length) return;
+
+        // 重建一个新顺序的 categories 对象
+        const newCategories = {};
+        const reordered = [...keys];
+        [reordered[index], reordered[newIndex]] = [reordered[newIndex], reordered[index]];
+        reordered.forEach(key => {
+            newCategories[key] = categories[key];
+        });
+
+        // 替换原有 categories 并重渲染
+        Object.keys(categories).forEach(k => delete categories[k]);
+        Object.assign(categories, newCategories);
+
+        renderSections();
+        renderCategoryButtons();
+        updateCategorySelect();
+        saveLinks();
+
+        logAction('移动分类', { categoryName, direction });
+    }
+
+    // 切换分类编辑模式
+    function toggleEditCategory() {
+        isEditCategoryMode = !isEditCategoryMode;
+
+        const deleteButtons = document.querySelectorAll('.delete-category-btn');
+        const editButtons = document.querySelectorAll('.edit-category-btn');
+        const moveButtons = document.querySelectorAll('.move-category-btn');
+
+        deleteButtons.forEach(btn => {
+            btn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+        });
+
+        editButtons.forEach(btn => {
+            btn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+        });
+
+        moveButtons.forEach(btn => {
+            btn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+        });
+
+        // 更新分类管理按钮的样式以显示当前状态
+        const manageButton = document.querySelector('.category-manage-btn');
+        if (manageButton) {
+            if (isEditCategoryMode) {
+                manageButton.classList.add('active');
+            } else {
+                manageButton.classList.remove('active');
+            }
+        }
+
+        // 给用户提示 - 暂时使用console.log避免阻塞
+        if (isEditCategoryMode) {
+            console.log('分类编辑模式已开启');
+        } else {
+            console.log('分类编辑模式已关闭');
+        }
+
+        logAction('切换分类编辑模式', { isEditCategoryMode });
+    }
+
+
 
     // 渲染分类快捷按钮
     function renderCategoryButtons() {
@@ -1623,7 +2405,7 @@ const HTML_CONTENT = `
             privateLinks = data.links ? data.links.filter(link => link.isPrivate) : [];
             links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
 
-            loadSections();
+            renderSections();
             updateCategorySelect();
             updateUIState();
             logAction('读取链接', {
@@ -1633,35 +2415,25 @@ const HTML_CONTENT = `
                 hasToken: !!localStorage.getItem('authToken')
             });
         } catch (error) {
-            console.error('Error loading links:', error);
-            alert('加载链接时出错，请刷新页面重试');
+            // 🔧 安全修复：避免泄露详细错误信息
+            console.error('Failed to load links');
+            console.error('加载链接时出错，请刷新页面重试');
         }
     }
 
 
     // 更新UI状态
     function updateUIState() {
-        const passwordInput = document.getElementById('admin-password');
-        const adminBtn = document.getElementById('admin-mode-btn');
-        const secretGardenBtn = document.getElementById('secret-garden-btn');
         const addRemoveControls = document.querySelector('.add-remove-controls');
 
-        passwordInput.style.display = isLoggedIn ? 'none' : 'inline-block';
-        secretGardenBtn.textContent = isLoggedIn ? "退出" : "登录";
-        secretGardenBtn.style.display = 'inline-block';
-
         if (isAdmin) {
-            adminBtn.textContent = "离开设置";
-            adminBtn.style.display = 'inline-block';
             addRemoveControls.style.display = 'flex';
-        } else if (isLoggedIn) {
-            adminBtn.textContent = "设置";
-            adminBtn.style.display = 'inline-block';
-            addRemoveControls.style.display = 'none';
         } else {
-            adminBtn.style.display = 'none';
             addRemoveControls.style.display = 'none';
         }
+
+        // 同时更新登录和设置按钮状态
+        updateLoginButton();
 
         logAction('更新UI状态', { isAdmin, isLoggedIn });
     }
@@ -1670,7 +2442,7 @@ const HTML_CONTENT = `
     function showSecretGarden() {
         if (isLoggedIn) {
             links = [...publicLinks, ...privateLinks];
-            loadSections();
+            renderSections();
             // 显示所有私密标签
             document.querySelectorAll('.private-tag').forEach(tag => {
                 tag.style.display = 'block';
@@ -1679,8 +2451,8 @@ const HTML_CONTENT = `
         }
     }
 
-    // 加载分类和链接
-    function loadSections() {
+    // 渲染分类和链接
+    function renderSections() {
         const container = document.getElementById('sections-container');
         container.innerHTML = '';
 
@@ -1698,12 +2470,33 @@ const HTML_CONTENT = `
             titleContainer.appendChild(title);
 
             if (isAdmin) {
+                const editBtn = document.createElement('button');
+                editBtn.textContent = '编辑名称';
+                editBtn.className = 'edit-category-btn';
+                editBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                editBtn.onclick = () => editCategoryName(category);
+                titleContainer.appendChild(editBtn);
+
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = '删除分类';
                 deleteBtn.className = 'delete-category-btn';
-                deleteBtn.style.display = 'none';
+                deleteBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
                 deleteBtn.onclick = () => deleteCategory(category);
                 titleContainer.appendChild(deleteBtn);
+
+                const upBtn = document.createElement('button');
+                upBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 6l-6 6h4v6h4v-6h4z"/></svg>';
+                upBtn.className = 'move-category-btn';
+                upBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                upBtn.onclick = () => moveCategory(category, -1);
+                titleContainer.appendChild(upBtn);
+
+                const downBtn = document.createElement('button');
+                downBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18l6-6h-4v-6h-4v6h-4z"/></svg>';
+                downBtn.className = 'move-category-btn';
+                downBtn.style.display = isEditCategoryMode ? 'inline-block' : 'none';
+                downBtn.onclick = () => moveCategory(category, 1);
+                titleContainer.appendChild(downBtn);
             }
 
             const cardContainer = document.createElement('div');
@@ -1732,7 +2525,7 @@ const HTML_CONTENT = `
         // 渲染分类快捷按钮
         renderCategoryButtons();
 
-        logAction('加载分类和链接', { isAdmin: isAdmin, linkCount: links.length, categoryCount: Object.keys(categories).length });
+        logAction('渲染分类和链接', { isAdmin: isAdmin, linkCount: links.length, categoryCount: Object.keys(categories).length });
     }
 
     // 从URL中提取域名
@@ -1746,12 +2539,23 @@ const HTML_CONTENT = `
         return domain;
     }
 
+    // URL验证函数
+    function isValidUrl(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     // 创建卡片
     function createCard(link, container) {
         const card = document.createElement('div');
         card.className = 'card';
         card.setAttribute('draggable', isAdmin);
         card.dataset.isPrivate = link.isPrivate;
+        card.setAttribute('data-url', link.url);
 
         // 设置卡片动画延迟
         const cardIndex = container.children.length;
@@ -1769,7 +2573,17 @@ const HTML_CONTENT = `
         // 创建图标元素
         const icon = document.createElement('img');
         icon.className = 'card-icon';
-        icon.src = 'https://www.faviconextractor.com/favicon/' + extractDomain(link.url);
+
+        // 使用自定义图标或回退到favicon提取服务
+        icon.src = (
+            !link.icon ||
+            typeof link.icon !== 'string' ||
+            !link.icon.trim() ||
+            !isValidUrl(link.icon)
+        )
+            ? 'https://www.faviconextractor.com/favicon/' + extractDomain(link.url)
+            : link.icon;
+
         icon.alt = 'Website Icon';
 
         // 如果图片加载失败，使用默认的 SVG 图标
@@ -1811,14 +2625,45 @@ const HTML_CONTENT = `
             });
         }
 
+        // 创建按钮容器
+        const cardActions = document.createElement('div');
+        cardActions.className = 'card-actions';
+
+        // 编辑按钮
+        const editBtn = document.createElement('button');
+        editBtn.className = 'card-btn edit-btn';
+        editBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>' +
+            '<path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>' +
+            '</svg>';
+        editBtn.title = '编辑';
+        editBtn.onclick = function (event) {
+            event.stopPropagation();
+            showEditDialog(link);
+        };
+
+        // 删除按钮
         const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = '×';
-        deleteBtn.className = 'delete-btn';
+        deleteBtn.className = 'card-btn delete-btn';
+        deleteBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<polyline points="3,6 5,6 21,6"></polyline>' +
+            '<path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>' +
+            '<line x1="10" y1="11" x2="10" y2="17"></line>' +
+            '<line x1="14" y1="11" x2="14" y2="17"></line>' +
+            '</svg>';
+        deleteBtn.title = '删除';
         deleteBtn.onclick = function (event) {
             event.stopPropagation();
             removeCard(card);
         };
-        card.appendChild(deleteBtn);
+
+        cardActions.appendChild(editBtn);
+        cardActions.appendChild(deleteBtn);
+        card.appendChild(cardActions);
+
+        // 添加鼠标悬停事件处理描述提示
+        card.addEventListener('mousemove', (e) => handleTooltipMouseMove(e, link.tips, isAdmin));
+        card.addEventListener('mouseleave', handleTooltipMouseLeave);
 
         card.addEventListener('dragstart', dragStart);
         card.addEventListener('dragover', dragOver);
@@ -1827,6 +2672,7 @@ const HTML_CONTENT = `
         card.addEventListener('touchstart', touchStart, { passive: false });
 
         if (isAdmin && removeMode) {
+            editBtn.style.display = 'flex';
             deleteBtn.style.display = 'flex';
         }
 
@@ -1876,8 +2722,9 @@ const HTML_CONTENT = `
             });
             logAction('保存链接', { linkCount: allLinks.length, categoryCount: Object.keys(categories).length });
         } catch (error) {
-            logAction('保存链接失败', { error: error.message });
-            alert('保存链接失败，请重试');
+            // 🔧 安全修复：避免泄露详细错误信息
+            logAction('保存链接失败', { error: 'Save operation failed' });
+            console.error('保存链接失败，请重试');
         }
     }
 
@@ -1886,41 +2733,75 @@ const HTML_CONTENT = `
         if (!await validateToken()) {
             return;
         }
-        const name = document.getElementById('name-input').value;
-        const url = document.getElementById('url-input').value;
+        const name = document.getElementById('name-input').value.trim();
+        const url = document.getElementById('url-input').value.trim();
+        const tips = document.getElementById('tips-input').value.trim();
+        const icon = document.getElementById('icon-input').value.trim();
         const category = document.getElementById('category-select').value;
         const isPrivate = document.getElementById('private-checkbox').checked;
 
-        if (name && url && category) {
-            const newLink = { name, url, category, isPrivate };
-
-            if (isPrivate) {
-                privateLinks.push(newLink);
-            } else {
-                publicLinks.push(newLink);
+        // 验证必填字段
+        if (!name || !url || !category) {
+            let errorMessage = '';
+            if (!name && !url) {
+                errorMessage = '请输入名称和URL';
+            } else if (!name) {
+                errorMessage = '请输入名称';
+            } else if (!url) {
+                errorMessage = '请输入URL';
             }
 
-            links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
-
-            if (isAdmin || (isPrivate && isLoggedIn) || !isPrivate) {
-                const container = document.getElementById(category);
-                if (container) {
-                    createCard(newLink, container);
-                } else {
-                    categories[category] = [];
-                    renderCategories();
-                }
+            await customAlert(errorMessage, '添加卡片');
+            if (!name) {
+                document.getElementById('name-input').focus();
+            } else if (!url) {
+                document.getElementById('url-input').focus();
             }
-
-            saveLinks();
-
-            document.getElementById('name-input').value = '';
-            document.getElementById('url-input').value = '';
-            document.getElementById('private-checkbox').checked = false;
-            hideAddDialog();
-
-            logAction('添加卡片', { name, url, category, isPrivate });
+            return;
         }
+
+        // 检查URL是否已存在
+        const normalizedUrl = url.toLowerCase();
+        const allLinks = [...publicLinks, ...privateLinks];
+        const isUrlExists = allLinks.some(link => link.url.toLowerCase() === normalizedUrl);
+
+        if (isUrlExists) {
+            await customAlert('该URL已存在，请勿重复添加', '添加卡片');
+            document.getElementById('url-input').focus();
+            return;
+        }
+
+        const newLink = { name, url, tips, icon, category, isPrivate };
+
+        if (isPrivate) {
+            privateLinks.push(newLink);
+        } else {
+            publicLinks.push(newLink);
+        }
+
+        links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
+
+        if (isAdmin || (isPrivate && isLoggedIn) || !isPrivate) {
+            const container = document.getElementById(category);
+            if (container) {
+                createCard(newLink, container);
+            } else {
+                categories[category] = [];
+                renderSections();
+            }
+        }
+
+        saveLinks();
+
+        // 清空表单
+        document.getElementById('name-input').value = '';
+        document.getElementById('url-input').value = '';
+        document.getElementById('tips-input').value = '';
+        document.getElementById('icon-input').value = '';
+        document.getElementById('private-checkbox').checked = false;
+        hideAddDialog();
+
+        logAction('添加卡片', { name, url, tips, icon, category, isPrivate });
     }
 
     // 删除卡片
@@ -1929,8 +2810,13 @@ const HTML_CONTENT = `
             return;
         }
         const name = card.querySelector('.card-title').textContent;
-        const url = card.querySelector('.card-url').textContent;
+        const url = card.getAttribute('data-url');
         const isPrivate = card.dataset.isPrivate === 'true';
+
+        const confirmed = await customConfirm('确定要删除 "' + name + '" 吗？', '确定', '取消');
+        if (!confirmed) {
+            return;
+        }
 
         links = links.filter(link => link.url !== url);
         if (isPrivate) {
@@ -2005,15 +2891,14 @@ const HTML_CONTENT = `
         const card = draggedCard;
         const targetCategory = card.closest('.card-container').id;
 
-        validateToken().then(isValid => {
-            if (isValid && card) {
-                updateCardCategory(card, targetCategory);
-                saveCardOrder().catch(error => {
-                    console.error('Save failed:', error);
-                });
-            }
-            cleanupDragState();
-        });
+        // 🔧 优化：删除冗余验证，拖拽只在管理员模式下可用，saveCardOrder()内部已有验证
+        if (isAdmin && card) {
+            updateCardCategory(card, targetCategory);
+            saveCardOrder().catch(error => {
+                console.error('Save failed:', error);
+            });
+        }
+        cleanupDragState();
     }
 
     function findCardUnderTouch(x, y) {
@@ -2105,7 +2990,7 @@ const HTML_CONTENT = `
     // 更新卡片分类
     function updateCardCategory(card, newCategory) {
         const cardTitle = card.querySelector('.card-title').textContent;
-        const cardUrl = card.querySelector('.card-url').textContent;
+        const cardUrl = card.getAttribute('data-url');
         const isPrivate = card.dataset.isPrivate === 'true';
 
         const linkIndex = links.findIndex(link => link.url === cardUrl);
@@ -2145,11 +3030,17 @@ const HTML_CONTENT = `
             newCategories[category] = [];
 
             [...container.children].forEach(card => {
-                const url = card.querySelector('.card-url').textContent;
+                const url = card.getAttribute('data-url');
                 const name = card.querySelector('.card-title').textContent;
                 const isPrivate = card.dataset.isPrivate === 'true';
                 card.dataset.category = category;
-                const link = { name, url, category, isPrivate };
+
+                // 从原始链接数据中获取描述和图标信息
+                const originalLink = links.find(link => link.url === url);
+                const tips = originalLink?.tips || '';
+                const icon = originalLink?.icon || '';
+
+                const link = { name, url, tips, icon, category, isPrivate };
                 if (isPrivate) {
                     newPrivateLinks.push(link);
                 } else {
@@ -2192,35 +3083,154 @@ const HTML_CONTENT = `
             logAction('保存卡片顺序', { publicCount: newPublicLinks.length, privateCount: newPrivateLinks.length, categoryCount: Object.keys(newCategories).length });
         } catch (error) {
             logAction('保存顺序失败', { error: error.message });
-            alert('保存顺序失败，请重试');
+            await customAlert('保存顺序失败，请重试', '保存失败');
         }
     }
 
     // 设置状态重新加载卡片
-    function reloadCardsAsAdmin() {
+    async function reloadCardsAsAdmin() {
         document.querySelectorAll('.card-container').forEach(container => {
             container.innerHTML = '';
         });
-        loadLinks();
+        await loadLinks();
         logAction('重新加载卡片（管理员模式）');
     }
 
-    // 密码输入框回车事件
-    document.getElementById('admin-password').addEventListener('keypress', (e) => {
+    // 处理登录按钮点击
+    async function handleLoginClick() {
+        if (isLoggedIn) {
+            // 如果已登录，退出登录
+            const confirmed = await customConfirm('确定要退出登录吗？', '确定', '取消');
+            if (confirmed) {
+                await logout();
+            }
+        } else {
+            // 如果未登录，显示登录弹窗
+            showLoginModal();
+        }
+    }
+
+    // 显示登录弹窗
+    function showLoginModal() {
+        document.getElementById('login-modal').style.display = 'flex';
+        document.getElementById('login-password').focus();
+    }
+
+    // 隐藏登录弹窗
+    function hideLoginModal() {
+        document.getElementById('login-modal').style.display = 'none';
+        document.getElementById('login-password').value = '';
+    }
+
+    // 执行登录
+    async function performLogin() {
+        const password = document.getElementById('login-password').value;
+        if (!password) {
+            await customAlert('请输入密码', '提示');
+            return;
+        }
+
+        try {
+            const result = await verifyPassword(password);
+            if (result.valid) {
+                isLoggedIn = true;
+                localStorage.setItem('authToken', result.token);
+                console.log('Token saved:', result.token);
+                loadLinks();
+                hideLoginModal();
+                updateLoginButton();
+                await customAlert('登录成功！', '登录');
+                logAction('登录成功');
+            } else {
+                await customAlert('密码错误', '登录失败');
+                logAction('登录失败', { reason: result.error || '密码错误' });
+            }
+        } catch (error) {
+            // 🔧 安全修复：避免泄露详细错误信息
+            console.error('Login error occurred');
+            await customAlert('登录过程出错，请重试', '错误');
+        }
+    }
+
+    // 退出登录
+    async function logout() {
+        isLoggedIn = false;
+        isAdmin = false;
+        localStorage.removeItem('authToken');
+        links = publicLinks;
+        renderSections();
+        updateLoginButton();
+        await customAlert('退出登录成功！', '退出登录');
+        updateUIState();
+        logAction('退出登录');
+    }
+
+    // 更新按钮状态
+    function updateLoginButton() {
+        const loginBtn = document.getElementById('login-btn');
+        const adminBtn = document.getElementById('admin-btn');
+
+        if (isLoggedIn) {
+            loginBtn.textContent = '退出登录';
+            adminBtn.style.display = 'inline-block';
+            if (isAdmin) {
+                adminBtn.textContent = '离开设置';
+            } else {
+                adminBtn.textContent = '设置';
+            }
+        } else {
+            loginBtn.textContent = '登录';
+            adminBtn.style.display = 'none';
+        }
+    }
+
+    // 打开GitHub仓库
+    function openGitHub() {
+        window.open('https://github.com/hmhm2022/Card-Tab', '_blank');
+        logAction('访问GitHub仓库');
+    }
+
+    // 切换书签搜索下拉框
+    function toggleBookmarkSearch() {
+        const dropdown = document.getElementById('bookmark-search-dropdown');
+        const isVisible = dropdown.classList.contains('show');
+
+        if (isVisible) {
+            dropdown.classList.remove('show');
+        } else {
+            dropdown.classList.add('show');
+            document.getElementById('bookmark-search-input').focus();
+        }
+    }
+
+    // 点击页面其他地方关闭书签搜索下拉框
+    document.addEventListener('click', function(event) {
+        const searchToggle = document.querySelector('.bookmark-search-toggle');
+        const dropdown = document.getElementById('bookmark-search-dropdown');
+
+        if (!searchToggle.contains(event.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    // 登录密码输入框回车事件
+    document.getElementById('login-password').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            toggleSecretGarden();
+            performLogin();
         }
     });
 
     // 切换设置状态
     async function toggleAdminMode() {
-        const adminBtn = document.getElementById('admin-mode-btn');
         const addRemoveControls = document.querySelector('.add-remove-controls');
 
         if (!isAdmin && isLoggedIn) {
             if (!await validateToken()) {
                 return;
             }
+
+            // 显示加载状态
+            showLoading('正在进入设置模式...');
 
             // 在进入设置模式之前进行备份
             try {
@@ -2242,66 +3252,49 @@ const HTML_CONTENT = `
                     throw new Error('备份失败');
                 }
             } catch (error) {
-                logAction('数据备份失败', { error: error.message });
-                if (!confirm('备份失败，是否仍要继续进入设置模式？')) {
+                // 🔧 安全修复：避免泄露详细错误信息
+                logAction('数据备份失败', { error: 'Backup operation failed' });
+                hideLoading();
+                const confirmed = await customConfirm('备份失败，是否仍要继续进入设置模式？', '是', '否');
+                if (!confirmed) {
                     return;
                 }
+                showLoading('正在进入设置模式...');
             }
 
-            isAdmin = true;
-            adminBtn.textContent = "退出设置";
-            addRemoveControls.style.display = 'flex';
-            alert('准备设置分类和书签');
-            reloadCardsAsAdmin();
-            logAction('进入设置');
+            try {
+                isAdmin = true;
+                addRemoveControls.style.display = 'flex';
+                await reloadCardsAsAdmin();
+                logAction('进入设置');
+                hideLoading();
+                await customAlert('准备设置分类和书签', '设置模式');
+            } finally {
+                hideLoading();
+            }
         } else if (isAdmin) {
             isAdmin = false;
             removeMode = false;
-            adminBtn.textContent = "设  置";
+            isRemoveCategoryMode = false;
+            isEditCategoryMode = false;
+
+            // 重置分类管理按钮状态
+            const manageButton = document.querySelector('.category-manage-btn');
+            if (manageButton) {
+                manageButton.classList.remove('active');
+            }
+
             addRemoveControls.style.display = 'none';
-            alert('设置已保存');
-            reloadCardsAsAdmin();
+            await reloadCardsAsAdmin();
             logAction('离开设置');
+            await customAlert('设置已保存', '设置完成');
         }
 
+        updateLoginButton();
         updateUIState();
     }
 
-    // 切换到登录状态
-    function toggleSecretGarden() {
-        const passwordInput = document.getElementById('admin-password');
-        if (!isLoggedIn) {
-            verifyPassword(passwordInput.value)
-                .then(result => {
-                    if (result.valid) {
-                        isLoggedIn = true;
-                        localStorage.setItem('authToken', result.token);
-                        console.log('Token saved:', result.token);
-                        loadLinks();
-                        alert('登录成功！');
-                        logAction('登录成功');
-                    } else {
-                        alert('密码错误');
-                        logAction('登录失败', { reason: result.error || '密码错误' });
-                    }
-                    updateUIState();
-                })
-                .catch(error => {
-                    console.error('Login error:', error);
-                    alert('登录过程出错，请重试');
-                });
-        } else {
-            isLoggedIn = false;
-            isAdmin = false;
-            localStorage.removeItem('authToken');
-            links = publicLinks;
-            loadSections();
-            alert('退出登录！');
-            updateUIState();
-            passwordInput.value = '';
-            logAction('退出登录');
-        }
-    }
+
 
     // 应用暗色主题
     function applyDarkTheme() {
@@ -2310,37 +3303,221 @@ const HTML_CONTENT = `
         logAction('应用暗色主题');
     }
 
+    // 全局变量用于管理对话框事件处理器
+    let currentConfirmHandler = null;
+    let currentCancelHandler = null;
+
+    // 显示编辑链接对话框
+    function showEditDialog(link) {
+        document.getElementById('dialog-overlay').style.display = 'flex';
+
+        document.getElementById('name-input').value = link.name;
+        document.getElementById('url-input').value = link.url;
+        document.getElementById('tips-input').value = link.tips || '';
+        document.getElementById('icon-input').value = link.icon || '';
+        document.getElementById('category-select').value = link.category;
+        document.getElementById('private-checkbox').checked = link.isPrivate;
+
+        const confirmBtn = document.getElementById('dialog-confirm-btn');
+        const cancelBtn = document.getElementById('dialog-cancel-btn');
+
+        // 清除所有旧的事件处理器
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+        if (currentConfirmHandler) {
+            confirmBtn.removeEventListener('click', currentConfirmHandler);
+        }
+        if (currentCancelHandler) {
+            cancelBtn.removeEventListener('click', currentCancelHandler);
+        }
+
+        // 设置新的事件处理器
+        currentConfirmHandler = async function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            await updateLink(link);
+        };
+
+        currentCancelHandler = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            hideAddDialog();
+        };
+
+        confirmBtn.addEventListener('click', currentConfirmHandler);
+        cancelBtn.addEventListener('click', currentCancelHandler);
+
+        logAction('显示编辑链接对话框');
+    }
+
     // 显示添加链接对话框
     function showAddDialog() {
         document.getElementById('dialog-overlay').style.display = 'flex';
+
+        const nameInput = document.getElementById('name-input');
+        nameInput.value = '';
+        document.getElementById('url-input').value = '';
+        document.getElementById('tips-input').value = '';
+        document.getElementById('icon-input').value = '';
+        document.getElementById('private-checkbox').checked = false;
+
+        const confirmBtn = document.getElementById('dialog-confirm-btn');
+        const cancelBtn = document.getElementById('dialog-cancel-btn');
+
+        // 清除所有旧的事件处理器
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+        if (currentConfirmHandler) {
+            confirmBtn.removeEventListener('click', currentConfirmHandler);
+        }
+        if (currentCancelHandler) {
+            cancelBtn.removeEventListener('click', currentCancelHandler);
+        }
+
+        // 设置新的事件处理器
+        currentConfirmHandler = async function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            await addLink();
+        };
+
+        currentCancelHandler = function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            hideAddDialog();
+        };
+
+        confirmBtn.addEventListener('click', currentConfirmHandler);
+        cancelBtn.addEventListener('click', currentCancelHandler);
+
+        setTimeout(() => {
+            nameInput.focus();
+        }, 50);
+
         logAction('显示添加链接对话框');
+    }
+
+    // 更新链接
+    async function updateLink(oldLink) {
+        if (!await validateToken()) return;
+
+        const name = document.getElementById('name-input').value.trim();
+        const url = document.getElementById('url-input').value.trim();
+        const tips = document.getElementById('tips-input').value.trim();
+        const icon = document.getElementById('icon-input').value.trim();
+        const category = document.getElementById('category-select').value;
+        const isPrivate = document.getElementById('private-checkbox').checked;
+
+        // 验证必填字段
+        if (!name || !url || !category) {
+            let errorMessage = '';
+            if (!name && !url) {
+                errorMessage = '请输入名称和URL';
+            } else if (!name) {
+                errorMessage = '请输入名称';
+            } else if (!url) {
+                errorMessage = '请输入URL';
+            }
+
+            await customAlert(errorMessage, '编辑卡片');
+            if (!name) {
+                document.getElementById('name-input').focus();
+            } else if (!url) {
+                document.getElementById('url-input').focus();
+            }
+            return;
+        }
+
+        // 检查URL是否与其他链接重复（排除当前编辑的链接）
+        const normalizedUrl = url.toLowerCase();
+        const allLinks = [...publicLinks, ...privateLinks];
+        const isUrlExists = allLinks.some(link =>
+            link.url.toLowerCase() === normalizedUrl && link.url !== oldLink.url
+        );
+
+        if (isUrlExists) {
+            await customAlert('该URL已存在，请勿重复添加', '编辑卡片');
+            document.getElementById('url-input').focus();
+            return;
+        }
+
+        const updatedLink = { name, url, tips, icon, category, isPrivate };
+
+        try {
+            // 替换旧链接
+            const list = oldLink.isPrivate ? privateLinks : publicLinks;
+            const index = list.findIndex(l => l.url === oldLink.url);
+            if (index !== -1) {
+                list[index] = updatedLink;
+            }
+
+            // 同步更新 links
+            links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
+
+            await saveLinks();
+            renderCategories();
+            hideAddDialog();
+
+            logAction('更新卡片', { oldUrl: oldLink.url, name, url, tips, icon, category, isPrivate });
+        } catch (error) {
+            logAction('更新卡片失败:', error);
+            await customAlert('更新卡片失败:' + error.message, '编辑卡片');
+        }
     }
 
     // 隐藏添加链接对话框
     function hideAddDialog() {
         document.getElementById('dialog-overlay').style.display = 'none';
+
+        // 清理事件处理器
+        const confirmBtn = document.getElementById('dialog-confirm-btn');
+        const cancelBtn = document.getElementById('dialog-cancel-btn');
+
+        if (currentConfirmHandler) {
+            confirmBtn.removeEventListener('click', currentConfirmHandler);
+            currentConfirmHandler = null;
+        }
+        if (currentCancelHandler) {
+            cancelBtn.removeEventListener('click', currentCancelHandler);
+            currentCancelHandler = null;
+        }
+
+        confirmBtn.onclick = null;
+        cancelBtn.onclick = null;
+
         logAction('隐藏添加链接对话框');
     }
 
-    // 切换删除卡片模式
+    // 切换编辑卡片模式
     function toggleRemoveMode() {
         removeMode = !removeMode;
+        const editButtons = document.querySelectorAll('.edit-btn');
         const deleteButtons = document.querySelectorAll('.delete-btn');
-        deleteButtons.forEach(btn => {
-            btn.style.display = removeMode ? 'block' : 'none';
+
+        editButtons.forEach(btn => {
+            btn.style.display = removeMode ? 'flex' : 'none';
         });
-        logAction('切换删除卡片模式', { removeMode });
+        deleteButtons.forEach(btn => {
+            btn.style.display = removeMode ? 'flex' : 'none';
+        });
+
+        // 隐藏自定义提示框
+        document.getElementById('custom-tooltip').style.display = 'none';
+
+        // 切换卡片悬停效果
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            if (removeMode) {
+                card.classList.add('no-hover');
+            } else {
+                card.classList.remove('no-hover');
+            }
+        });
+
+        logAction('切换编辑卡片模式', { removeMode });
     }
 
-    //切换删除分类模式
-    function toggleRemoveCategory() {
-        isRemoveCategoryMode = !isRemoveCategoryMode;
-        const deleteButtons = document.querySelectorAll('.delete-category-btn');
-        deleteButtons.forEach(btn => {
-            btn.style.display = isRemoveCategoryMode ? 'inline-block' : 'none';
-        });
-        logAction('切换删除分类模式', { isRemoveCategoryMode });
-    }
+
 
     // 切换主题
     function toggleTheme() {
@@ -2354,6 +3531,71 @@ const HTML_CONTENT = `
         }
 
         logAction('切换主题', { isDarkTheme });
+    }
+
+    // 返回顶部
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        logAction('返回顶部');
+    }
+
+    // 控制返回顶部按钮显示/隐藏
+    function handleBackToTopVisibility() {
+        const btn = document.getElementById('back-to-top-btn');
+        if (!btn) return;
+
+        // 如果页面滚动高度大于 300px，才显示按钮
+        if (window.scrollY > 300) {
+            btn.style.display = 'flex';
+        } else {
+            btn.style.display = 'none';
+        }
+    }
+
+    // 处理鼠标悬停提示
+    function handleTooltipMouseMove(e, tips, isAdmin) {
+        const tooltip = document.getElementById('custom-tooltip');
+
+        if (!tips || isAdmin) {
+            tooltip.style.display = 'none';
+            return;
+        }
+
+        // 设置提示内容
+        if (tooltip.textContent !== tips) {
+            tooltip.textContent = tips;
+        }
+
+        tooltip.style.display = 'block';
+
+        const offsetX = 15;
+        const offsetY = 10;
+
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const pageWidth = window.innerWidth;
+        const pageHeight = window.innerHeight;
+
+        let left = e.pageX + offsetX;
+        let top = e.pageY + offsetY;
+
+        if (pageWidth - e.clientX < 200) {
+            left = e.pageX - tooltipRect.width - offsetX;
+        }
+        // 如果距离底部小于100像素，往上显示
+        if (pageHeight - e.clientY < 100) {
+            top = e.pageY - tooltipRect.height - offsetY;
+        }
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+    }
+
+    function handleTooltipMouseLeave() {
+        const tooltip = document.getElementById('custom-tooltip');
+        tooltip.style.display = 'none';
     }
 
     // 验证密码
@@ -2370,7 +3612,7 @@ const HTML_CONTENT = `
     // 全局变量，标记是否正在显示搜索结果
     let isShowingSearchResults = false;
 
-    // 书签搜索功能
+    // 书签搜索功能 - 简化版
     function searchBookmarks(query) {
         if (!query || query.trim() === '') {
             hideSearchResults();
@@ -2378,122 +3620,132 @@ const HTML_CONTENT = `
         }
 
         query = query.toLowerCase().trim();
-        const resultsContainer = document.getElementById('search-results-container');
-        const resultsContent = document.getElementById('search-results-content');
-        const searchOverlay = document.getElementById('search-overlay');
-        resultsContent.innerHTML = '';
+        const sectionsContainer = document.getElementById('sections-container');
 
-        // 只搜索当前可见的链接（公开链接或已登录状态下的所有链接）
+        // 只搜索书签名称，简化搜索逻辑
         const visibleLinks = links;
         const matchedLinks = visibleLinks.filter(link =>
-            link.name.toLowerCase().includes(query) ||
-            link.url.toLowerCase().includes(query)
+            link.name.toLowerCase().includes(query)
         );
 
+        // 清空主内容区域
+        sectionsContainer.innerHTML = '';
+
+        // 创建搜索结果头部
+        const searchHeader = document.createElement('div');
+        searchHeader.className = 'search-results-header';
+
+        const searchTitle = document.createElement('div');
+        searchTitle.className = 'search-results-title';
+        searchTitle.textContent = '搜索结果 (' + matchedLinks.length + '个)';
+
+        const backButton = document.createElement('button');
+        backButton.className = 'back-to-main';
+        backButton.textContent = '返回主页';
+        backButton.onclick = hideSearchResults;
+
+        searchHeader.appendChild(searchTitle);
+        searchHeader.appendChild(backButton);
+        sectionsContainer.appendChild(searchHeader);
+
         if (matchedLinks.length === 0) {
-            resultsContent.innerHTML = '<div class="no-search-results">没有找到匹配的书签</div>';
+            const noResults = document.createElement('div');
+            noResults.className = 'no-search-results';
+            noResults.textContent = '没有找到匹配的书签';
+            noResults.style.textAlign = 'center';
+            noResults.style.padding = '40px';
+            noResults.style.color = '#666';
+            sectionsContainer.appendChild(noResults);
         } else {
-            // 按分类组织搜索结果
-            const categorizedResults = {};
+            // 创建简单的搜索结果容器
+            const resultsSection = document.createElement('div');
+            resultsSection.className = 'search-results-section';
 
+            const cardContainer = document.createElement('div');
+            cardContainer.className = 'card-container';
+
+            // 为每个匹配的链接创建卡片
             matchedLinks.forEach(link => {
-                if (!categorizedResults[link.category]) {
-                    categorizedResults[link.category] = [];
-                }
-                categorizedResults[link.category].push(link);
+                createCard(link, cardContainer);
             });
 
-            // 为每个分类创建一个区域
-            Object.keys(categorizedResults).forEach(category => {
-                const categoryLinks = categorizedResults[category];
-
-                const section = document.createElement('div');
-                section.className = 'search-results-section';
-
-                const sectionTitle = document.createElement('div');
-                sectionTitle.className = 'search-section-title'; // 使用不同的类名，避免与主页面的分类标题混淆
-                sectionTitle.textContent = category;
-                section.appendChild(sectionTitle);
-
-                const cardContainer = document.createElement('div');
-                cardContainer.className = 'card-container';
-
-                // 为每个链接创建卡片
-                categoryLinks.forEach(link => {
-                    createCard(link, cardContainer);
-                });
-
-                section.appendChild(cardContainer);
-                resultsContent.appendChild(section);
-            });
+            resultsSection.appendChild(cardContainer);
+            sectionsContainer.appendChild(resultsSection);
         }
 
-        // 显示遮罩层和搜索结果容器
-        searchOverlay.style.display = 'block';
-        resultsContainer.style.display = 'block';
-
-        // 设置标记，表示正在显示搜索结果
+        // 设置搜索状态标记
         isShowingSearchResults = true;
 
-        // 禁用页面滚动
-        document.body.style.overflow = 'hidden';
+        // 隐藏分类按钮
+        const categoryButtonsContainer = document.getElementById('category-buttons-container');
+        if (categoryButtonsContainer) {
+            categoryButtonsContainer.style.display = 'none';
+        }
 
-        logAction('搜索书签', { query, resultCount: matchedLinks.length });
+        logAction('执行书签搜索', { query, resultCount: matchedLinks.length });
     }
 
-    // 隐藏搜索结果
+    // 隐藏搜索结果 - 简化版
     function hideSearchResults() {
-        const resultsContainer = document.getElementById('search-results-container');
-        const searchOverlay = document.getElementById('search-overlay');
-
-        // 隐藏搜索结果和遮罩层
-        resultsContainer.style.display = 'none';
-        searchOverlay.style.display = 'none';
-
         // 重置标记
         isShowingSearchResults = false;
-
-        // 恢复页面滚动
-        document.body.style.overflow = 'auto';
 
         // 清空搜索框
         document.getElementById('bookmark-search-input').value = '';
 
-        // 清空搜索结果内容，避免影响下次搜索
-        document.getElementById('search-results-content').innerHTML = '';
+        // 重新渲染正常的分类和书签
+        renderSections();
+
+        // 显示分类按钮
+        const categoryButtonsContainer = document.getElementById('category-buttons-container');
+        if (categoryButtonsContainer) {
+            categoryButtonsContainer.style.display = 'flex';
+        }
 
         // 重新渲染分类按钮，确保分类按钮的正确显示
         renderCategoryButtons();
     }
-
-    // 书签搜索按钮点击事件
-    document.getElementById('bookmark-search-button').addEventListener('click', () => {
-        const query = document.getElementById('bookmark-search-input').value;
-        searchBookmarks(query);
-    });
 
     // 书签搜索输入框回车事件
     document.getElementById('bookmark-search-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const query = document.getElementById('bookmark-search-input').value;
             searchBookmarks(query);
+            // 搜索后关闭下拉框
+            document.getElementById('bookmark-search-dropdown').classList.remove('show');
         }
     });
 
-    // 不再允许点击遮罩层关闭搜索结果
-    // 防止点击搜索结果区域时的事件冒泡
-    document.getElementById('search-results-container').addEventListener('click', (e) => {
-        e.stopPropagation();
+    // 书签搜索输入框实时搜索
+    document.getElementById('bookmark-search-input').addEventListener('input', (e) => {
+        const query = e.target.value;
+        if (query.trim() === '') {
+            hideSearchResults();
+        } else {
+            searchBookmarks(query);
+        }
     });
+
+
 
     // 初始化加载
     document.addEventListener('DOMContentLoaded', async () => {
-        await validateToken();
-        loadLinks().then(() => {
+        try {
+            await validateToken();
+            updateLoginButton();
+            await loadLinks();
             // 初始加载完成后，检测当前可见分类
             setTimeout(setActiveCategoryButtonByVisibility, 500);
-        });
+            // 初始化返回顶部按钮状态
+            setTimeout(handleBackToTopVisibility, 100);
+        } catch (error) {
+            // 🔧 安全修复：避免泄露详细错误信息
+            console.error('Initialization failed');
+        }
     });
+
+    // 添加滚动事件监听器
+    window.addEventListener('scroll', handleBackToTopVisibility);
 
 
     // 前端检查是否有 token
@@ -2519,14 +3771,18 @@ const HTML_CONTENT = `
             updateUIState();
             return true;
         } catch (error) {
-            console.error('Token validation error:', error);
+            // 🔧 安全修复：避免泄露详细错误信息
+            console.error('Token validation failed');
             return false;
         }
     }
 
     // 重置状态
     async function resetToLoginState(message) {
-        alert(message);
+        // 🔧 修复：显示用户可见的Token过期提示
+        if (message && message.trim() !== '') {
+            await customAlert(message, '登录状态');
+        }
 
         cleanupDragState();
 
@@ -2535,15 +3791,12 @@ const HTML_CONTENT = `
         isAdmin = false;
         removeMode = false;
         isRemoveCategoryMode = false;
+        isEditCategoryMode = false;
 
-        const passwordInput = document.getElementById('admin-password');
-        if (passwordInput) {
-            passwordInput.value = '';
-        }
-
+        updateLoginButton();
         updateUIState();
         links = publicLinks;
-        loadSections();
+        renderSections();
 
         const addRemoveControls = document.querySelector('.add-remove-controls');
         if (addRemoveControls) {
@@ -2558,10 +3811,196 @@ const HTML_CONTENT = `
             btn.style.display = 'none';
         });
 
+        document.querySelectorAll('.edit-category-btn').forEach(btn => {
+            btn.style.display = 'none';
+        });
+
+        document.querySelectorAll('.move-category-btn').forEach(btn => {
+            btn.style.display = 'none';
+        });
+
+        // 重置分类管理按钮状态
+        const manageButton = document.querySelector('.category-manage-btn');
+        if (manageButton) {
+            manageButton.classList.remove('active');
+        }
+
         const dialogOverlay = document.getElementById('dialog-overlay');
         if (dialogOverlay) {
             dialogOverlay.style.display = 'none';
         }
+
+        const loginModal = document.getElementById('login-modal');
+        if (loginModal) {
+            loginModal.style.display = 'none';
+        }
+
+        // 确保按钮状态正确重置
+        const adminBtn = document.getElementById('admin-btn');
+        if (adminBtn) {
+            adminBtn.style.display = 'none';
+        }
+    }
+
+    // 自定义Alert对话框
+    function customAlert(message, title = '提示', confirmText = '确定') {
+        return new Promise((resolve) => {
+            const overlay = document.getElementById('custom-alert-overlay');
+            const titleEl = document.getElementById('custom-alert-title');
+            const contentEl = document.getElementById('custom-alert-content');
+            const confirmBtn = document.getElementById('custom-alert-confirm');
+
+            // 设置内容
+            titleEl.textContent = title;
+            contentEl.textContent = message;
+            confirmBtn.textContent = confirmText;
+
+            // 显示弹窗
+            overlay.style.display = 'flex';
+
+            // 确认按钮事件
+            const handleConfirm = () => {
+                overlay.style.display = 'none';
+                confirmBtn.removeEventListener('click', handleConfirm);
+                document.removeEventListener('keydown', handleKeyDown);
+                resolve();
+            };
+
+            confirmBtn.addEventListener('click', handleConfirm);
+
+            // ESC键关闭
+            const handleKeyDown = (e) => {
+                if (e.key === 'Escape') {
+                    handleConfirm();
+                }
+            };
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            // 点击遮罩层关闭
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    handleConfirm();
+                }
+            });
+        });
+    }
+
+    // 自定义Confirm对话框
+    function customConfirm(message, okText = '确定', cancelText = '取消') {
+        return new Promise((resolve) => {
+            const overlay = document.getElementById('custom-confirm-overlay');
+            const messageEl = document.getElementById('custom-confirm-message');
+            const okBtn = document.getElementById('custom-confirm-ok');
+            const cancelBtn = document.getElementById('custom-confirm-cancel');
+
+            // 设置弹窗内容
+            messageEl.textContent = message;
+            okBtn.textContent = okText;
+            cancelBtn.textContent = cancelText;
+
+            // 显示弹窗
+            overlay.style.display = 'flex';
+
+            // 事件处理函数
+            const handleConfirm = (result) => {
+                cleanup();
+                resolve(result);
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter') handleConfirm(true);
+                if (e.key === 'Escape') handleConfirm(false);
+            };
+
+            // 清理函数
+            const cleanup = () => {
+                overlay.style.display = 'none';
+                document.removeEventListener('keydown', handleKeyDown);
+                okBtn.onclick = null;
+                cancelBtn.onclick = null;
+                overlay.onclick = null;
+            };
+
+            // 绑定事件
+            okBtn.onclick = () => handleConfirm(true);
+            cancelBtn.onclick = () => handleConfirm(false);
+            document.addEventListener('keydown', handleKeyDown);
+            overlay.onclick = (e) => e.target === overlay && handleConfirm(false);
+        });
+    }
+
+    // 分类名称输入对话框
+    function showCategoryDialog(title, defaultValue = '') {
+        return new Promise((resolve) => {
+            const dialog = document.getElementById('category-dialog');
+            const input = document.getElementById('category-name-input');
+            const titleEl = document.getElementById('category-dialog-title');
+            const confirmBtn = document.getElementById('category-confirm-btn');
+            const cancelBtn = document.getElementById('category-cancel-btn');
+
+            // 设置弹窗内容
+            titleEl.textContent = title;
+            input.value = defaultValue;
+
+            // 显示弹窗
+            dialog.style.display = 'flex';
+            setTimeout(() => input.focus(), 50);
+
+            // 事件处理函数
+            const handleConfirm = () => {
+                const value = input.value.trim();
+                if (value) {
+                    cleanup();
+                    resolve(value);
+                } else {
+                    input.focus();
+                }
+            };
+
+            const handleCancel = () => {
+                cleanup();
+                resolve(null);
+            };
+
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleConfirm();
+                } else if (e.key === 'Escape') {
+                    handleCancel();
+                }
+            };
+
+            // 清理函数
+            const cleanup = () => {
+                dialog.style.display = 'none';
+                document.removeEventListener('keydown', handleKeyDown);
+                confirmBtn.onclick = null;
+                cancelBtn.onclick = null;
+                dialog.onclick = null;
+            };
+
+            // 绑定事件
+            confirmBtn.onclick = handleConfirm;
+            cancelBtn.onclick = handleCancel;
+            document.addEventListener('keydown', handleKeyDown);
+            dialog.onclick = (e) => e.target === dialog && handleCancel();
+        });
+    }
+
+    // 显示加载遮罩
+    function showLoading(message = '加载中，请稍候...') {
+        const mask = document.getElementById('loading-mask');
+        const textElement = mask.querySelector('p');
+        textElement.textContent = message;
+        mask.style.display = 'flex';
+    }
+
+    // 隐藏加载遮罩
+    function hideLoading() {
+        const mask = document.getElementById('loading-mask');
+        mask.style.display = 'none';
     }
 
     </script>
@@ -2569,6 +4008,16 @@ const HTML_CONTENT = `
 
 </html>
 `;
+
+// 常量时间比较函数，防止时序攻击
+function constantTimeCompare(a, b) {
+    if (a.length !== b.length) return false;
+    let result = 0;
+    for (let i = 0; i < a.length; i++) {
+        result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    }
+    return result === 0;
+}
 
 // 服务端 token 验证
 async function validateServerToken(authToken, env) {
@@ -2604,7 +4053,8 @@ async function validateServerToken(authToken, env) {
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const expectedHash = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
 
-        if (hash !== expectedHash) {
+        // 使用常量时间比较防止时序攻击
+        if (!constantTimeCompare(hash, expectedHash)) {
             return {
                 isValid: false,
                 status: 401,
@@ -2618,6 +4068,7 @@ async function validateServerToken(authToken, env) {
 
         return { isValid: true };
     } catch (error) {
+        // 避免泄露详细错误信息
         return {
             isValid: false,
             status: 401,
@@ -2628,6 +4079,20 @@ async function validateServerToken(authToken, env) {
             }
         };
     }
+}
+
+// 管理员权限验证函数
+async function validateAdminToken(authToken, env) {
+    const validation = await validateServerToken(authToken, env);
+    if (!validation.isValid) {
+        return validation;
+    }
+
+    // Token有效，确认管理员权限
+    return {
+        isValid: true,
+        isAdmin: true
+    };
 }
 
 export default {
@@ -2756,12 +4221,34 @@ export default {
       }
 
       if (url.pathname === '/api/backupData' && request.method === 'POST') {
-        const { sourceUserId } = await request.json();
-        const result = await this.backupData(env, sourceUserId);
-        return new Response(JSON.stringify(result), {
-          status: result.success ? 200 : 404,
-          headers: { 'Content-Type': 'application/json' }
-        });
+        // 🔧 安全修复：添加管理员权限验证
+        const authToken = request.headers.get('Authorization');
+        const validation = await validateAdminToken(authToken, env);
+
+        if (!validation.isValid) {
+            return new Response(JSON.stringify(validation.response), {
+                status: validation.status,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        try {
+            const { sourceUserId } = await request.json();
+            const result = await this.backupData(env, sourceUserId);
+            return new Response(JSON.stringify(result), {
+              status: result.success ? 200 : 404,
+              headers: { 'Content-Type': 'application/json' }
+            });
+        } catch (error) {
+            // 避免泄露详细错误信息
+            return new Response(JSON.stringify({
+                success: false,
+                message: '备份操作失败'
+            }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
       }
 
       return new Response('Not Found', { status: 404 });
