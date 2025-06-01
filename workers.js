@@ -3455,7 +3455,7 @@ const HTML_CONTENT = `
             links = isLoggedIn ? [...publicLinks, ...privateLinks] : publicLinks;
 
             await saveLinks();
-            renderCategories();
+            renderSections();
             hideAddDialog();
 
             logAction('更新卡片', { oldUrl: oldLink.url, name, url, tips, icon, category, isPrivate });
