@@ -748,7 +748,7 @@ const HTML_CONTENT = `
     /* 分类按钮容器样式 - 移至固定元素区域内 */
     .category-buttons-container {
         display: flex;
-        flex-wrap: nowrap; /* 不允许按钮换行，使用水平滚动 */
+        flex-wrap: wrap; /* 允许按钮换行显示 */
         justify-content: center; /* 居中排列按钮 */
         gap: 6px;
         padding: 8px 12px;
@@ -756,10 +756,6 @@ const HTML_CONTENT = `
         max-width: 1200px; /* 增加容器宽度，确保能显示更多按钮 */
         margin-left: auto;
         margin-right: auto;
-        overflow-x: auto; /* 允许水平滚动 */
-        white-space: nowrap; /* 不允许文本换行 */
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE and Edge */
         margin-top: 5px; /* 减少与搜索栏的距离 */
         background-color: transparent; /* 背景透明 */
         border-radius: 8px;
