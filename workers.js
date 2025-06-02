@@ -1031,7 +1031,8 @@ const HTML_CONTENT = `
         column-gap: 35px;
         row-gap: 15px;
         justify-content: start;
-        padding: 45px;
+        padding: 15px;
+        padding-left: 45px;
         margin: 0 auto;
         max-width: 1600px;
     }
@@ -3024,12 +3025,6 @@ const HTML_CONTENT = `
         privateLinks.push(...newPrivateLinks);
         Object.keys(categories).forEach(key => delete categories[key]);
         Object.assign(categories, newCategories);
-
-        logAction('保存卡片顺序', {
-            publicCount: newPublicLinks.length,
-            privateCount: newPrivateLinks.length,
-            categoryCount: Object.keys(newCategories).length
-        });
 
         try {
             const response = await fetch('/api/saveOrder', {
