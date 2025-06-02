@@ -1031,7 +1031,7 @@ const HTML_CONTENT = `
         column-gap: 35px;
         row-gap: 15px;
         justify-content: start;
-        padding: 15px;
+        padding: 45px;
         margin: 0 auto;
         max-width: 1600px;
     }
