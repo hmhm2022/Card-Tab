@@ -1028,7 +1028,7 @@ const HTML_CONTENT = `
     .card-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, 150px);
-        column-gap: 22px;
+        column-gap: 35px;
         row-gap: 15px;
         justify-content: start;
         padding: 15px;
@@ -1185,39 +1185,6 @@ const HTML_CONTENT = `
     }
 
     /* 响应式设计 */
-    @media (max-width: 1400px) and (min-width: 1201px) {
-        .card-container {
-            grid-template-columns: repeat(auto-fit, 150px);
-            justify-content: start;
-            column-gap: 15px;
-            row-gap: 15px;
-            padding: 15px;
-            margin: 0 auto;
-        }
-    }
-
-    @media (max-width: 1200px) and (min-width: 769px) {
-        .card-container {
-            grid-template-columns: repeat(auto-fit, 150px);
-            justify-content: start;
-            column-gap: 35px;
-            row-gap: 12px;
-            padding: 15px;
-            margin: 0 auto;
-        }
-    }
-
-    @media (max-width: 768px) and (min-width: 481px) {
-        .card-container {
-            grid-template-columns: repeat(auto-fit, 150px);
-            justify-content: start;
-            column-gap: 30px;
-            row-gap: 12px;
-            padding: 15px;
-            margin: 0 auto;
-        }
-    }
-
     @media (max-width: 480px) {
         .fixed-elements {
             position: fixed; /* 恢复固定定位，确保分类按钮位置正确 */
