@@ -1027,12 +1027,13 @@ const HTML_CONTENT = `
 
     .card-container {
         display: grid;
-        grid-template-columns: repeat(8, 150px);
-        column-gap: 40px;
+        grid-template-columns: repeat(auto-fit, 150px);
+        column-gap: 22px;
         row-gap: 15px;
-        justify-content: center;
+        justify-content: start;
         padding: 15px;
         margin: 0 auto;
+        max-width: 1600px;
     }
 
     .card {
@@ -1188,7 +1189,7 @@ const HTML_CONTENT = `
         .card-container {
             grid-template-columns: repeat(auto-fit, 150px);
             justify-content: start;
-            column-gap: 40px;
+            column-gap: 15px;
             row-gap: 15px;
             padding: 15px;
             margin: 0 auto;
