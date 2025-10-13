@@ -1,0 +1,38 @@
+# 本地特有文件，不在远程仓库中
+workers.bak
+workers.js功能增强修改计划.md
+
+# 本地历史文件
+history/20240917-20241026.js
+history/20241026-20250428.js
+
+# 编辑器和IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+*.tmp
+*.temp
+*.log
+
+# Node.js (如果将来需要)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 其他可能的本地文件
+*.local
+*.private
+config.local.*
+
+# Markdown文档目录
+md/
