@@ -3989,24 +3989,49 @@ async function validateServerToken(authToken, env) {
     }
 
     try {
-        const [timestamp, hash] = authToken.split('.');
+        const parts = authToken.split('.');
+        let timestamp, expiryMinutes, hash;
+
+        // 兼容新旧两种 token 格式
+        if (parts.length === 3) {
+            // 新格式：timestamp.expiryMinutes.hash
+            [timestamp, expiryMinutes, hash] = parts;
+            expiryMinutes = parseInt(expiryMinutes);
+            if (isNaN(expiryMinutes)) {
+                throw new Error('Invalid expiry format');
+            }
+        } else if (parts.length === 2) {
+            // 旧格式：timestamp.hash（向后兼容，使用默认30分钟）
+            [timestamp, hash] = parts;
+            const envExpiry = parseInt(env.TOKEN_EXPIRY_MINUTES);
+            expiryMinutes = isNaN(envExpiry) ? 30 : envExpiry;
+        } else {
+            throw new Error('Invalid token format');
+        }
+
         const tokenTimestamp = parseInt(timestamp);
         const now = Date.now();
 
-        const FIFTEEN_MINUTES = 15 * 60 * 1000;
-        if (now - tokenTimestamp > FIFTEEN_MINUTES) {
-            return {
-                isValid: false,
-                status: 401,
-                response: {
-                    error: 'Token expired',
-                    tokenExpired: true,
-                    message: '登录已过期，请重新登录'
-                }
-            };
+        // 计算过期时间：-1 表示永久有效
+        if (expiryMinutes !== -1) {
+            const expiryMs = expiryMinutes * 60 * 1000;
+            if (now - tokenTimestamp > expiryMs) {
+                return {
+                    isValid: false,
+                    status: 401,
+                    response: {
+                        error: 'Token expired',
+                        tokenExpired: true,
+                        message: '登录已过期，请重新登录'
+                    }
+                };
+            }
         }
 
-        const tokenData = timestamp + "_" + env.ADMIN_PASSWORD;
+        // 根据 token 格式构建验证数据
+        const tokenData = parts.length === 3
+            ? timestamp + "_" + expiryMinutes + "_" + env.ADMIN_PASSWORD
+            : timestamp + "_" + env.ADMIN_PASSWORD;
         const encoder = new TextEncoder();
         const data = encoder.encode(tokenData);
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -4138,23 +4163,35 @@ export default {
 
       if (url.pathname === '/api/verifyPassword' && request.method === 'POST') {
         try {
-            const { password } = await request.json();
+            const body = await request.json();
+            const { password, expiryMinutes: clientExpiry } = body;
             const isValid = password === env.ADMIN_PASSWORD;
 
             if (isValid) {
-                // 生成包含时间戳的加密 token
+                // 允许的有效期白名单（分钟）：15分钟、1小时、1天、7天、30天、永久
+                const ALLOWED_EXPIRY_VALUES = [15, 60, 1440, 10080, 43200, -1];
+                const defaultExpiry = parseInt(env.TOKEN_EXPIRY_MINUTES) || 30;
+
+                // 验证客户端传入的有效期是否在白名单中
+                let expiryMinutes = defaultExpiry;
+                if (typeof clientExpiry === 'number' && Number.isInteger(clientExpiry) && ALLOWED_EXPIRY_VALUES.includes(clientExpiry)) {
+                    expiryMinutes = clientExpiry;
+                }
+
+                // 生成包含时间戳和有效期的加密 token
                 const timestamp = Date.now();
-                const tokenData = timestamp + "_" + env.ADMIN_PASSWORD;
+                const tokenData = timestamp + "_" + expiryMinutes + "_" + env.ADMIN_PASSWORD;
                 const encoder = new TextEncoder();
                 const data = encoder.encode(tokenData);
                 const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 
-                // 使用指定格式：timestamp.hash
-                const token = timestamp + "." + btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
+                // 使用指定格式：timestamp.expiryMinutes.hash
+                const token = timestamp + "." + expiryMinutes + "." + btoa(String.fromCharCode(...new Uint8Array(hashBuffer)));
 
                 return new Response(JSON.stringify({
                     valid: true,
-                    token: token
+                    token: token,
+                    expiryMinutes: expiryMinutes
                 }), {
                     status: 200,
                     headers: { 'Content-Type': 'application/json' }

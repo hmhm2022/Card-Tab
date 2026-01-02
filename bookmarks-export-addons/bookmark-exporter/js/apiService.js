@@ -9,6 +9,25 @@ class ApiService {
     }
 
     /**
+     * 处理 401 响应（token 过期或无效）
+     * @param {Response} response - fetch 响应对象
+     * @returns {Promise<{success: boolean, tokenExpired: boolean, error: string}|null>} 如果是 401 返回错误对象，否则返回 null
+     */
+    async _handle401Response(response) {
+        if (response.status === 401) {
+            const data = await response.json().catch(() => ({}));
+            // 清除本地过期的 token
+            await this.storageService.clearAuthToken();
+            return {
+                success: false,
+                tokenExpired: true,
+                error: data.message || '登录已过期，请重新登录'
+            };
+        }
+        return null;
+    }
+
+    /**
      * 登录获取 Token
      * @param {string} password - 管理密码
      * @returns {Promise<{success: boolean, token?: string, error?: string}>}
@@ -20,12 +39,14 @@ class ApiService {
         }
 
         try {
+            // 获取用户设置的有效期（默认30分钟）
+            const expiryMinutes = (await this.storageService.getExpirySetting()) ?? 30;
             const response = await fetch(`${apiUrl}/api/verifyPassword`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ password })
+                body: JSON.stringify({ password, expiryMinutes })
             });
 
             const data = await response.json();
@@ -63,6 +84,10 @@ class ApiService {
                 headers
             });
 
+            // 处理 401 错误（token 过期或无效）
+            const authError = await this._handle401Response(response);
+            if (authError) return authError;
+
             if (!response.ok) {
                 throw new Error('HTTP error: ' + response.status);
             }
@@ -93,7 +118,7 @@ class ApiService {
         }
 
         if (!token) {
-            return { success: false, error: '请先登录' };
+            return { success: false, error: '请先登录', tokenExpired: true };
         }
 
         try {
@@ -109,6 +134,10 @@ class ApiService {
                     categories
                 })
             });
+
+            // 处理 401 错误（token 过期或无效）
+            const authError = await this._handle401Response(response);
+            if (authError) return authError;
 
             const data = await response.json();
 

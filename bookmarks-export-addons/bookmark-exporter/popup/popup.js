@@ -188,6 +188,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     /**
+     * 处理 Token 过期情况
+     */
+    async function handleTokenExpired(result) {
+        if (result.tokenExpired) {
+            await updateLoginStatus();
+            showMessage(result.error || '登录已过期，请重新登录', 'error');
+            updateStatus('error', '请重新登录');
+            openSettings();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 检查当前页面状态
      */
     async function checkCurrentPageStatus() {
@@ -210,6 +224,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const result = await apiService.findBookmark(currentTab.url);
 
         if (!result.success) {
+            if (await handleTokenExpired(result)) return;
             showMessage(result.error, 'error');
             updateStatus('error', '获取失败');
             return;
@@ -466,6 +481,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 closeAddBookmarkModal();
                 await checkCurrentPageStatus();
             } else {
+                closeAddBookmarkModal();
+                if (await handleTokenExpired(result)) return;
                 showMessage(result.error, 'error');
             }
         } catch (error) {
@@ -496,6 +513,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showMessage('删除成功！', 'success');
                 await checkCurrentPageStatus();
             } else {
+                if (await handleTokenExpired(result)) return;
                 showMessage(result.error, 'error');
             }
         } catch (error) {
@@ -525,6 +543,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 originalCategory = newCategory;
                 elements.saveCategoryBtn.style.display = 'none';
             } else {
+                if (await handleTokenExpired(result)) return;
                 showMessage(result.error, 'error');
             }
         } catch (error) {
@@ -565,6 +584,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showMessage(`成功导入 ${result.imported} 个书签！`, 'success');
                 await checkCurrentPageStatus();
             } else {
+                if (await handleTokenExpired(result)) return;
                 showMessage(result.error, 'error');
             }
         } catch (error) {
@@ -585,6 +605,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const result = await apiService.getBookmarks();
 
             if (!result.success) {
+                if (await handleTokenExpired(result)) return;
                 showMessage(result.error, 'error');
                 return;
             }
