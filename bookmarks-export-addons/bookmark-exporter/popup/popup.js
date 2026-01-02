@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 登录/设置
         loginBtn: document.getElementById('loginBtn'),
+        logoutBtn: document.getElementById('logoutBtn'),
         goSettingsBtn: document.getElementById('goSettingsBtn'),
         settingsModal: document.getElementById('settingsModal'),
         closeSettingsBtn: document.getElementById('closeSettingsBtn'),
@@ -94,15 +95,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function updateLoginStatus() {
         const isLoggedIn = await storageService.isLoggedIn();
         const loginBtn = elements.loginBtn;
+        const logoutBtn = elements.logoutBtn;
 
         if (isLoggedIn) {
             loginBtn.classList.remove('logged-out');
             loginBtn.classList.add('logged-in');
             loginBtn.title = '已登录 - 点击打开设置';
+            logoutBtn.style.display = 'inline-block';
         } else {
             loginBtn.classList.remove('logged-in');
             loginBtn.classList.add('logged-out');
             loginBtn.title = '未登录 - 点击登录';
+            logoutBtn.style.display = 'none';
         }
     }
 
@@ -112,10 +116,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     function bindEvents() {
         // 登录/设置按钮
         elements.loginBtn.addEventListener('click', openSettings);
+        elements.logoutBtn.addEventListener('click', logout);
         elements.goSettingsBtn.addEventListener('click', openSettings);
         elements.closeSettingsBtn.addEventListener('click', closeSettings);
         elements.testConnBtn.addEventListener('click', testConnection);
         elements.saveSettingsBtn.addEventListener('click', saveSettings);
+
+        // 密码输入框回车触发登录
+        elements.passwordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveSettings();
+            }
+        });
 
         // 操作按钮
         elements.addBtn.addEventListener('click', openAddBookmarkModal);
@@ -292,6 +305,15 @@ document.addEventListener('DOMContentLoaded', async () => {
      */
     function closeSettings() {
         elements.settingsModal.style.display = 'none';
+    }
+
+    /**
+     * 退出登录
+     */
+    async function logout() {
+        await storageService.clearAuthToken();
+        await updateLoginStatus();
+        showMessage('已退出登录', 'info');
     }
 
     /**

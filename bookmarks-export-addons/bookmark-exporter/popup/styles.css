@@ -68,6 +68,24 @@ body {
     color: #218838;
 }
 
+/* 顶部栏操作区 */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 退出按钮 */
+.logout-btn {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.logout-btn:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #c82333;
+}
+
 /* 配置提示 */
 .config-prompt {
     text-align: center;

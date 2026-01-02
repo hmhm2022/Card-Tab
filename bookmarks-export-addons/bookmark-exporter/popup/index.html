@@ -10,12 +10,21 @@
         <!-- 顶部栏 -->
         <header class="header">
             <h1>Card-Tab Manager</h1>
-            <button id="loginBtn" class="icon-btn login-status" title="未登录">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-            </button>
+            <div class="header-actions">
+                <button id="loginBtn" class="icon-btn login-status" title="未登录">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <button id="logoutBtn" class="icon-btn logout-btn" title="退出登录" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
         </header>
 
         <!-- 未配置提示 -->
@@ -84,7 +93,7 @@
     <div id="settingsModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>设置</h2>
+                <h2>登录</h2>
                 <button id="closeSettingsBtn" class="close-btn">&times;</button>
             </div>
             <div class="modal-body">
