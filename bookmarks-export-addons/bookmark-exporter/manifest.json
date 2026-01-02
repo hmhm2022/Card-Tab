@@ -1,12 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "Bookmarks Exporter for Card-Tab",
-  "version": "0.0.1",
-  "description": "Export Chrome bookmarks with customizable JSON format",
+  "name": "Card-Tab Manager",
+  "version": "1.0.0",
+  "description": "Manage Card-Tab bookmarks: add, delete, import and export",
   "author": "Linux.do user705",
   "homepage_url": "https://github.com/hmhm2022/Card-Tab",
   "permissions": [
-    "bookmarks"
+    "bookmarks",
+    "tabs",
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "action": {
     "default_popup": "popup/index.html",

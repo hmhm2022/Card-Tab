@@ -1,14 +1,473 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    width: 300px;
-    padding: 15px;
+    width: 360px;
+    min-height: 200px;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f8f6f2;
+    color: #333;
+    font-size: 14px;
 }
 
 #app {
-    text-align: center;
+    padding: 16px;
 }
 
-button {
-    padding: 8px 16px;
-    margin: 10px;
+/* 顶部栏 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
     cursor: pointer;
-} 
+    padding: 6px;
+    border-radius: 6px;
+    color: #666;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background-color: #e8e8e8;
+    color: #333;
+}
+
+/* 登录状态按钮 */
+.login-status {
+    transition: all 0.3s ease;
+}
+
+.login-status.logged-out {
+    color: #999;
+}
+
+.login-status.logged-in {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.login-status.logged-in:hover {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #218838;
+}
+
+/* 配置提示 */
+.config-prompt {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.config-prompt p {
+    color: #666;
+    margin-bottom: 16px;
+}
+
+/* 当前页面信息 */
+.current-page {
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.page-info {
+    margin-bottom: 8px;
+}
+
+.page-title {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.page-url {
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.page-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-badge.added {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.not-added {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.checking {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* 分类选择 */
+.category-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.category-section label {
+    font-weight: 500;
+    color: #555;
+    white-space: nowrap;
+}
+
+.category-select {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.category-select:focus {
+    outline: none;
+    border-color: #43b883;
+}
+
+/* 按钮样式 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: #43b883;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #3aa876;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: #5a6268;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #c82333;
+}
+
+/* 操作按钮区 */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.action-buttons .btn {
+    flex: 1;
+}
+
+/* 分隔线 */
+.divider {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 16px 0;
+}
+
+/* 批量操作 */
+.batch-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.batch-actions .btn {
+    flex: 1;
+    padding: 10px 12px;
+}
+
+/* 状态消息 */
+.status-message {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.status-message.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* 模态框 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    width: 320px;
+    max-height: 90%;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 12px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 12px;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* 表单 */
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #43b883;
+}
+
+.form-group input[readonly] {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: #888;
+}
+
+/* 设置模态框紧凑表单 - 标签和输入框同行 */
+.settings-form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.settings-form-group label {
+    width: 60px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 0;
+}
+
+.settings-form-group input,
+.settings-form-group select {
+    flex: 1;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.settings-form-group input:focus,
+.settings-form-group select:focus {
+    outline: none;
+    border-color: #43b883;
+}
+
+.settings-form-hint {
+    margin-left: 70px;
+    font-size: 11px;
+    color: #888;
+    margin-top: -6px;
+    margin-bottom: 10px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* 加载状态 */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* 模态框内消息样式 */
+.settings-message {
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.settings-message.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.settings-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.settings-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}

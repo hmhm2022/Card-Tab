@@ -1,6 +1,8 @@
 # 本地特有文件，不在远程仓库中
 workers.bak
 workers.js功能增强修改计划.md
+.cunzhi-memory/
+.claude/
 
 # 本地历史文件
 history/20240917-20241026.js

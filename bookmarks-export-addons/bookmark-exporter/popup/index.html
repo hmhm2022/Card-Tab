@@ -1,17 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Bookmarks Exporter</title>
+    <title>Card-Tab Manager</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="app">
-        <h1>Bookmarks Exporter</h1>
-        <button id="exportBtn">Export Bookmarks</button>
+        <!-- 顶部栏 -->
+        <header class="header">
+            <h1>Card-Tab Manager</h1>
+            <button id="loginBtn" class="icon-btn login-status" title="未登录">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </button>
+        </header>
+
+        <!-- 未配置提示 -->
+        <div id="configPrompt" class="config-prompt" style="display: none;">
+            <p>请先配置 Card-Tab API 地址</p>
+            <button id="goSettingsBtn" class="btn btn-primary">去设置</button>
+        </div>
+
+        <!-- 主内容区 -->
+        <main id="mainContent" style="display: none;">
+            <!-- 当前页面信息 -->
+            <section class="current-page">
+                <div class="page-info">
+                    <div class="page-title" id="pageTitle">加载中...</div>
+                    <div class="page-url" id="pageUrl"></div>
+                </div>
+                <div class="page-status">
+                    <span id="statusBadge" class="status-badge">检测中</span>
+                </div>
+            </section>
+
+            <!-- 分类选择 -->
+            <section class="category-section">
+                <label for="categorySelect">分类：</label>
+                <select id="categorySelect" class="category-select">
+                    <option value="">加载中...</option>
+                </select>
+            </section>
+
+            <!-- 操作按钮 -->
+            <section class="action-buttons">
+                <button id="addBtn" class="btn btn-success" style="display: none;">添加书签</button>
+                <button id="deleteBtn" class="btn btn-danger" style="display: none;">删除书签</button>
+                <button id="saveCategoryBtn" class="btn btn-primary" style="display: none;">保存分类</button>
+            </section>
+
+            <!-- 分隔线 -->
+            <hr class="divider">
+
+            <!-- 批量操作 -->
+            <section class="batch-actions">
+                <button id="importBtn" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    导入书签
+                </button>
+                <button id="exportBtn" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    导出备份
+                </button>
+            </section>
+        </main>
+
+        <!-- 状态消息 -->
+        <div id="statusMessage" class="status-message" style="display: none;"></div>
     </div>
+
+    <!-- 设置模态框 -->
+    <div id="settingsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>设置</h2>
+                <button id="closeSettingsBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-form-group">
+                    <label for="apiUrlInput">API 地址</label>
+                    <input type="text" id="apiUrlInput" placeholder="https://your-domain.com">
+                </div>
+                <div class="settings-form-hint">Card-Tab 部署的域名地址</div>
+                <div class="settings-form-group">
+                    <label for="passwordInput">管理密码</label>
+                    <input type="password" id="passwordInput" placeholder="输入管理密码">
+                </div>
+                <div class="settings-form-group">
+                    <label for="tokenExpirySelect">有效期</label>
+                    <select id="tokenExpirySelect">
+                        <option value="15">15 分钟</option>
+                        <option value="60">1 小时</option>
+                        <option value="1440">1 天</option>
+                        <option value="10080">7 天</option>
+                        <option value="43200">30 天</option>
+                        <option value="-1">永久保持登录</option>
+                    </select>
+                </div>
+                <!-- 设置页专用消息区域 -->
+                <div id="settingsMessage" class="settings-message" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="testConnBtn" class="btn btn-secondary">测试连接</button>
+                <button id="saveSettingsBtn" class="btn btn-primary">保存并登录</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加书签模态框 -->
+    <div id="addBookmarkModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>添加书签</h2>
+                <button id="closeAddBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="bookmarkName">名称</label>
+                    <input type="text" id="bookmarkName" placeholder="书签名称">
+                </div>
+                <div class="form-group">
+                    <label for="bookmarkUrl">网址</label>
+                    <input type="text" id="bookmarkUrl" placeholder="https://" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="bookmarkTips">描述</label>
+                    <input type="text" id="bookmarkTips" placeholder="可选描述">
+                </div>
+                <div class="form-group">
+                    <label for="bookmarkCategory">分类</label>
+                    <select id="bookmarkCategory" class="category-select">
+                    </select>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="bookmarkPrivate">
+                        设为私密书签
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelAddBtn" class="btn btn-secondary">取消</button>
+                <button id="confirmAddBtn" class="btn btn-success">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="../js/storageService.js"></script>
+    <script src="../js/apiService.js"></script>
     <script src="../js/bookmarkService.js"></script>
     <script src="../js/exportService.js"></script>
     <script src="popup.js"></script>
 </body>
-</html> 
+</html>
