@@ -655,9 +655,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             };
 
             const filename = `cardtab-backup-${new Date().toISOString().slice(0, 10)}.json`;
-            exportService.exportToJson(data, filename);
+            const exportResult = await exportService.exportToJson(data, filename);
 
-            showMessage('备份已下载！', 'success');
+            if (exportResult.success) {
+                showMessage('备份已下载！', 'success');
+            } else if (exportResult.cancelled) {
+                showMessage('已取消导出', 'info');
+            }
         } catch (error) {
             showMessage('导出失败：' + error.message, 'error');
         } finally {
