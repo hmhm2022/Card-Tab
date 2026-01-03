@@ -21,4 +21,4 @@
 2. 当前页面书签状态自动检测，可直接添加/删除/修改分类
 3. 底部按钮进行批量导入导出操作
 
-![image](https://github.com/user-attachments/assets/a14dd0eb-fa4f-4a1d-a871-e5348faee0b2)
+<img width="362" height="401" alt="image" src="https://github.com/user-attachments/assets/66209728-46ac-42ad-a5b0-42ffdf9321ea" />
