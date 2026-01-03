@@ -1,4 +1,59 @@
 /**
+ * URL 规范化函数
+ * 统一处理 URL 格式，确保匹配时不会因格式差异而失败
+ * @param {string} url - 原始 URL
+ * @returns {string} 规范化后的 URL
+ */
+function normalizeUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return url;
+    }
+
+    // 去除首尾空格
+    url = url.trim();
+
+    // 补全协议（如果缺少）
+    if (!/^https?:\/\//i.test(url)) {
+        url = 'https://' + url;
+    }
+
+    try {
+        const parsed = new URL(url);
+
+        // 协议小写
+        let normalized = parsed.protocol.toLowerCase() + '//';
+
+        // 域名小写
+        normalized += parsed.hostname.toLowerCase();
+
+        // 移除默认端口（80 for http, 443 for https）
+        if (parsed.port &&
+            !((parsed.protocol === 'http:' && parsed.port === '80') ||
+              (parsed.protocol === 'https:' && parsed.port === '443'))) {
+            normalized += ':' + parsed.port;
+        }
+
+        // 路径保留原样（服务器可能区分大小写）
+        // 但移除根路径的单斜杠
+        if (parsed.pathname && parsed.pathname !== '/') {
+            normalized += parsed.pathname;
+        }
+
+        // 保留查询参数（保守策略，不移除 tracking 参数）
+        if (parsed.search) {
+            normalized += parsed.search;
+        }
+
+        // 不保留 fragment（#hash 部分）
+
+        return normalized;
+    } catch {
+        // URL 解析失败，返回小写处理后的原始值
+        return url.toLowerCase();
+    }
+}
+
+/**
  * ApiService - 与 Card-Tab 后端 API 通信
  * 处理登录、获取书签、保存书签等操作
  */
@@ -165,16 +220,21 @@ class ApiService {
 
         const { links, categories } = result;
 
+        // 规范化输入的 URL
+        const normalizedInputUrl = normalizeUrl(bookmark.url);
+
+        // 预处理：一次性规范化所有现有 URL（性能优化）
+        const existingUrls = new Set(links.map(link => normalizeUrl(link.url)));
+
         // 检查是否已存在
-        const exists = links.some(link => link.url === bookmark.url);
-        if (exists) {
+        if (existingUrls.has(normalizedInputUrl)) {
             return { success: false, error: '该书签已存在' };
         }
 
-        // 添加新书签
+        // 添加新书签（存储规范化后的 URL）
         const newBookmark = {
             name: bookmark.name,
-            url: bookmark.url,
+            url: normalizedInputUrl,
             category: bookmark.category || '常用网站',
             tips: bookmark.tips || '',
             isPrivate: bookmark.isPrivate || false
@@ -205,8 +265,12 @@ class ApiService {
 
         let { links, categories } = result;
 
-        // 找到并删除
-        const index = links.findIndex(link => link.url === url);
+        // 规范化输入的 URL
+        const normalizedInputUrl = normalizeUrl(url);
+
+        // 预处理：一次性规范化所有 URL（性能优化）
+        const normalizedUrls = links.map(link => normalizeUrl(link.url));
+        const index = normalizedUrls.indexOf(normalizedInputUrl);
         if (index === -1) {
             return { success: false, error: '书签不存在' };
         }
@@ -232,14 +296,18 @@ class ApiService {
 
         let { links, categories } = result;
 
-        // 找到书签
-        const bookmark = links.find(link => link.url === url);
-        if (!bookmark) {
+        // 规范化输入的 URL
+        const normalizedInputUrl = normalizeUrl(url);
+
+        // 预处理：一次性规范化所有 URL（性能优化）
+        const normalizedUrls = links.map(link => normalizeUrl(link.url));
+        const index = normalizedUrls.indexOf(normalizedInputUrl);
+        if (index === -1) {
             return { success: false, error: '书签不存在' };
         }
 
         // 更新分类
-        bookmark.category = newCategory;
+        links[index].category = newCategory;
 
         // 确保新分类存在
         if (!categories[newCategory]) {
@@ -261,10 +329,16 @@ class ApiService {
             return result;
         }
 
-        const bookmark = result.links.find(link => link.url === url);
+        // 规范化输入的 URL
+        const normalizedInputUrl = normalizeUrl(url);
+
+        // 预处理：一次性规范化所有 URL（性能优化）
+        const normalizedUrls = result.links.map(link => normalizeUrl(link.url));
+        const index = normalizedUrls.indexOf(normalizedInputUrl);
+
         return {
             success: true,
-            bookmark: bookmark || null,
+            bookmark: index !== -1 ? result.links[index] : null,
             categories: result.categories
         };
     }
@@ -377,14 +451,19 @@ class ApiService {
             }
         }
 
-        // 合并书签（避免重复）
-        const existingUrls = new Set(links.map(l => l.url));
+        // 合并书签（避免重复，使用规范化后的 URL 比较）
+        const existingUrls = new Set(links.map(l => normalizeUrl(l.url)));
         let importedCount = 0;
 
         for (const newLink of newLinks) {
-            if (!existingUrls.has(newLink.url)) {
-                links.push(newLink);
-                existingUrls.add(newLink.url);
+            const normalizedNewUrl = normalizeUrl(newLink.url);
+            if (!existingUrls.has(normalizedNewUrl)) {
+                // 存储规范化后的 URL
+                links.push({
+                    ...newLink,
+                    url: normalizedNewUrl
+                });
+                existingUrls.add(normalizedNewUrl);
                 importedCount++;
 
                 // 确保分类存在

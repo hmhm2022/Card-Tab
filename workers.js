@@ -2514,6 +2514,56 @@ const HTML_CONTENT = `
         }
     }
 
+    // URL规范化函数
+    function normalizeUrl(url) {
+        if (!url || typeof url !== 'string') {
+            return url;
+        }
+
+        // 去除首尾空格
+        url = url.trim();
+
+        // 补全协议（如果缺少）
+        if (!/^https?:\/\//i.test(url)) {
+            url = 'https://' + url;
+        }
+
+        try {
+            const parsed = new URL(url);
+
+            // 协议小写
+            let normalized = parsed.protocol.toLowerCase() + '//';
+
+            // 域名小写
+            normalized += parsed.hostname.toLowerCase();
+
+            // 移除默认端口（80 for http, 443 for https）
+            if (parsed.port &&
+                !((parsed.protocol === 'http:' && parsed.port === '80') ||
+                  (parsed.protocol === 'https:' && parsed.port === '443'))) {
+                normalized += ':' + parsed.port;
+            }
+
+            // 路径保留原样（服务器可能区分大小写）
+            // 但移除根路径的单斜杠
+            if (parsed.pathname && parsed.pathname !== '/') {
+                normalized += parsed.pathname;
+            }
+
+            // 保留查询参数
+            if (parsed.search) {
+                normalized += parsed.search;
+            }
+
+            // 不保留 fragment（#hash 部分）
+
+            return normalized;
+        } catch {
+            // URL 解析失败，返回小写处理后的原始值
+            return url.toLowerCase();
+        }
+    }
+
     // 创建卡片
     function createCard(link, container) {
         const card = document.createElement('div');
@@ -2672,6 +2722,12 @@ const HTML_CONTENT = `
 
         let allLinks = [...publicLinks, ...privateLinks];
 
+        // 懒迁移：保存前规范化所有 URL
+        allLinks = allLinks.map(link => ({
+            ...link,
+            url: normalizeUrl(link.url)
+        }));
+
         try {
             await fetch('/api/saveOrder', {
                 method: 'POST',
@@ -2725,18 +2781,20 @@ const HTML_CONTENT = `
             return;
         }
 
-        // 检查URL是否已存在
-        const normalizedUrl = url.toLowerCase();
+        // 规范化 URL 并检查是否已存在
+        const normalizedUrl = normalizeUrl(url);
         const allLinks = [...publicLinks, ...privateLinks];
-        const isUrlExists = allLinks.some(link => link.url.toLowerCase() === normalizedUrl);
+        // 预处理：一次性规范化所有 URL（性能优化）
+        const existingUrls = new Set(allLinks.map(link => normalizeUrl(link.url)));
 
-        if (isUrlExists) {
+        if (existingUrls.has(normalizedUrl)) {
             await customAlert('该URL已存在，请勿重复添加', '添加卡片');
             document.getElementById('url-input').focus();
             return;
         }
 
-        const newLink = { name, url, tips, icon, category, isPrivate };
+        // 存储规范化后的 URL
+        const newLink = { name, url: normalizedUrl, tips, icon, category, isPrivate };
 
         if (isPrivate) {
             privateLinks.push(newLink);
@@ -3387,11 +3445,15 @@ const HTML_CONTENT = `
             return;
         }
 
-        // 检查URL是否与其他链接重复（排除当前编辑的链接）
-        const normalizedUrl = url.toLowerCase();
+        // 规范化 URL 并检查是否与其他链接重复（排除当前编辑的链接）
+        const normalizedUrl = normalizeUrl(url);
+        const normalizedOldUrl = normalizeUrl(oldLink.url);
         const allLinks = [...publicLinks, ...privateLinks];
-        const isUrlExists = allLinks.some(link =>
-            link.url.toLowerCase() === normalizedUrl && link.url !== oldLink.url
+
+        // 预处理：一次性规范化所有 URL（性能优化）
+        const normalizedUrls = allLinks.map(link => normalizeUrl(link.url));
+        const isUrlExists = normalizedUrls.some(nUrl =>
+            nUrl === normalizedUrl && nUrl !== normalizedOldUrl
         );
 
         if (isUrlExists) {
@@ -3400,12 +3462,14 @@ const HTML_CONTENT = `
             return;
         }
 
-        const updatedLink = { name, url, tips, icon, category, isPrivate };
+        // 存储规范化后的 URL
+        const updatedLink = { name, url: normalizedUrl, tips, icon, category, isPrivate };
 
         try {
             // 替换旧链接
             const list = oldLink.isPrivate ? privateLinks : publicLinks;
-            const index = list.findIndex(l => l.url === oldLink.url);
+            const listNormalizedUrls = list.map(l => normalizeUrl(l.url));
+            const index = listNormalizedUrls.indexOf(normalizedOldUrl);
             if (index !== -1) {
                 list[index] = updatedLink;
             }

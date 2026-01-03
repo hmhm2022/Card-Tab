@@ -460,6 +460,16 @@ body {
     cursor: pointer;
 }
 
+/* 紧凑布局下的 checkbox 样式 */
+.settings-form-group.checkbox-group {
+    margin-left: 70px;
+}
+
+.settings-form-group.checkbox-group label {
+    width: auto;
+    font-size: 13px;
+}
+
 /* 加载状态 */
 .loading {
     opacity: 0.7;
