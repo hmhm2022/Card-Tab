@@ -24,6 +24,7 @@ desktop.ini
 *.tmp
 *.temp
 *.log
+*.zip
 
 # Node.js (如果将来需要)
 node_modules/
