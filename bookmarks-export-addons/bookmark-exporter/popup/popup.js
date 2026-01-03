@@ -577,11 +577,48 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
+            // 统计分类数量
+            const categoryCount = Object.keys(bookmarks.categories || {}).length;
+
+            // 用户确认
+            const confirmed = confirm(
+                `即将导入 ${bookmarks.links.length} 个书签（${categoryCount} 个分类）到 Card-Tab。\n\n` +
+                `导入前会自动备份现有数据。\n\n` +
+                `是否继续？`
+            );
+
+            if (!confirmed) {
+                showMessage('已取消导入', 'info');
+                return;
+            }
+
+            // 触发备份
+            showMessage('正在备份现有数据...', 'info');
+            const backupResult = await apiService.triggerBackup();
+
+            if (!backupResult.success) {
+                if (await handleTokenExpired(backupResult)) return;
+                // 备份失败，询问是否继续
+                const continueWithoutBackup = confirm(
+                    `备份失败：${backupResult.error}\n\n是否仍要继续导入？`
+                );
+                if (!continueWithoutBackup) {
+                    showMessage('已取消导入', 'info');
+                    return;
+                }
+            }
+
             // 导入到 Card-Tab
+            showMessage('正在导入书签...', 'info');
             const result = await apiService.importBookmarks(bookmarks.links, false);
 
             if (result.success) {
-                showMessage(`成功导入 ${result.imported} 个书签！`, 'success');
+                if (backupResult.success) {
+                    showMessage(`成功导入 ${result.imported} 个书签！（已备份）`, 'success');
+                } else {
+                    // 备份失败时使用警告样式，提醒用户注意
+                    showMessage(`成功导入 ${result.imported} 个书签，但备份失败，建议手动导出备份`, 'warning');
+                }
                 await checkCurrentPageStatus();
             } else {
                 if (await handleTokenExpired(result)) return;

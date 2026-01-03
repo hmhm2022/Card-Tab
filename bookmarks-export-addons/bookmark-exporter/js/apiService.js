@@ -292,6 +292,73 @@ class ApiService {
     }
 
     /**
+     * 触发数据备份
+     * @param {number} timeout - 超时时间（毫秒），默认 30000
+     * @returns {Promise<{success: boolean, backupId?: string, error?: string}>}
+     */
+    async triggerBackup(timeout = 30000) {
+        const apiUrl = await this.storageService.getApiUrl();
+        const token = await this.storageService.getAuthToken();
+
+        if (!apiUrl) {
+            return { success: false, error: '请先配置 API 地址' };
+        }
+
+        if (!token) {
+            return { success: false, error: '请先登录', tokenExpired: true };
+        }
+
+        // 创建 AbortController 用于超时控制
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+        try {
+            const response = await fetch(`${apiUrl}/api/backupData`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    sourceUserId: this.userId
+                }),
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            // 处理 401 错误
+            const authError = await this._handle401Response(response);
+            if (authError) return authError;
+
+            // 处理其他 HTTP 错误
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                if (response.status === 403) {
+                    return { success: false, error: '无权限执行备份操作' };
+                }
+                if (response.status >= 500) {
+                    return { success: false, error: '服务器错误，请稍后重试' };
+                }
+                return { success: false, error: errorData.message || `请求失败 (${response.status})` };
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                return { success: true, backupId: data.backupId };
+            } else {
+                return { success: false, error: data.message || '备份失败' };
+            }
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                return { success: false, error: '备份请求超时，请检查网络连接' };
+            }
+            return { success: false, error: '备份失败：' + error.message };
+        }
+    }
+
+    /**
      * 批量导入书签
      * @param {Array} newLinks - 要导入的书签列表
      * @param {boolean} overwrite - 是否覆盖现有数据
