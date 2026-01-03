@@ -1,5 +1,5 @@
 /**
- * Card-Tab Manager - Popup 主逻辑
+ * Card-Tab Helper - Popup 主逻辑
  */
 document.addEventListener('DOMContentLoaded', async () => {
     // 初始化服务
@@ -438,6 +438,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.textContent = cat;
             categorySelect.appendChild(option);
         });
+
+        // 联动主界面分类选择
+        categorySelect.value = elements.categorySelect.value;
 
         elements.addBookmarkModal.style.display = 'flex';
     }

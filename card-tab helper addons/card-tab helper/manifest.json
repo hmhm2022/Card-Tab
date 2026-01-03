@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Card-Tab Manager",
-  "version": "1.0.0",
+  "name": "Card-Tab Helper",
+  "version": "2026.01.03",
   "description": "Manage Card-Tab bookmarks: add, delete, import and export",
   "author": "Linux.do user705",
   "homepage_url": "https://github.com/hmhm2022/Card-Tab",
