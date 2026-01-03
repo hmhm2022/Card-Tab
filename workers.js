@@ -2524,7 +2524,7 @@ const HTML_CONTENT = `
         url = url.trim();
 
         // 补全协议（如果缺少）
-        if (!/^https?:\/\//i.test(url)) {
+        if (!/^https?:\\/\\//i.test(url)) {
             url = 'https://' + url;
         }
 
