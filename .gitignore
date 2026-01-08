@@ -5,6 +5,7 @@ workers.js功能增强修改计划.md
 .claude/
 wrangler.toml
 .wrangler/
+.serena/
 
 # 本地历史文件
 history/20240917-20241026.js

@@ -12,6 +12,7 @@
 ### 配置说明
 - [申请和风天气 API Key](https://id.qweather.com/#/register)（合理设置API限制）
 - 配置API Key到环境变量 `WEATHER_API_KEY`
+- [控制台设置]( https://console.qweather.com/setting) 中复制 “API Host”， 配置到环境变量 `WEATHER_API_KEY`
 
 ## [2026.01.03] - 浏览器扩展重构升级
 

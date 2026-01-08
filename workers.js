@@ -4706,6 +4706,64 @@ export default {
       }
 
       // ========== 天气代理 API ==========
+      const normalizeBaseUrl = (raw) => {
+        const value = (raw || '').trim();
+        if (!value) return null;
+        const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+        return withScheme.replace(/\/+$/, '');
+      };
+
+      // 公告说明：公共 API 域名将逐步停服，建议改用你的 API Host（形如：xxx.yyy.qweatherapi.com）
+      // - devapi.qweather.com 已于 2026-01-01 停止服务
+      // - GeoAPI 使用 API Host 时需从 /v2/... 变更为 /geo/v2/...
+      const qweatherHost = normalizeBaseUrl(env.WEATHER_API_HOST);
+      const qweatherApiBase = qweatherHost || 'https://api.qweather.com';
+      const qweatherGeoBase = qweatherHost ? `${qweatherApiBase}/geo` : 'https://geoapi.qweather.com';
+
+      const proxyQWeatherJson = async (targetUrl) => {
+        const redactedUrl = targetUrl.replace(/([?&]key=)[^&]*/i, '$1***');
+        let res;
+        try {
+          res = await fetch(targetUrl);
+        } catch (err) {
+          return new Response(JSON.stringify({
+            code: '502',
+            error: 'qweather_fetch_failed',
+            upstreamUrl: redactedUrl,
+            message: String(err)
+          }), { status: 502, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        const contentType = res.headers.get('content-type') || '';
+        const text = await res.text();
+
+        if (!res.ok) {
+          return new Response(JSON.stringify({
+            code: String(res.status),
+            error: 'qweather_upstream_error',
+            upstreamStatus: res.status,
+            upstreamContentType: contentType,
+            upstreamUrl: redactedUrl,
+            upstreamBody: (text || '').slice(0, 800)
+          }), { status: 502, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        try {
+          if (!text) throw new Error('empty response body');
+          const data = JSON.parse(text);
+          return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+        } catch (err) {
+          return new Response(JSON.stringify({
+            code: '502',
+            error: 'qweather_invalid_json',
+            upstreamContentType: contentType,
+            upstreamUrl: redactedUrl,
+            upstreamBody: (text || '').slice(0, 800),
+            message: String(err)
+          }), { status: 502, headers: { 'Content-Type': 'application/json' } });
+        }
+      };
+
       if (url.pathname === '/api/weather/now') {
         if (!env.WEATHER_API_KEY) {
           return new Response(JSON.stringify({ code: '503', error: 'weather_not_configured' }), {
@@ -4718,9 +4776,9 @@ export default {
             status: 400, headers: { 'Content-Type': 'application/json' }
           });
         }
-        const res = await fetch(`https://devapi.qweather.com/v7/weather/now?location=${location}&key=${env.WEATHER_API_KEY}`);
-        const data = await res.json();
-        return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+        return await proxyQWeatherJson(
+          `${qweatherApiBase}/v7/weather/now?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}`
+        );
       }
 
       if (url.pathname === '/api/weather/3d') {
@@ -4735,9 +4793,9 @@ export default {
             status: 400, headers: { 'Content-Type': 'application/json' }
           });
         }
-        const res = await fetch(`https://devapi.qweather.com/v7/weather/3d?location=${location}&key=${env.WEATHER_API_KEY}`);
-        const data = await res.json();
-        return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+        return await proxyQWeatherJson(
+          `${qweatherApiBase}/v7/weather/3d?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}`
+        );
       }
 
       if (url.pathname === '/api/weather/geo') {
@@ -4753,9 +4811,9 @@ export default {
             status: 400, headers: { 'Content-Type': 'application/json' }
           });
         }
-        const res = await fetch(`https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}&number=${number}`);
-        const data = await res.json();
-        return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+        return await proxyQWeatherJson(
+          `${qweatherGeoBase}/v2/city/lookup?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}&number=${number}`
+        );
       }
 
       if (url.pathname === '/api/getLinks') {
