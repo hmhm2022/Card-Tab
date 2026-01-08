@@ -1293,6 +1293,44 @@ const HTML_CONTENT = `
     .weather-search-item-name { font-weight: 500; font-size: 14px; }
     .weather-search-item-path { font-size: 12px; color: #999; margin-top: 2px; }
 
+    /* 定位模式切换 */
+    .weather-mode-switch {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+    .weather-mode-btn {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+    .weather-mode-btn:hover { border-color: #43b883; }
+    .weather-mode-btn.active {
+        background: #43b883;
+        border-color: #43b883;
+        color: #fff;
+    }
+    body.dark-theme .weather-mode-btn {
+        background: #3a3a3a;
+        border-color: #555;
+        color: #e3e3e3;
+    }
+    body.dark-theme .weather-mode-btn:hover { border-color: #43b883; }
+    body.dark-theme .weather-mode-btn.active {
+        background: #43b883;
+        border-color: #43b883;
+        color: #fff;
+    }
+
     /* 当前天气 */
     .weather-current {
         text-align: center;
@@ -4193,6 +4231,8 @@ const HTML_CONTENT = `
     const WEATHER_GEO_API = 'https://geoapi.qweather.com/v2';
     const WEATHER_CACHE_KEY = 'card_tab_weather_cache';
     const WEATHER_CACHE_DURATION = 30 * 60 * 1000; // 30分钟
+    const WEATHER_MODE_KEY = 'card_tab_weather_mode'; // 定位模式：ip 或 fixed
+    const WEATHER_FIXED_CITY_KEY = 'card_tab_weather_fixed_city'; // 默认城市信息
 
     // 天气图标映射
     const WEATHER_ICONS = {
@@ -4210,8 +4250,74 @@ const HTML_CONTENT = `
     let currentWeatherLocation = null;
     let weatherSearchTimer = null;
 
+    // 获取定位模式
+    function getWeatherMode() {
+        return localStorage.getItem(WEATHER_MODE_KEY) || 'ip';
+    }
+
+    // 设置定位模式
+    function setWeatherMode(mode) {
+        localStorage.setItem(WEATHER_MODE_KEY, mode);
+        updateWeatherModeUI();
+    }
+
+    // 获取默认城市
+    function getFixedCity() {
+        try {
+            const data = localStorage.getItem(WEATHER_FIXED_CITY_KEY);
+            return data ? JSON.parse(data) : null;
+        } catch (e) { return null; }
+    }
+
+    // 设置默认城市
+    function setFixedCity(location) {
+        localStorage.setItem(WEATHER_FIXED_CITY_KEY, JSON.stringify(location));
+    }
+
+    // 更新模式切换UI
+    function updateWeatherModeUI() {
+        const mode = getWeatherMode();
+        const ipBtn = document.getElementById('weather-mode-ip');
+        const fixedBtn = document.getElementById('weather-mode-fixed');
+        if (ipBtn && fixedBtn) {
+            ipBtn.classList.toggle('active', mode === 'ip');
+            fixedBtn.classList.toggle('active', mode === 'fixed');
+        }
+    }
+
+    // 切换到IP定位模式
+    async function switchToIPMode() {
+        setWeatherMode('ip');
+        localStorage.removeItem(WEATHER_CACHE_KEY);
+        document.getElementById('weather-mini').innerHTML = '<span class="weather-loading">定位中...</span>';
+        await loadWeatherByIP();
+    }
+
     // 初始化天气
     async function initWeather() {
+        updateWeatherModeUI();
+        const mode = getWeatherMode();
+
+        // 如果是默认城市模式，优先使用默认城市
+        if (mode === 'fixed') {
+            const fixedCity = getFixedCity();
+            if (fixedCity) {
+                // 检查缓存是否有效
+                const cache = getWeatherCache();
+                if (cache && cache.location && cache.location.id === fixedCity.id && cache.now && cache.forecast) {
+                    currentWeatherLocation = cache.location;
+                    renderWeatherMini(cache.now, cache.location);
+                    renderWeatherModal(cache.now, cache.forecast, cache.location);
+                    return;
+                }
+                // 缓存无效，使用默认城市重新加载天气
+                currentWeatherLocation = fixedCity;
+                await loadWeatherData();
+                return;
+            }
+        }
+
+        // IP定位模式或没有设置默认城市
         const cache = getWeatherCache();
         if (cache && cache.location && cache.now && cache.forecast) {
             currentWeatherLocation = cache.location;
@@ -4374,6 +4480,9 @@ const HTML_CONTENT = `
         document.getElementById('weather-search-results').classList.remove('show');
         document.getElementById('weather-city-input').value = '';
         document.getElementById('weather-mini').innerHTML = '<span class="weather-loading">加载中...</span>';
+        // 保存为默认城市并切换模式
+        setFixedCity(currentWeatherLocation);
+        setWeatherMode('fixed');
         localStorage.removeItem(WEATHER_CACHE_KEY);
         await loadWeatherData();
     }
@@ -4401,6 +4510,10 @@ const HTML_CONTENT = `
             <div class="weather-search">
                 <input type="text" id="weather-city-input" placeholder="🔍 搜索城市..." oninput="searchWeatherCity(this.value)">
                 <div class="weather-search-results" id="weather-search-results"></div>
+            </div>
+            <div class="weather-mode-switch">
+                <button class="weather-mode-btn" id="weather-mode-ip" onclick="switchToIPMode()">🌐 IP自动定位</button>
+                <button class="weather-mode-btn" id="weather-mode-fixed">📍 默认城市</button>
             </div>
             <div class="weather-current" id="weather-current">
                 <div class="weather-current-icon">--</div>
