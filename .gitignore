@@ -3,6 +3,8 @@ workers.bak
 workers.js功能增强修改计划.md
 .cunzhi-memory/
 .claude/
+wrangler.toml
+.wrangler/
 
 # 本地历史文件
 history/20240917-20241026.js
@@ -25,6 +27,7 @@ desktop.ini
 *.temp
 *.log
 *.zip
+nul
 
 # Node.js (如果将来需要)
 node_modules/
