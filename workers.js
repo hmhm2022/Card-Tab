@@ -1953,7 +1953,7 @@ const HTML_CONTENT = `
 
 <body>
     <div class="fixed-elements">
-        <h3>我的导航<span class="weather-mini" id="weather-mini" onclick="openWeatherModal()"><span class="weather-loading">加载中...</span></span></h3>
+        <h3><span class="weather-mini" id="weather-mini" onclick="openWeatherModal()"><span class="weather-loading">加载中...</span></span></h3>
         <div class="center-content">
             <!-- 一言模块 -->
             <p id="hitokoto">
@@ -4292,9 +4292,9 @@ const HTML_CONTENT = `
     function renderWeatherMini(now, location) {
         const icon = WEATHER_ICONS[now.icon] || '❓';
         document.getElementById('weather-mini').innerHTML =
+            '<span class="weather-city">' + location.name + '</span>' +
             '<span class="weather-icon">' + icon + '</span>' +
-            '<span class="weather-temp">' + now.temp + '°</span>' +
-            '<span class="weather-city">' + location.name + '</span>';
+            '<span class="weather-temp">' + now.temp + '°</span>';
     }
 
     // 渲染天气弹窗
