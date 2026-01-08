@@ -1362,6 +1362,24 @@ const HTML_CONTENT = `
     .weather-forecast-temp .high { color: #e74c3c; }
     .weather-forecast-temp .low { color: #3498db; }
 
+    /* 天气未配置状态 */
+    .weather-not-configured {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+        font-size: 14px;
+    }
+    .weather-search input:disabled {
+        background: #f5f5f5;
+        cursor: not-allowed;
+        color: #999;
+    }
+    body.dark-theme .weather-not-configured { color: #666; }
+    body.dark-theme .weather-search input:disabled {
+        background: #2a2e38;
+        color: #666;
+    }
+
     /* 天气弹窗暗色主题 */
     body.dark-theme .weather-modal-content { background: #1e2128; }
     body.dark-theme .weather-modal-header { border-bottom-color: #333; }
@@ -4226,13 +4244,12 @@ const HTML_CONTENT = `
     }
 
     // ========== 天气组件 ==========
-    const WEATHER_API_KEY = '8bc2cd24dc914a63a81929657f780bd8';
-    const WEATHER_API = 'https://devapi.qweather.com/v7';
-    const WEATHER_GEO_API = 'https://geoapi.qweather.com/v2';
+    const WEATHER_API = '/api/weather';  // 后端代理
     const WEATHER_CACHE_KEY = 'card_tab_weather_cache';
     const WEATHER_CACHE_DURATION = 30 * 60 * 1000; // 30分钟
     const WEATHER_MODE_KEY = 'card_tab_weather_mode'; // 定位模式：ip 或 fixed
     const WEATHER_FIXED_CITY_KEY = 'card_tab_weather_fixed_city'; // 默认城市信息
+    let weatherNotConfigured = false; // 天气服务是否未配置
 
     // 天气图标映射
     const WEATHER_ICONS = {
@@ -4358,8 +4375,16 @@ const HTML_CONTENT = `
             const cityName = ipData.city || ipData.region;
             console.log('城市名称:', cityName);
 
-            const geoRes = await fetch(WEATHER_GEO_API + '/city/lookup?location=' + encodeURIComponent(cityName) + '&key=' + WEATHER_API_KEY + '&number=1');
+            const geoRes = await fetch(WEATHER_API + '/geo?location=' + encodeURIComponent(cityName) + '&number=1');
             console.log('城市查询响应状态:', geoRes.status);
+
+            // 检查是否未配置天气服务
+            if (geoRes.status === 503) {
+                weatherNotConfigured = true;
+                renderWeatherNotConfigured(cityName);
+                return;
+            }
+
             const geoData = await geoRes.json();
             console.log('城市查询数据:', geoData);
             if (geoData.code !== '200' || !geoData.location || !geoData.location.length) throw new Error('城市查询失败');
@@ -4378,9 +4403,17 @@ const HTML_CONTENT = `
         if (!currentWeatherLocation) return;
         try {
             const [nowRes, forecastRes] = await Promise.all([
-                fetch(WEATHER_API + '/weather/now?location=' + currentWeatherLocation.id + '&key=' + WEATHER_API_KEY),
-                fetch(WEATHER_API + '/weather/3d?location=' + currentWeatherLocation.id + '&key=' + WEATHER_API_KEY)
+                fetch(WEATHER_API + '/now?location=' + currentWeatherLocation.id),
+                fetch(WEATHER_API + '/3d?location=' + currentWeatherLocation.id)
             ]);
+
+            // 检查是否未配置天气服务
+            if (nowRes.status === 503 || forecastRes.status === 503) {
+                weatherNotConfigured = true;
+                renderWeatherNotConfigured(currentWeatherLocation.name);
+                return;
+            }
+
             const nowData = await nowRes.json();
             const forecastData = await forecastRes.json();
 
@@ -4391,6 +4424,23 @@ const HTML_CONTENT = `
             renderWeatherModal(nowData.now, forecastData.daily, currentWeatherLocation);
         } catch (e) {
             console.warn('天气数据加载失败:', e);
+        }
+    }
+
+    // 渲染未配置天气服务的状态
+    function renderWeatherNotConfigured(cityName) {
+        // 迷你天气：城市 + --°
+        document.getElementById('weather-mini').innerHTML =
+            '<span class="weather-city">' + (cityName || '--') + '</span>' +
+            '<span class="weather-temp">--°</span>';
+        // 弹窗内容
+        document.getElementById('weather-current').innerHTML =
+            '<div class="weather-not-configured">未配置天气 Api Key</div>';
+        // 禁用搜索框
+        const searchInput = document.getElementById('weather-city-input');
+        if (searchInput) {
+            searchInput.disabled = true;
+            searchInput.placeholder = '天气服务未启用';
         }
     }
 
@@ -4441,13 +4491,14 @@ const HTML_CONTENT = `
 
     // 城市搜索
     async function searchWeatherCity(query) {
+        if (weatherNotConfigured) return; // 未配置时禁用搜索
         if (weatherSearchTimer) clearTimeout(weatherSearchTimer);
         const resultsEl = document.getElementById('weather-search-results');
         if (query.length < 1) { resultsEl.classList.remove('show'); return; }
 
         weatherSearchTimer = setTimeout(async function() {
             try {
-                const res = await fetch(WEATHER_GEO_API + '/city/lookup?location=' + encodeURIComponent(query) + '&key=' + WEATHER_API_KEY + '&number=8');
+                const res = await fetch(WEATHER_API + '/geo?location=' + encodeURIComponent(query) + '&number=8');
                 const data = await res.json();
                 if (data.code !== '200' || !data.location || !data.location.length) {
                     resultsEl.innerHTML = '<div class="weather-search-item"><div class="weather-search-item-name">未找到城市</div></div>';
@@ -4652,6 +4703,59 @@ export default {
         return new Response(HTML_CONTENT, {
           headers: { 'Content-Type': 'text/html' }
         });
+      }
+
+      // ========== 天气代理 API ==========
+      if (url.pathname === '/api/weather/now') {
+        if (!env.WEATHER_API_KEY) {
+          return new Response(JSON.stringify({ code: '503', error: 'weather_not_configured' }), {
+            status: 503, headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        const location = url.searchParams.get('location');
+        if (!location) {
+          return new Response(JSON.stringify({ code: '400', error: 'missing location' }), {
+            status: 400, headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        const res = await fetch(`https://devapi.qweather.com/v7/weather/now?location=${location}&key=${env.WEATHER_API_KEY}`);
+        const data = await res.json();
+        return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+      }
+
+      if (url.pathname === '/api/weather/3d') {
+        if (!env.WEATHER_API_KEY) {
+          return new Response(JSON.stringify({ code: '503', error: 'weather_not_configured' }), {
+            status: 503, headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        const location = url.searchParams.get('location');
+        if (!location) {
+          return new Response(JSON.stringify({ code: '400', error: 'missing location' }), {
+            status: 400, headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        const res = await fetch(`https://devapi.qweather.com/v7/weather/3d?location=${location}&key=${env.WEATHER_API_KEY}`);
+        const data = await res.json();
+        return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+      }
+
+      if (url.pathname === '/api/weather/geo') {
+        if (!env.WEATHER_API_KEY) {
+          return new Response(JSON.stringify({ code: '503', error: 'weather_not_configured' }), {
+            status: 503, headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        const location = url.searchParams.get('location');
+        const number = url.searchParams.get('number') || '8';
+        if (!location) {
+          return new Response(JSON.stringify({ code: '400', error: 'missing location' }), {
+            status: 400, headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        const res = await fetch(`https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}&number=${number}`);
+        const data = await res.json();
+        return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
       }
 
       if (url.pathname === '/api/getLinks') {
