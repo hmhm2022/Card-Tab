@@ -23,6 +23,11 @@ const HTML_CONTENT = `
         color: #e3e3e3;
     }
 
+    body.archive-theme {
+        background-color: #f4e7bf;
+        color: #2f2a1f;
+    }
+
     /* 固定元素样式 */
     .fixed-elements {
         position: fixed;
@@ -33,13 +38,18 @@ const HTML_CONTENT = `
         z-index: 1000;
         padding: 10px;
         transition: all 0.3s ease;
-        height: 150px;
+        height: 110px;
         box-shadow: none; /* 移除阴影 */
     }
 
     body.dark-theme .fixed-elements {
         background-color: #121418; /* 与暗色主题背景完全一致 */
         box-shadow: none; /* 移除阴影 */
+    }
+
+    body.archive-theme .fixed-elements {
+        background-color: #f4e7bf;
+        box-shadow: none;
     }
 
     /* 分类快捷按钮容器样式移至搜索栏内 */
@@ -68,6 +78,12 @@ const HTML_CONTENT = `
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
+    body.archive-theme .category-button {
+        background-color: #fff9e8;
+        color: #7a5419;
+        box-shadow: 0 2px 4px rgba(91, 63, 26, 0.12);
+    }
+
     .category-button:hover {
         background-color: #43b883;
         color: white;
@@ -91,6 +107,13 @@ const HTML_CONTENT = `
         color: white;
     }
 
+    body.archive-theme .category-button:hover,
+    body.archive-theme .category-button.active {
+        background-color: #b7791f;
+        color: #fff9e8;
+        border-bottom-color: #7a5419;
+    }
+
     /* 分类按钮悬停样式 */
 
     .fixed-elements h3 {
@@ -107,36 +130,6 @@ const HTML_CONTENT = `
 
     body.dark-theme .fixed-elements h3 {
         color: #e3e3e3;
-    }
-
-    /* 一言模块样式 */
-    #hitokoto {
-        margin: 5px 0 15px;
-        font-size: 14px;
-        color: #888;
-        font-style: italic;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-    }
-
-    #hitokoto a {
-        color: #43b883;
-        text-decoration: none;
-        transition: all 0.3s ease;
-    }
-
-    #hitokoto a:hover {
-        color: #35a674;
-    }
-
-    body.dark-theme #hitokoto {
-        color: #a0a0a0;
-    }
-
-    body.dark-theme #hitokoto a {
-        color: #5d7fb9;
     }
 
     /* 中心内容样式 */
@@ -623,10 +616,12 @@ const HTML_CONTENT = `
     .remove-btn { order: 2; }
     .category-btn { order: 3; }
     .remove-category-btn { order: 4; }
+    .export-btn { order: 5; }
+    .import-btn { order: 6; }
 
     /* 主要内容区域样式 */
     .content {
-        margin-top: 170px;
+        margin-top: 125px;
         padding: 10px;
         max-width: 1600px;
         margin-left: auto;
@@ -636,114 +631,6 @@ const HTML_CONTENT = `
 
     .loading .content {
         opacity: 0.6;
-    }
-
-    /* 搜索栏样式 */
-    .search-container {
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
-    .search-bar {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 10px;
-        width: 100%;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e0e0e0;
-        transition: all 0.3s ease;
-    }
-
-    .search-bar:focus-within {
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-        border-color: #43b883;
-    }
-
-    .search-bar select {
-        border: none;
-        background-color: #f4f7fa;
-        padding: 10px 15px;
-        font-size: 14px;
-        color: #43b883;
-        width: 120px;
-        outline: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6" viewBox="0 0 12 6"><path fill="%2343b883" d="M0 0l6 6 6-6z"/></svg>');
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border-radius: 0;
-    }
-
-    /* 下拉菜单样式 */
-    select option {
-        background-color: #fff;
-        color: #333;
-        padding: 10px;
-        font-size: 14px;
-        white-space: nowrap;
-        overflow: visible;
-    }
-
-    /* 暗色主题搜索栏样式 */
-    body.dark-theme .search-bar {
-        border-color: #323642;
-        background-color: #1e2128;
-    }
-
-    body.dark-theme .search-bar select {
-        background-color: #252830;
-        color: #5d7fb9;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6" viewBox="0 0 12 6"><path fill="%235d7fb9" d="M0 0l6 6 6-6z"/></svg>');
-    }
-
-    body.dark-theme .search-bar input {
-        background-color: #252830;
-        color: #e3e3e3;
-    }
-
-    body.dark-theme .search-bar button {
-        background-color: #5d7fb9;
-    }
-
-    body.dark-theme select option {
-        background-color: #252830;
-        color: #e3e3e3;
-        white-space: nowrap;
-        overflow: visible;
-    }
-
-    .search-bar input {
-        flex: 1;
-        border: none;
-        padding: 10px 15px;
-        font-size: 14px;
-        background-color: #fff;
-        outline: none;
-    }
-
-    .search-bar button {
-        border: none;
-        background-color: #43b883;
-        color: white;
-        padding: 0 20px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .search-bar button:hover {
-        background-color: #35a674;
     }
 
     /* 分类按钮容器样式 - 移至固定元素区域内 */
@@ -897,10 +784,26 @@ const HTML_CONTENT = `
         transition: all 0.3s ease;
     }
 
-    #dialog-box input:focus, #dialog-box select:focus {
+    #dialog-box input:focus,
+    #dialog-box select:focus,
+    #dialog-box textarea:focus {
         border-color: #43b883;
         box-shadow: 0 0 0 2px rgba(67, 184, 131, 0.2);
         outline: none;
+    }
+
+    #dialog-box textarea {
+        width: 100%;
+        min-height: 76px;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.5;
     }
 
     #dialog-box label {
@@ -940,7 +843,8 @@ const HTML_CONTENT = `
     }
 
     body.dark-theme #dialog-box input,
-    body.dark-theme #dialog-box select {
+    body.dark-theme #dialog-box select,
+    body.dark-theme #dialog-box textarea {
         background-color: #323642;
         color: #e3e3e3;
         border-color: #444;
@@ -1034,6 +938,12 @@ const HTML_CONTENT = `
         max-width: 1600px;
     }
 
+    .card-container.drop-target {
+        outline: 2px dashed #b7791f;
+        outline-offset: 6px;
+        border-radius: 8px;
+    }
+
     .card {
         background-color: white;
         border-radius: 8px;
@@ -1055,6 +965,12 @@ const HTML_CONTENT = `
         background-color: #1e2128; /* 卡片背景 */
         border-left-color: #5d7fb9;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    body.archive-theme .card {
+        background-color: #fff9e8;
+        border-left-color: #b7791f;
+        box-shadow: 0 3px 10px rgba(91, 63, 26, 0.12);
     }
 
     @keyframes fadeIn {
@@ -1104,6 +1020,14 @@ const HTML_CONTENT = `
 
     body.dark-theme .card-url {
         color: #a0a0a0;
+    }
+
+    body.archive-theme .card-title {
+        color: #2f2a1f;
+    }
+
+    body.archive-theme .card-url {
+        color: #766b58;
     }
 
     .private-tag {
@@ -1182,242 +1106,18 @@ const HTML_CONTENT = `
         background-color: #5d7fb9;
     }
 
-    /* ========== 天气组件样式 ========== */
-    .weather-mini {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        background: rgba(67, 184, 131, 0.1);
-        border-radius: 16px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 13px;
-        margin-left: 12px;
-        vertical-align: middle;
-    }
-    .weather-mini:hover {
-        background: rgba(67, 184, 131, 0.2);
-        transform: translateY(-1px);
-    }
-    .weather-mini .weather-icon { font-size: 16px; }
-    .weather-mini .weather-temp { font-weight: 600; color: #333; }
-    .weather-mini .weather-city { color: #666; font-size: 12px; }
-    .weather-mini .weather-loading { color: #999; font-size: 12px; }
-
-    body.dark-theme .weather-mini {
-        background: rgba(93, 127, 185, 0.15);
-    }
-    body.dark-theme .weather-mini:hover {
-        background: rgba(93, 127, 185, 0.25);
-    }
-    body.dark-theme .weather-mini .weather-temp { color: #e3e3e3; }
-    body.dark-theme .weather-mini .weather-city { color: #aaa; }
-
-    /* 天气弹窗 */
-    .weather-modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.5);
-        z-index: 2000;
-        justify-content: center;
-        align-items: center;
-    }
-    .weather-modal.show { display: flex; }
-    .weather-modal-content {
-        background: #fff;
-        border-radius: 16px;
-        padding: 20px;
-        width: 90%;
-        max-width: 360px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        animation: weatherModalIn 0.25s ease;
-    }
-    @keyframes weatherModalIn {
-        from { opacity: 0; transform: scale(0.9) translateY(-20px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .weather-modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #eee;
-    }
-    .weather-modal-title { font-size: 16px; font-weight: 600; color: #333; }
-    .weather-modal-close {
-        background: none; border: none;
-        font-size: 20px; cursor: pointer;
-        color: #999; padding: 0; line-height: 1;
-    }
-    .weather-modal-close:hover { color: #333; }
-
-    /* 城市搜索 */
-    .weather-search {
-        position: relative;
-        margin-bottom: 16px;
-    }
-    .weather-search input {
-        width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 14px;
-        outline: none;
-        box-sizing: border-box;
-    }
-    .weather-search input:focus { border-color: #43b883; }
-    .weather-search-results {
-        position: absolute;
-        top: 100%;
-        left: 0; right: 0;
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        margin-top: 4px;
-        max-height: 200px;
-        overflow-y: auto;
-        display: none;
-        z-index: 10;
-    }
-    .weather-search-results.show { display: block; }
-    .weather-search-item {
-        padding: 10px 12px;
-        cursor: pointer;
-        border-bottom: 1px solid #eee;
-    }
-    .weather-search-item:last-child { border-bottom: none; }
-    .weather-search-item:hover { background: #f5f5f5; }
-    .weather-search-item-name { font-weight: 500; font-size: 14px; }
-    .weather-search-item-path { font-size: 12px; color: #999; margin-top: 2px; }
-
-    /* 定位模式切换 */
-    .weather-mode-switch {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 16px;
-    }
-    .weather-mode-btn {
-        flex: 1;
-        padding: 8px 12px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background: #fff;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-    }
-    .weather-mode-btn:hover { border-color: #43b883; }
-    .weather-mode-btn.active {
-        background: #43b883;
-        border-color: #43b883;
-        color: #fff;
-    }
-    body.dark-theme .weather-mode-btn {
-        background: #3a3a3a;
-        border-color: #555;
-        color: #e3e3e3;
-    }
-    body.dark-theme .weather-mode-btn:hover { border-color: #43b883; }
-    body.dark-theme .weather-mode-btn.active {
-        background: #43b883;
-        border-color: #43b883;
-        color: #fff;
-    }
-
-    /* 当前天气 */
-    .weather-current {
-        text-align: center;
-        padding: 16px 0;
-        border-bottom: 1px solid #eee;
-        margin-bottom: 16px;
-    }
-    .weather-current-icon { font-size: 48px; margin-bottom: 8px; }
-    .weather-current-temp { font-size: 36px; font-weight: 300; color: #333; }
-    .weather-current-desc { font-size: 16px; color: #666; margin: 4px 0; }
-    .weather-current-detail { font-size: 13px; color: #999; }
-
-    /* 天气预报 */
-    .weather-forecast {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-    }
-    .weather-forecast-item {
-        flex: 1;
-        text-align: center;
-        padding: 12px 8px;
-        background: #f8f9fa;
-        border-radius: 10px;
-    }
-    .weather-forecast-day { font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px; }
-    .weather-forecast-icon { font-size: 24px; margin: 6px 0; }
-    .weather-forecast-temp { font-size: 12px; color: #666; }
-    .weather-forecast-temp .high { color: #e74c3c; }
-    .weather-forecast-temp .low { color: #3498db; }
-
-    /* 天气未配置状态 */
-    .weather-not-configured {
-        text-align: center;
-        padding: 40px 20px;
-        color: #999;
-        font-size: 14px;
-    }
-    .weather-search input:disabled {
-        background: #f5f5f5;
-        cursor: not-allowed;
-        color: #999;
-    }
-    body.dark-theme .weather-not-configured { color: #666; }
-    body.dark-theme .weather-search input:disabled {
-        background: #2a2e38;
-        color: #666;
-    }
-
-    /* 天气弹窗暗色主题 */
-    body.dark-theme .weather-modal-content { background: #1e2128; }
-    body.dark-theme .weather-modal-header { border-bottom-color: #333; }
-    body.dark-theme .weather-modal-title { color: #e3e3e3; }
-    body.dark-theme .weather-modal-close { color: #888; }
-    body.dark-theme .weather-modal-close:hover { color: #e3e3e3; }
-    body.dark-theme .weather-search input { background: #2a2e38; border-color: #444; color: #e3e3e3; }
-    body.dark-theme .weather-search input:focus { border-color: #5d7fb9; }
-    body.dark-theme .weather-search-results { background: #2a2e38; border-color: #444; }
-    body.dark-theme .weather-search-item:hover { background: #333; }
-    body.dark-theme .weather-search-item { border-bottom-color: #444; }
-    body.dark-theme .weather-current { border-bottom-color: #333; }
-    body.dark-theme .weather-current-temp { color: #e3e3e3; }
-    body.dark-theme .weather-current-desc { color: #aaa; }
-    body.dark-theme .weather-forecast-item { background: #2a2e38; }
-    body.dark-theme .weather-forecast-day { color: #e3e3e3; }
-    body.dark-theme .weather-forecast-temp { color: #aaa; }
-
     /* 响应式设计 */
     @media (max-width: 480px) {
         .fixed-elements {
             position: fixed; /* 恢复固定定位，确保分类按钮位置正确 */
             padding: 8px 12px 5px 12px; /* 紧凑的内边距 */
             height: auto;
-            min-height: 140px; /* 增加最小高度，确保有足够空间 */
+            min-height: 110px; /* 保留分类按钮所需空间 */
             box-shadow: none; /* 移除阴影 */
         }
 
         body.dark-theme .fixed-elements {
             box-shadow: none; /* 移除阴影 */
-        }
-
-        /* 移动端一言样式调整 - 紧凑显示 */
-        #hitokoto {
-            margin: 3px 0 6px 0; /* 紧凑的上下边距 */
-            font-size: 12px; /* 减小字体 */
-            line-height: 1.3; /* 紧凑行高 */
-            padding: 0 8px; /* 左右内边距 */
         }
 
         .category-buttons-container {
@@ -1446,7 +1146,7 @@ const HTML_CONTENT = `
         }
 
         .content {
-            margin-top: 150px; /* 增加顶部边距，适配更高的固定元素 */
+            margin-top: 120px; /* 适配更紧凑的顶部区域 */
             margin-bottom: 100px; /* 为底部的分类按钮和版权信息留出空间 */
             padding: 15px; /* 保持内边距 */
             transition: opacity 0.3s ease;
@@ -1463,32 +1163,6 @@ const HTML_CONTENT = `
 
         .loading .content {
             opacity: 0.6;
-        }
-
-        /* 移动端搜索容器样式 */
-        .search-container {
-            margin-top: 15px; /* 增加上边距，与右上角按钮拉开距离 */
-        }
-
-        .search-bar {
-            flex-wrap: nowrap;
-            max-width: 320px; /* 限制移动端搜索栏宽度 */
-            width: 90%; /* 相对宽度 */
-            margin: 6px auto 8px auto; /* 居中显示 */
-        }
-
-        .search-bar select {
-            width: 80px; /* 缩小选择框宽度，参考佬友修改版 */
-            flex: 0 0 auto;
-            font-size: 12px; /* 减小字体以适应更小宽度 */
-        }
-
-        .search-bar input {
-            flex: 1;
-        }
-
-        .search-bar button {
-            flex: 0 0 auto;
         }
 
         .admin-controls input,
@@ -1963,6 +1637,46 @@ const HTML_CONTENT = `
         background: #e74c3c;
     }
 
+    .note-btn {
+        background: #b7791f;
+    }
+
+    .note-modal-content {
+        max-width: 560px;
+        width: min(92vw, 560px);
+    }
+
+    .private-note-meta {
+        margin-bottom: 12px;
+        color: #766b58;
+        font-size: 13px;
+        word-break: break-all;
+    }
+
+    .private-note-content {
+        min-height: 120px;
+        max-height: 45vh;
+        overflow: auto;
+        padding: 14px;
+        border: 1px solid #d8c28a;
+        border-radius: 6px;
+        background: #fff9e8;
+        color: #2f2a1f;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        user-select: text;
+    }
+
+    body.dark-theme .private-note-meta {
+        color: #9ba8bd;
+    }
+
+    body.dark-theme .private-note-content {
+        background: #1e2128;
+        color: #e3e3e3;
+        border-color: #3a4050;
+    }
+
     /* 自定义提示框样式 */
     #custom-tooltip {
         position: absolute;
@@ -2009,26 +1723,7 @@ const HTML_CONTENT = `
 
 <body>
     <div class="fixed-elements">
-        <h3><span class="weather-mini" id="weather-mini" onclick="openWeatherModal()"><span class="weather-loading">加载中...</span></span></h3>
         <div class="center-content">
-            <!-- 一言模块 -->
-            <p id="hitokoto">
-                <a href="#" id="hitokoto_text"></a>
-            </p>
-            <script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script>
-            <!-- 搜索栏 -->
-            <div class="search-container">
-                <div class="search-bar">
-                    <select id="search-engine-select">
-                        <option value="baidu">百度</option>
-                        <option value="bing">必应</option>
-                        <option value="google">谷歌</option>
-                        <option value="duckduckgo">DuckDuckGo</option>
-                    </select>
-                    <input type="text" id="search-input" placeholder="">
-                    <button id="search-button">🔍</button>
-                </div>
-            </div>
             <div id="category-buttons-container" class="category-buttons-container"></div>
         </div>
         <!-- 右上角控制区域 -->
@@ -2084,7 +1779,24 @@ const HTML_CONTENT = `
                     <path d="M24 21v3m0 8v3m4.8-12-2.1 2.1M20.8 31l-2.1 2.1M19 23l2.1 2.1M27 31l2.1 2.1M17 28h3M28 28h3" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
+
+            <button class="round-btn export-btn" onclick="exportJsonBackup()" title="导出JSON">
+                <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 8v20" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M15 19l9 9 9-9" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M10 36h28" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </button>
+
+            <button class="round-btn import-btn" onclick="triggerJsonImport()" title="导入JSON">
+                <svg viewBox="0 0 48 48" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 40V20" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M15 29l9-9 9 9" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M10 12h28" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </button>
         </div>
+        <input type="file" id="json-import-input" accept=".json,application/json" style="display: none;">
 
 
 
@@ -2108,8 +1820,10 @@ const HTML_CONTENT = `
                 <input type="text" id="url-input" placeholder="必填">
                 <label for="tips-input">描述</label>
                 <input type="text" id="tips-input" placeholder="可选">
+                <label for="private-note-input">私密备注</label>
+                <textarea id="private-note-input" placeholder="登录后可见，可选"></textarea>
                 <label for="icon-input">图标</label>
-                <input type="text" id="icon-input" placeholder="可选">
+                <input type="text" id="icon-input" placeholder="可选，留空自动获取">
                 <label for="category-select">选择分类</label>
                 <select id="category-select"></select>
                 <div class="private-link-container">
@@ -2156,6 +1870,19 @@ const HTML_CONTENT = `
             </div>
         </div>
 
+        <!-- 私密备注弹窗 -->
+        <div class="dialog-overlay top-z-index" id="note-modal" style="display: none;">
+            <div class="dialog-box note-modal-content">
+                <h3 class="dialog-title" id="note-modal-title">私密备注</h3>
+                <div class="private-note-meta" id="note-modal-url"></div>
+                <div class="private-note-content" id="note-modal-content"></div>
+                <div class="dialog-buttons">
+                    <button id="note-copy-btn" class="dialog-confirm-btn">复制</button>
+                    <button id="note-close-btn" class="dialog-cancel-btn">关闭</button>
+                </div>
+            </div>
+        </div>
+
         <!-- 分类名称输入对话框 -->
         <div class="dialog-overlay" id="category-dialog" style="display: none;">
             <div class="dialog-box">
@@ -2179,53 +1906,12 @@ const HTML_CONTENT = `
     <div id="custom-tooltip"></div>
 
     <script>
-    // 搜索引擎配置
-    const searchEngines = {
-        baidu: "https://www.baidu.com/s?wd=",
-        bing: "https://www.bing.com/search?q=",
-        google: "https://www.google.com/search?q=",
-        duckduckgo: "https://duckduckgo.com/?q="
-    };
-
-    let currentEngine = "baidu";
-
     // 日志记录函数
     function logAction(action, details) {
         const timestamp = new Date().toISOString();
         const logEntry = timestamp + ': ' + action + ' - ' + JSON.stringify(details);
         console.log(logEntry);
     }
-
-    // 设置当前搜索引擎
-    function setActiveEngine(engine) {
-        currentEngine = engine;
-        document.getElementById('search-engine-select').value = engine;
-        logAction('设置搜索引擎', { engine });
-    }
-
-    // 搜索引擎选择框变更事件
-    document.getElementById('search-engine-select').addEventListener('change', function() {
-        setActiveEngine(this.value);
-    });
-
-    // 搜索按钮点击事件
-    document.getElementById('search-button').addEventListener('click', () => {
-        const query = document.getElementById('search-input').value;
-        if (query) {
-            logAction('执行搜索', { engine: currentEngine, query });
-            window.open(searchEngines[currentEngine] + encodeURIComponent(query), '_blank');
-        }
-    });
-
-    // 搜索输入框回车事件
-    document.getElementById('search-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('search-button').click();
-        }
-    });
-
-    // 初始化搜索引擎
-    setActiveEngine(currentEngine);
 
     // 全局变量
     let publicLinks = [];
@@ -2236,6 +1922,8 @@ const HTML_CONTENT = `
     let isRemoveCategoryMode = false;
     let isEditCategoryMode = false;
     let isDarkTheme = false;
+    let currentTheme = localStorage.getItem('card_tab_theme') || 'light';
+    let currentCategoryView = 'all';
     let links = [];
     const categories = {};
 
@@ -2390,9 +2078,38 @@ const HTML_CONTENT = `
 
 
 
+    function normalizeCategoryView(category) {
+        return category && categories[category] ? category : 'all';
+    }
+
+    function readCategoryViewFromHash() {
+        const rawHash = decodeURIComponent((location.hash || '').replace(/^#/, ''));
+        return rawHash && rawHash.toLowerCase() !== 'all' ? rawHash : 'all';
+    }
+
+    function syncCategoryHash(category) {
+        const hashValue = category === 'all' ? 'all' : encodeURIComponent(category);
+        if (location.hash !== '#' + hashValue) {
+            history.replaceState(null, '', '#' + hashValue);
+        }
+    }
+
+    function setCategoryView(category, shouldSyncHash = true) {
+        currentCategoryView = normalizeCategoryView(category);
+        if (shouldSyncHash) {
+            syncCategoryHash(currentCategoryView);
+        }
+        renderSections();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        logAction('切换分类视图', { currentCategoryView });
+    }
+
+    function categoryHasVisibleLinks(category) {
+        return links.some(link => link.category === category && (!link.isPrivate || isLoggedIn));
+    }
+
     // 渲染分类快捷按钮
     function renderCategoryButtons() {
-        // 如果正在显示搜索结果，不重新渲染分类按钮
         if (isShowingSearchResults) {
             return;
         }
@@ -2400,118 +2117,38 @@ const HTML_CONTENT = `
         const buttonsContainer = document.getElementById('category-buttons-container');
         buttonsContainer.innerHTML = '';
 
-        // 只有当有分类时才显示按钮容器
-        if (Object.keys(categories).length > 0) {
-            // 获取页面上实际显示的分类顺序（只从sections-container中获取，不包括搜索结果）
-            const displayedCategories = [];
-            document.querySelectorAll('#sections-container .section-title').forEach(titleElement => {
-                displayedCategories.push(titleElement.textContent);
-            });
-
-            // 创建按钮并添加到容器
-            let visibleButtonsCount = 0;
-            displayedCategories.forEach(category => {
-                // 检查该分类是否有可见的链接
-                const visibleLinks = links.filter(function(link) {
-                    return link.category === category && (!link.isPrivate || isLoggedIn);
-                });
-
-                // 只为有可见链接的分类创建按钮
-                if (visibleLinks.length > 0) {
-                    const button = document.createElement('button');
-                    button.className = 'category-button';
-                    button.textContent = category;
-                    button.dataset.category = category;
-                    button.onclick = () => {
-                        // 如果正在显示搜索结果，先隐藏搜索结果
-                        if (isShowingSearchResults) {
-                            hideSearchResults();
-                        }
-
-                        // 清除所有按钮的active类
-                        document.querySelectorAll('.category-button').forEach(btn => {
-                            btn.classList.remove('active');
-                        });
-                        // 为当前点击的按钮添加active类
-                        button.classList.add('active');
-                        scrollToCategory(category);
-                    };
-
-                    buttonsContainer.appendChild(button);
-                    visibleButtonsCount++;
-                }
-            });
-
-            // 显示或隐藏按钮容器
-            if (visibleButtonsCount > 0) {
-                buttonsContainer.style.display = 'flex';
-            } else {
-                buttonsContainer.style.display = 'none';
-            }
-
-            // 初始时检测当前可见分类并设置相应按钮为活跃状态
-            setTimeout(setActiveCategoryButtonByVisibility, 100);
-        } else {
+        const categoryNames = Object.keys(categories).filter(categoryHasVisibleLinks);
+        if (categoryNames.length === 0) {
             buttonsContainer.style.display = 'none';
-        }
-    }
-
-    // 根据可见性设置活跃的分类按钮
-    function setActiveCategoryButtonByVisibility() {
-        // 如果正在显示搜索结果，不更新分类按钮的活跃状态
-        if (isShowingSearchResults) {
             return;
         }
 
-        // 获取所有分类区域
-        const sections = document.querySelectorAll('.section');
-        if (!sections.length) return;
+        const allButton = document.createElement('button');
+        allButton.className = 'category-button';
+        allButton.textContent = 'All';
+        allButton.dataset.category = 'all';
+        allButton.classList.toggle('active', currentCategoryView === 'all');
+        allButton.onclick = () => {
+            if (isShowingSearchResults) hideSearchResults();
+            setCategoryView('all');
+        };
+        buttonsContainer.appendChild(allButton);
 
-        // 获取视窗高度
-        const viewportHeight = window.innerHeight;
-        // 考虑固定元素的高度
-        const fixedElementsHeight = 170;
-        // 计算视窗中心点
-        const viewportCenter = viewportHeight / 2 + fixedElementsHeight;
-
-        // 找出最接近视窗中心的分类
-        let closestSection = null;
-        let closestDistance = Infinity;
-
-        sections.forEach(section => {
-            const rect = section.getBoundingClientRect();
-            // 计算分类区域的中心点
-            const sectionCenter = rect.top + rect.height / 2;
-            // 计算到视窗中心的距离
-            const distance = Math.abs(sectionCenter - viewportCenter);
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestSection = section;
-            }
+        categoryNames.forEach(category => {
+            const button = document.createElement('button');
+            button.className = 'category-button';
+            button.textContent = category;
+            button.dataset.category = category;
+            button.classList.toggle('active', currentCategoryView === category);
+            button.onclick = () => {
+                if (isShowingSearchResults) hideSearchResults();
+                setCategoryView(category);
+            };
+            buttonsContainer.appendChild(button);
         });
 
-        if (closestSection) {
-            const cardContainer = closestSection.querySelector('.card-container');
-            if (cardContainer && cardContainer.id) {
-                const categoryId = cardContainer.id;
-                const buttons = document.querySelectorAll('.category-button');
-
-                // 移除所有活跃状态
-                buttons.forEach(btn => btn.classList.remove('active'));
-
-                // 为匹配的分类按钮添加活跃状态
-                buttons.forEach(btn => {
-                    if (btn.dataset.category === categoryId) {
-                        btn.classList.add('active');
-                    }
-                });
-            }
-        }
+        buttonsContainer.style.display = 'flex';
     }
-
-    // 添加滚动事件监听器，滚动时更新活跃的分类按钮
-    window.addEventListener('scroll', debounce(setActiveCategoryButtonByVisibility, 100));
 
     // 防抖函数，避免过多的滚动事件处理
     function debounce(func, wait) {
@@ -2638,7 +2275,16 @@ const HTML_CONTENT = `
         const container = document.getElementById('sections-container');
         container.innerHTML = '';
 
-        Object.keys(categories).forEach(category => {
+        if (currentCategoryView !== 'all' && !categories[currentCategoryView]) {
+            currentCategoryView = 'all';
+            syncCategoryHash(currentCategoryView);
+        }
+
+        const categoriesToRender = currentCategoryView === 'all'
+            ? Object.keys(categories)
+            : [currentCategoryView];
+
+        categoriesToRender.forEach(category => {
             const section = document.createElement('div');
             section.className = 'section';
 
@@ -2706,6 +2352,7 @@ const HTML_CONTENT = `
 
         // 渲染分类快捷按钮
         renderCategoryButtons();
+        setupDropContainers();
 
         logAction('渲染分类和链接', { isAdmin: isAdmin, linkCount: links.length, categoryCount: Object.keys(categories).length });
     }
@@ -2781,6 +2428,49 @@ const HTML_CONTENT = `
         }
     }
 
+    function findDuplicateLink(normalizedUrl, excludedUrl = '') {
+        const normalizedExcludedUrl = excludedUrl ? normalizeUrl(excludedUrl) : '';
+        return [...publicLinks, ...privateLinks].find(link => {
+            const currentUrl = normalizeUrl(link.url);
+            return currentUrl === normalizedUrl && currentUrl !== normalizedExcludedUrl;
+        });
+    }
+
+    async function resolveAutoFaviconUrl(targetUrl) {
+        const parsedUrl = new URL(targetUrl);
+        const fallbackUrl = parsedUrl.origin + '/favicon.ico';
+
+        try {
+            const response = await fetch(parsedUrl.toString());
+
+            if (!response.ok) {
+                return fallbackUrl;
+            }
+
+            const html = await response.text();
+            const iconPatterns = [
+                /<link[^>]+rel=["'][^"']*icon[^"']*["'][^>]*href=["']([^"']+)["']/i,
+                /<link[^>]+rel=["'][^"']*shortcut icon[^"']*["'][^>]*href=["']([^"']+)["']/i,
+                /<link[^>]+rel=["'][^"']*apple-touch-icon[^"']*["'][^>]*href=["']([^"']+)["']/i
+            ];
+
+            for (const pattern of iconPatterns) {
+                const match = html.match(pattern);
+                if (match && match[1]) {
+                    try {
+                        return new URL(match[1], parsedUrl.origin).href;
+                    } catch {
+                        continue;
+                    }
+                }
+            }
+        } catch {
+            // 忽略解析失败，使用默认 favicon 地址
+        }
+
+        return fallbackUrl;
+    }
+
     // 创建卡片
     function createCard(link, container) {
         const card = document.createElement('div');
@@ -2806,14 +2496,14 @@ const HTML_CONTENT = `
         const icon = document.createElement('img');
         icon.className = 'card-icon';
 
-        // 使用自定义图标或回退到favicon提取服务
+        // 使用自定义图标或回退到站点自己的 favicon
         icon.src = (
             !link.icon ||
             typeof link.icon !== 'string' ||
             !link.icon.trim() ||
             !isValidUrl(link.icon)
         )
-            ? 'https://www.faviconextractor.com/favicon/' + extractDomain(link.url)
+            ? '/api/favicon?url=' + encodeURIComponent(link.url)
             : link.icon;
 
         icon.alt = 'Website Icon';
@@ -2889,6 +2579,24 @@ const HTML_CONTENT = `
             removeCard(card);
         };
 
+        const noteBtn = document.createElement('button');
+        noteBtn.className = 'card-btn note-btn';
+        noteBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>' +
+            '<line x1="8" y1="9" x2="16" y2="9"></line>' +
+            '<line x1="8" y1="13" x2="14" y2="13"></line>' +
+            '</svg>';
+        noteBtn.title = '查看私密备注';
+        noteBtn.onclick = function(event) {
+            event.stopPropagation();
+            showNoteModal(link);
+        };
+
+        if (isLoggedIn && link.privateNote && link.privateNote.trim()) {
+            noteBtn.style.display = 'flex';
+        }
+
+        cardActions.appendChild(noteBtn);
         cardActions.appendChild(editBtn);
         cardActions.appendChild(deleteBtn);
         card.appendChild(cardActions);
@@ -2974,6 +2682,7 @@ const HTML_CONTENT = `
         const name = document.getElementById('name-input').value.trim();
         const url = document.getElementById('url-input').value.trim();
         const tips = document.getElementById('tips-input').value.trim();
+        const privateNote = document.getElementById('private-note-input').value.trim();
         const icon = document.getElementById('icon-input').value.trim();
         const category = document.getElementById('category-select').value;
         const isPrivate = document.getElementById('private-checkbox').checked;
@@ -3002,16 +2711,18 @@ const HTML_CONTENT = `
         const normalizedUrl = normalizeUrl(url);
         const allLinks = [...publicLinks, ...privateLinks];
         // 预处理：一次性规范化所有 URL（性能优化）
-        const existingUrls = new Set(allLinks.map(link => normalizeUrl(link.url)));
+        const duplicateLink = findDuplicateLink(normalizedUrl);
 
-        if (existingUrls.has(normalizedUrl)) {
-            await customAlert('该URL已存在，请勿重复添加', '添加卡片');
-            document.getElementById('url-input').focus();
-            return;
+        if (duplicateLink) {
+            const confirmed = await customConfirm('该URL已存在于「' + duplicateLink.category + '」，仍然添加到当前分类吗？', '仍然添加', '取消');
+            if (!confirmed) {
+                document.getElementById('url-input').focus();
+                return;
+            }
         }
 
         // 存储规范化后的 URL
-        const newLink = { name, url: normalizedUrl, tips, icon, category, isPrivate };
+        const newLink = { name, url: normalizedUrl, tips, privateNote, icon, category, isPrivate };
 
         if (isPrivate) {
             privateLinks.push(newLink);
@@ -3037,6 +2748,7 @@ const HTML_CONTENT = `
         document.getElementById('name-input').value = '';
         document.getElementById('url-input').value = '';
         document.getElementById('tips-input').value = '';
+        document.getElementById('private-note-input').value = '';
         document.getElementById('icon-input').value = '';
         document.getElementById('private-checkbox').checked = false;
         hideAddDialog();
@@ -3193,6 +2905,9 @@ const HTML_CONTENT = `
 
         document.removeEventListener('touchmove', touchMove);
         document.removeEventListener('touchend', touchEnd);
+        document.querySelectorAll('.drop-target').forEach(container => {
+            container.classList.remove('drop-target');
+        });
 
         touchStartX = null;
         touchStartY = null;
@@ -3205,6 +2920,7 @@ const HTML_CONTENT = `
             return;
         }
         event.preventDefault();
+        event.stopPropagation();
 
         const card = draggedCard;
         const targetCategory = event.target.closest('.card-container').id;
@@ -3225,6 +2941,52 @@ const HTML_CONTENT = `
             draggedCard.classList.remove('dragging');
             logAction('拖拽卡片结束');
         }
+    }
+
+    function containerDragOver(event) {
+        if (!isAdmin || !draggedCard) return;
+        event.preventDefault();
+        const container = event.currentTarget;
+        container.classList.add('drop-target');
+        const targetCard = event.target.closest('.card');
+        if (!targetCard || targetCard === draggedCard) {
+            container.appendChild(draggedCard);
+        }
+    }
+
+    function containerDragLeave(event) {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+            event.currentTarget.classList.remove('drop-target');
+        }
+    }
+
+    function containerDrop(event) {
+        if (!isAdmin || !draggedCard) return;
+        event.preventDefault();
+        event.stopPropagation();
+
+        const container = event.currentTarget;
+        const card = draggedCard;
+        const targetCategory = container.id;
+        container.classList.remove('drop-target');
+
+        validateToken().then(isValid => {
+            if (isValid && card) {
+                updateCardCategory(card, targetCategory);
+                saveCardOrder().catch(error => {
+                    console.error('Save failed:', error);
+                });
+            }
+            cleanupDragState();
+        });
+    }
+
+    function setupDropContainers() {
+        document.querySelectorAll('.card-container').forEach(container => {
+            container.addEventListener('dragover', containerDragOver);
+            container.addEventListener('dragleave', containerDragLeave);
+            container.addEventListener('drop', containerDrop);
+        });
     }
 
     // 更新卡片分类
@@ -3275,12 +3037,14 @@ const HTML_CONTENT = `
                 const isPrivate = card.dataset.isPrivate === 'true';
                 card.dataset.category = category;
 
-                // 从原始链接数据中获取描述和图标信息
                 const originalLink = links.find(link => link.url === url);
-                const tips = originalLink?.tips || '';
-                const icon = originalLink?.icon || '';
-
-                const link = { name, url, tips, icon, category, isPrivate };
+                const link = {
+                    ...originalLink,
+                    name,
+                    url,
+                    category,
+                    isPrivate
+                };
                 if (isPrivate) {
                     newPrivateLinks.push(link);
                 } else {
@@ -3408,7 +3172,7 @@ const HTML_CONTENT = `
             loginBtn.textContent = '退出登录';
             adminBtn.style.display = 'inline-block';
             if (isAdmin) {
-                adminBtn.textContent = '离开设置';
+                adminBtn.textContent = '退出设置';
             } else {
                 adminBtn.textContent = '设置';
             }
@@ -3420,8 +3184,197 @@ const HTML_CONTENT = `
 
     // 打开GitHub仓库
     function openGitHub() {
-        window.open('https://github.com/hmhm2022/Card-Tab', '_blank');
+        window.open('https://github.com/shake/Card-Tab', '_blank');
         logAction('访问GitHub仓库');
+    }
+
+    function formatJsonExportDate(date = new Date()) {
+        const pad = (value) => String(value).padStart(2, '0');
+        return [
+            date.getFullYear(),
+            pad(date.getMonth() + 1),
+            pad(date.getDate())
+        ].join('-');
+    }
+
+    function buildJsonBackupPayload() {
+        return {
+            version: 1,
+            exportedAt: new Date().toISOString(),
+            userId: 'testUser',
+            links: [...publicLinks, ...privateLinks],
+            categories: categories
+        };
+    }
+
+    function normalizeImportedLink(link) {
+        if (!link || typeof link !== 'object') {
+            return null;
+        }
+
+        const normalizedUrl = normalizeUrl(link.url || '');
+        const normalizedName = typeof link.name === 'string' ? link.name.trim() : '';
+        const normalizedCategory = typeof link.category === 'string' ? link.category.trim() : '';
+
+        if (!normalizedName || !normalizedUrl || !normalizedCategory) {
+            return null;
+        }
+
+        return {
+            name: normalizedName,
+            url: normalizedUrl,
+            tips: typeof link.tips === 'string' ? link.tips : '',
+            privateNote: typeof link.privateNote === 'string' ? link.privateNote : '',
+            icon: typeof link.icon === 'string' ? link.icon : '',
+            category: normalizedCategory,
+            isPrivate: Boolean(link.isPrivate)
+        };
+    }
+
+    function normalizeImportedCategories(rawCategories, links) {
+        const normalizedCategories = {};
+
+        if (rawCategories && typeof rawCategories === 'object' && !Array.isArray(rawCategories)) {
+            Object.keys(rawCategories).forEach(category => {
+                if (typeof category !== 'string' || !category.trim()) {
+                    return;
+                }
+                normalizedCategories[category] = [];
+            });
+        }
+
+        links.forEach(link => {
+            if (!normalizedCategories[link.category]) {
+                normalizedCategories[link.category] = [];
+            }
+            normalizedCategories[link.category].push(link);
+        });
+
+        return normalizedCategories;
+    }
+
+    function normalizeImportedBackup(data) {
+        if (!data || typeof data !== 'object') {
+            return null;
+        }
+
+        const rawLinks = Array.isArray(data.links)
+            ? data.links
+            : [
+                ...(Array.isArray(data.publicLinks) ? data.publicLinks : []),
+                ...(Array.isArray(data.privateLinks) ? data.privateLinks : [])
+            ];
+        const normalizedLinks = rawLinks.map(normalizeImportedLink).filter(Boolean);
+        const normalizedCategories = normalizeImportedCategories(data.categories, normalizedLinks);
+
+        if (!normalizedLinks.length && Object.keys(normalizedCategories).length === 0) {
+            return null;
+        }
+
+        return {
+            links: normalizedLinks,
+            categories: normalizedCategories
+        };
+    }
+
+    async function exportJsonBackup() {
+        if (!await validateToken()) {
+            return;
+        }
+
+        const payload = buildJsonBackupPayload();
+        const fileName = 'Card-Tab-' + formatJsonExportDate() + '.json';
+        const blob = new Blob([JSON.stringify(payload, null, 2)], {
+            type: 'application/json;charset=utf-8'
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+
+        logAction('导出JSON', {
+            fileName,
+            linkCount: payload.links.length,
+            categoryCount: Object.keys(payload.categories).length
+        });
+        await customAlert('JSON 已导出', '导出完成');
+    }
+
+    function triggerJsonImport() {
+        if (!isLoggedIn) {
+            return;
+        }
+
+        const input = document.getElementById('json-import-input');
+        input.value = '';
+        input.click();
+    }
+
+    async function handleJsonImport(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+            return;
+        }
+
+        if (!await validateToken()) {
+            return;
+        }
+
+        let parsed;
+        try {
+            parsed = JSON.parse(await file.text());
+        } catch (error) {
+            await customAlert('JSON 文件格式不正确，请检查后再导入。', '导入失败');
+            return;
+        }
+
+        const normalized = normalizeImportedBackup(parsed);
+        if (!normalized) {
+            await customAlert('这个 JSON 里没有可恢复的书签数据。', '导入失败');
+            return;
+        }
+
+        const confirmed = await customConfirm('导入会覆盖当前全部数据，确定继续吗？', '确定导入', '取消');
+        if (!confirmed) {
+            return;
+        }
+
+        showLoading('正在导入 JSON...');
+        try {
+            const response = await fetch('/api/saveOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('authToken')
+                },
+                body: JSON.stringify({
+                    userId: 'testUser',
+                    links: normalized.links,
+                    categories: normalized.categories
+                }),
+            });
+
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error('保存失败');
+            }
+
+            await reloadCardsAsAdmin();
+            logAction('导入JSON', {
+                fileName: file.name,
+                linkCount: normalized.links.length,
+                categoryCount: Object.keys(normalized.categories).length
+            });
+            hideLoading();
+            await customAlert('JSON 已导入并覆盖当前数据。', '导入完成');
+        } catch (error) {
+            hideLoading();
+            await customAlert('导入失败，请确认 JSON 内容后重试。', '导入失败');
+        }
     }
 
     // 切换书签搜索下拉框
@@ -3453,6 +3406,8 @@ const HTML_CONTENT = `
             performLogin();
         }
     });
+
+    document.getElementById('json-import-input').addEventListener('change', handleJsonImport);
 
     // 切换设置状态
     async function toggleAdminMode() {
@@ -3498,6 +3453,8 @@ const HTML_CONTENT = `
 
             try {
                 isAdmin = true;
+                currentCategoryView = 'all';
+                syncCategoryHash(currentCategoryView);
                 addRemoveControls.style.display = 'flex';
                 await reloadCardsAsAdmin();
                 logAction('进入设置');
@@ -3520,7 +3477,7 @@ const HTML_CONTENT = `
 
             addRemoveControls.style.display = 'none';
             await reloadCardsAsAdmin();
-            logAction('离开设置');
+            logAction('退出设置');
             await customAlert('设置已保存', '设置完成');
         }
 
@@ -3530,11 +3487,25 @@ const HTML_CONTENT = `
 
 
 
+    function applyTheme(theme) {
+        currentTheme = ['light', 'archive', 'dark'].includes(theme) ? theme : 'light';
+        isDarkTheme = currentTheme === 'dark';
+        document.body.classList.toggle('dark-theme', currentTheme === 'dark');
+        document.body.classList.toggle('archive-theme', currentTheme === 'archive');
+        localStorage.setItem('card_tab_theme', currentTheme);
+
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.textContent = currentTheme === 'dark' ? '☾' : currentTheme === 'archive' ? 'A' : '◑';
+            themeToggle.title = currentTheme === 'archive' ? 'Archive Yellow' : currentTheme === 'dark' ? '暗色主题' : '浅色主题';
+        }
+
+        logAction('应用主题', { currentTheme });
+    }
+
     // 应用暗色主题
     function applyDarkTheme() {
-        document.body.classList.add('dark-theme');
-        isDarkTheme = true;
-        logAction('应用暗色主题');
+        applyTheme('dark');
     }
 
     // 全局变量用于管理对话框事件处理器
@@ -3548,6 +3519,7 @@ const HTML_CONTENT = `
         document.getElementById('name-input').value = link.name;
         document.getElementById('url-input').value = link.url;
         document.getElementById('tips-input').value = link.tips || '';
+        document.getElementById('private-note-input').value = link.privateNote || '';
         document.getElementById('icon-input').value = link.icon || '';
         document.getElementById('category-select').value = link.category;
         document.getElementById('private-checkbox').checked = link.isPrivate;
@@ -3592,6 +3564,7 @@ const HTML_CONTENT = `
         nameInput.value = '';
         document.getElementById('url-input').value = '';
         document.getElementById('tips-input').value = '';
+        document.getElementById('private-note-input').value = '';
         document.getElementById('icon-input').value = '';
         document.getElementById('private-checkbox').checked = false;
 
@@ -3638,6 +3611,7 @@ const HTML_CONTENT = `
         const name = document.getElementById('name-input').value.trim();
         const url = document.getElementById('url-input').value.trim();
         const tips = document.getElementById('tips-input').value.trim();
+        const privateNote = document.getElementById('private-note-input').value.trim();
         const icon = document.getElementById('icon-input').value.trim();
         const category = document.getElementById('category-select').value;
         const isPrivate = document.getElementById('private-checkbox').checked;
@@ -3680,7 +3654,7 @@ const HTML_CONTENT = `
         }
 
         // 存储规范化后的 URL
-        const updatedLink = { name, url: normalizedUrl, tips, icon, category, isPrivate };
+        const updatedLink = { ...oldLink, name, url: normalizedUrl, tips, privateNote, icon, category, isPrivate };
 
         try {
             // 替换旧链接
@@ -3761,16 +3735,9 @@ const HTML_CONTENT = `
 
     // 切换主题
     function toggleTheme() {
-        isDarkTheme = !isDarkTheme;
-
-        // 添加或移除暗色主题类
-        if (isDarkTheme) {
-            document.body.classList.add('dark-theme');
-        } else {
-            document.body.classList.remove('dark-theme');
-        }
-
-        logAction('切换主题', { isDarkTheme });
+        const themes = ['light', 'archive', 'dark'];
+        const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+        applyTheme(nextTheme);
     }
 
     // 返回顶部
@@ -3971,11 +3938,11 @@ const HTML_CONTENT = `
     // 初始化加载
     document.addEventListener('DOMContentLoaded', async () => {
         try {
+            applyTheme(currentTheme);
             await validateToken();
             updateLoginButton();
+            currentCategoryView = readCategoryViewFromHash();
             await loadLinks();
-            // 初始加载完成后，检测当前可见分类
-            setTimeout(setActiveCategoryButtonByVisibility, 500);
             // 初始化返回顶部按钮状态
             setTimeout(handleBackToTopVisibility, 100);
         } catch (error) {
@@ -3986,6 +3953,9 @@ const HTML_CONTENT = `
 
     // 添加滚动事件监听器
     window.addEventListener('scroll', handleBackToTopVisibility);
+    window.addEventListener('hashchange', () => {
+        setCategoryView(readCategoryViewFromHash(), false);
+    });
 
 
     // 前端检查是否有 token
@@ -4170,6 +4140,46 @@ const HTML_CONTENT = `
         });
     }
 
+    function showNoteModal(link) {
+        const overlay = document.getElementById('note-modal');
+        document.getElementById('note-modal-title').textContent = link.name || '私密备注';
+        document.getElementById('note-modal-url').textContent = link.url || '';
+        document.getElementById('note-modal-content').textContent = link.privateNote || '';
+        document.getElementById('note-copy-btn').textContent = '复制';
+        overlay.style.display = 'flex';
+    }
+
+    function hideNoteModal() {
+        document.getElementById('note-modal').style.display = 'none';
+    }
+
+    async function copyPrivateNote() {
+        const content = document.getElementById('note-modal-content');
+        const copyBtn = document.getElementById('note-copy-btn');
+        const text = content.textContent || '';
+        if (!text) return;
+
+        try {
+            await navigator.clipboard.writeText(text);
+            copyBtn.textContent = '已复制';
+            setTimeout(() => { copyBtn.textContent = '复制'; }, 1200);
+        } catch (error) {
+            const range = document.createRange();
+            range.selectNodeContents(content);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            copyBtn.textContent = '已选中';
+            setTimeout(() => { copyBtn.textContent = '复制'; }, 1200);
+        }
+    }
+
+    document.getElementById('note-copy-btn').addEventListener('click', copyPrivateNote);
+    document.getElementById('note-close-btn').addEventListener('click', hideNoteModal);
+    document.getElementById('note-modal').addEventListener('click', (event) => {
+        if (event.target.id === 'note-modal') hideNoteModal();
+    });
+
     // 分类名称输入对话框
     function showCategoryDialog(title, defaultValue = '') {
         return new Promise((resolve) => {
@@ -4243,346 +4253,51 @@ const HTML_CONTENT = `
         mask.style.display = 'none';
     }
 
-    // ========== 天气组件 ==========
-    const WEATHER_API = '/api/weather';  // 后端代理
-    const WEATHER_CACHE_KEY = 'card_tab_weather_cache';
-    const WEATHER_CACHE_DURATION = 30 * 60 * 1000; // 30分钟
-    const WEATHER_MODE_KEY = 'card_tab_weather_mode'; // 定位模式：ip 或 fixed
-    const WEATHER_FIXED_CITY_KEY = 'card_tab_weather_fixed_city'; // 默认城市信息
-    let weatherNotConfigured = false; // 天气服务是否未配置
-
-    // 天气图标映射
-    const WEATHER_ICONS = {
-        '100': '☀️', '150': '🌙', '101': '⛅', '102': '⛅', '103': '🌥️', '104': '☁️',
-        '151': '🌙', '152': '🌙', '153': '🌙', '154': '☁️',
-        '300': '🌦️', '301': '🌧️', '302': '⛈️', '303': '⛈️', '304': '⛈️',
-        '305': '🌧️', '306': '🌧️', '307': '🌧️', '308': '🌧️', '309': '🌧️',
-        '310': '🌧️', '311': '🌧️', '312': '🌧️', '313': '🌧️',
-        '400': '🌨️', '401': '🌨️', '402': '🌨️', '403': '🌨️', '404': '🌨️',
-        '500': '🌫️', '501': '🌫️', '502': '🌫️', '503': '🌫️', '504': '🌫️',
-        '999': '❓'
-    };
-    const WEEKDAYS = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-
-    let currentWeatherLocation = null;
-    let weatherSearchTimer = null;
-
-    // 获取定位模式
-    function getWeatherMode() {
-        return localStorage.getItem(WEATHER_MODE_KEY) || 'ip';
-    }
-
-    // 设置定位模式
-    function setWeatherMode(mode) {
-        localStorage.setItem(WEATHER_MODE_KEY, mode);
-        updateWeatherModeUI();
-    }
-
-    // 获取默认城市
-    function getFixedCity() {
-        try {
-            const data = localStorage.getItem(WEATHER_FIXED_CITY_KEY);
-            return data ? JSON.parse(data) : null;
-        } catch (e) { return null; }
-    }
-
-    // 设置默认城市
-    function setFixedCity(location) {
-        localStorage.setItem(WEATHER_FIXED_CITY_KEY, JSON.stringify(location));
-    }
-
-    // 更新模式切换UI
-    function updateWeatherModeUI() {
-        const mode = getWeatherMode();
-        const ipBtn = document.getElementById('weather-mode-ip');
-        const fixedBtn = document.getElementById('weather-mode-fixed');
-        if (ipBtn && fixedBtn) {
-            ipBtn.classList.toggle('active', mode === 'ip');
-            fixedBtn.classList.toggle('active', mode === 'fixed');
-        }
-    }
-
-    // 切换到IP定位模式
-    async function switchToIPMode() {
-        setWeatherMode('ip');
-        localStorage.removeItem(WEATHER_CACHE_KEY);
-        document.getElementById('weather-mini').innerHTML = '<span class="weather-loading">定位中...</span>';
-        await loadWeatherByIP();
-    }
-
-    // 初始化天气
-    async function initWeather() {
-        updateWeatherModeUI();
-        const mode = getWeatherMode();
-
-        // 如果是默认城市模式，优先使用默认城市
-        if (mode === 'fixed') {
-            const fixedCity = getFixedCity();
-            if (fixedCity) {
-                // 检查缓存是否有效
-                const cache = getWeatherCache();
-                if (cache && cache.location && cache.location.id === fixedCity.id && cache.now && cache.forecast) {
-                    currentWeatherLocation = cache.location;
-                    renderWeatherMini(cache.now, cache.location);
-                    renderWeatherModal(cache.now, cache.forecast, cache.location);
-                    return;
-                }
-                // 缓存无效，使用默认城市重新加载天气
-                currentWeatherLocation = fixedCity;
-                await loadWeatherData();
-                return;
-            }
-        }
-
-        // IP定位模式或没有设置默认城市
-        const cache = getWeatherCache();
-        if (cache && cache.location && cache.now && cache.forecast) {
-            currentWeatherLocation = cache.location;
-            renderWeatherMini(cache.now, cache.location);
-            renderWeatherModal(cache.now, cache.forecast, cache.location);
-            return;
-        }
-        await loadWeatherByIP();
-    }
-
-    // 获取缓存
-    function getWeatherCache() {
-        try {
-            const data = localStorage.getItem(WEATHER_CACHE_KEY);
-            if (!data) return null;
-            const cache = JSON.parse(data);
-            if (Date.now() - cache.timestamp > WEATHER_CACHE_DURATION) return null;
-            return cache;
-        } catch (e) { return null; }
-    }
-
-    // 设置缓存
-    function setWeatherCache(location, now, forecast) {
-        localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({
-            location: location, now: now, forecast: forecast, timestamp: Date.now()
-        }));
-    }
-
-    // IP定位加载天气
-    async function loadWeatherByIP() {
-        try {
-            console.log('开始IP定位...');
-            const ipRes = await fetch('https://ipapi.co/json/');
-            console.log('IP定位响应状态:', ipRes.status);
-            if (!ipRes.ok) throw new Error('IP定位失败');
-            const ipData = await ipRes.json();
-            console.log('IP定位数据:', ipData);
-            const cityName = ipData.city || ipData.region;
-            console.log('城市名称:', cityName);
-
-            const geoRes = await fetch(WEATHER_API + '/geo?location=' + encodeURIComponent(cityName) + '&number=1');
-            console.log('城市查询响应状态:', geoRes.status);
-
-            // 检查是否未配置天气服务
-            if (geoRes.status === 503) {
-                weatherNotConfigured = true;
-                renderWeatherNotConfigured(cityName);
-                return;
-            }
-
-            const geoData = await geoRes.json();
-            console.log('城市查询数据:', geoData);
-            if (geoData.code !== '200' || !geoData.location || !geoData.location.length) throw new Error('城市查询失败');
-
-            currentWeatherLocation = geoData.location[0];
-            console.log('当前天气位置:', currentWeatherLocation);
-            await loadWeatherData();
-        } catch (e) {
-            console.error('天气加载失败详细错误:', e);
-            document.getElementById('weather-mini').innerHTML = '<span class="weather-loading" title="' + e.message + '">加载失败</span>';
-        }
-    }
-
-    // 加载天气数据
-    async function loadWeatherData() {
-        if (!currentWeatherLocation) return;
-        try {
-            const [nowRes, forecastRes] = await Promise.all([
-                fetch(WEATHER_API + '/now?location=' + currentWeatherLocation.id),
-                fetch(WEATHER_API + '/3d?location=' + currentWeatherLocation.id)
-            ]);
-
-            // 检查是否未配置天气服务
-            if (nowRes.status === 503 || forecastRes.status === 503) {
-                weatherNotConfigured = true;
-                renderWeatherNotConfigured(currentWeatherLocation.name);
-                return;
-            }
-
-            const nowData = await nowRes.json();
-            const forecastData = await forecastRes.json();
-
-            if (nowData.code !== '200' || forecastData.code !== '200') throw new Error('天气API错误');
-
-            setWeatherCache(currentWeatherLocation, nowData.now, forecastData.daily);
-            renderWeatherMini(nowData.now, currentWeatherLocation);
-            renderWeatherModal(nowData.now, forecastData.daily, currentWeatherLocation);
-        } catch (e) {
-            console.warn('天气数据加载失败:', e);
-        }
-    }
-
-    // 渲染未配置天气服务的状态
-    function renderWeatherNotConfigured(cityName) {
-        // 迷你天气：城市 + --°
-        document.getElementById('weather-mini').innerHTML =
-            '<span class="weather-city">' + (cityName || '--') + '</span>' +
-            '<span class="weather-temp">--°</span>';
-        // 弹窗内容
-        document.getElementById('weather-current').innerHTML =
-            '<div class="weather-not-configured">未配置天气 Api Key</div>';
-        // 禁用搜索框
-        const searchInput = document.getElementById('weather-city-input');
-        if (searchInput) {
-            searchInput.disabled = true;
-            searchInput.placeholder = '天气服务未启用';
-        }
-    }
-
-    // 渲染迷你天气
-    function renderWeatherMini(now, location) {
-        const icon = WEATHER_ICONS[now.icon] || '❓';
-        document.getElementById('weather-mini').innerHTML =
-            '<span class="weather-city">' + location.name + '</span>' +
-            '<span class="weather-icon">' + icon + '</span>' +
-            '<span class="weather-temp">' + now.temp + '°</span>';
-    }
-
-    // 渲染天气弹窗
-    function renderWeatherModal(now, forecast, location) {
-        const icon = WEATHER_ICONS[now.icon] || '❓';
-        document.getElementById('weather-current').innerHTML =
-            '<div class="weather-current-icon">' + icon + '</div>' +
-            '<div class="weather-current-temp">' + now.temp + '°C</div>' +
-            '<div class="weather-current-desc">' + location.name + ' · ' + now.text + '</div>' +
-            '<div class="weather-current-detail">体感' + now.feelsLike + '° 湿度' + now.humidity + '% ' + now.windDir + now.windScale + '级</div>';
-
-        let forecastHtml = '';
-        forecast.slice(0, 3).forEach(function(day, i) {
-            var date = new Date(day.fxDate);
-            var dayName = i === 0 ? '今天' : WEEKDAYS[date.getDay()];
-            var dayIcon = WEATHER_ICONS[day.iconDay] || '❓';
-            forecastHtml += '<div class="weather-forecast-item">' +
-                '<div class="weather-forecast-day">' + dayName + '</div>' +
-                '<div class="weather-forecast-icon">' + dayIcon + '</div>' +
-                '<div class="weather-forecast-temp"><span class="low">' + day.tempMin + '°</span>~<span class="high">' + day.tempMax + '°</span></div>' +
-            '</div>';
-        });
-        document.getElementById('weather-forecast').innerHTML = forecastHtml;
-    }
-
-    // 弹窗控制
-    function openWeatherModal() {
-        document.getElementById('weather-modal').classList.add('show');
-    }
-    function closeWeatherModal() {
-        document.getElementById('weather-modal').classList.remove('show');
-        document.getElementById('weather-search-results').classList.remove('show');
-        document.getElementById('weather-city-input').value = '';
-    }
-    function closeWeatherModalOutside(e) {
-        if (e.target.id === 'weather-modal') closeWeatherModal();
-    }
-
-    // 城市搜索
-    async function searchWeatherCity(query) {
-        if (weatherNotConfigured) return; // 未配置时禁用搜索
-        if (weatherSearchTimer) clearTimeout(weatherSearchTimer);
-        const resultsEl = document.getElementById('weather-search-results');
-        if (query.length < 1) { resultsEl.classList.remove('show'); return; }
-
-        weatherSearchTimer = setTimeout(async function() {
-            try {
-                const res = await fetch(WEATHER_API + '/geo?location=' + encodeURIComponent(query) + '&number=8');
-                const data = await res.json();
-                if (data.code !== '200' || !data.location || !data.location.length) {
-                    resultsEl.innerHTML = '<div class="weather-search-item"><div class="weather-search-item-name">未找到城市</div></div>';
-                } else {
-                    resultsEl.innerHTML = data.location.map(function(loc) {
-                        return '<div class="weather-search-item" data-loc-id="' + loc.id + '" data-loc-name="' + loc.name + '" data-loc-adm1="' + loc.adm1 + '" data-loc-adm2="' + loc.adm2 + '">' +
-                        '<div class="weather-search-item-name">' + loc.name + '</div>' +
-                        '<div class="weather-search-item-path">' + loc.adm1 + ' · ' + loc.adm2 + '</div></div>';
-                    }).join('');
-                    // 为搜索结果添加点击事件
-                    resultsEl.querySelectorAll('.weather-search-item').forEach(function(item) {
-                        item.onclick = function() {
-                            selectWeatherCity(
-                                item.getAttribute('data-loc-id'),
-                                item.getAttribute('data-loc-name'),
-                                item.getAttribute('data-loc-adm1'),
-                                item.getAttribute('data-loc-adm2')
-                            );
-                        };
-                    });
-                }
-                resultsEl.classList.add('show');
-            } catch (e) { resultsEl.innerHTML = '<div class="weather-search-item"><div class="weather-search-item-name">搜索失败</div></div>'; resultsEl.classList.add('show'); }
-        }, 300);
-    }
-
-    // 选择城市
-    async function selectWeatherCity(id, name, adm1, adm2) {
-        currentWeatherLocation = { id: id, name: name, adm1: adm1, adm2: adm2 };
-        document.getElementById('weather-search-results').classList.remove('show');
-        document.getElementById('weather-city-input').value = '';
-        document.getElementById('weather-mini').innerHTML = '<span class="weather-loading">加载中...</span>';
-        // 保存为默认城市并切换模式
-        setFixedCity(currentWeatherLocation);
-        setWeatherMode('fixed');
-        localStorage.removeItem(WEATHER_CACHE_KEY);
-        await loadWeatherData();
-    }
-
-    // 页面加载时初始化天气
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-            console.log('开始初始化天气组件...');
-            initWeather().catch(function(err) {
-                console.error('天气初始化失败:', err);
-                document.getElementById('weather-mini').innerHTML = '<span class="weather-loading">加载失败</span>';
-            });
-        }, 500); // 延迟加载，优先加载主内容
-    });
-
     </script>
 
-    <!-- 天气弹窗 -->
-    <div class="weather-modal" id="weather-modal" onclick="closeWeatherModalOutside(event)">
-        <div class="weather-modal-content" onclick="event.stopPropagation()">
-            <div class="weather-modal-header">
-                <span class="weather-modal-title">天气详情</span>
-                <button class="weather-modal-close" onclick="closeWeatherModal()">&times;</button>
-            </div>
-            <div class="weather-search">
-                <input type="text" id="weather-city-input" placeholder="🔍 搜索城市..." oninput="searchWeatherCity(this.value)">
-                <div class="weather-search-results" id="weather-search-results"></div>
-            </div>
-            <div class="weather-mode-switch">
-                <button class="weather-mode-btn" id="weather-mode-ip" onclick="switchToIPMode()">🌐 IP自动定位</button>
-                <button class="weather-mode-btn" id="weather-mode-fixed">📍 默认城市</button>
-            </div>
-            <div class="weather-current" id="weather-current">
-                <div class="weather-current-icon">--</div>
-                <div class="weather-current-temp">--°C</div>
-                <div class="weather-current-desc">--</div>
-                <div class="weather-current-detail">体感--° 湿度--% --</div>
-            </div>
-            <div class="weather-forecast" id="weather-forecast">
-                <div class="weather-forecast-item"><div class="weather-forecast-day">--</div><div class="weather-forecast-icon">--</div><div class="weather-forecast-temp">--</div></div>
-                <div class="weather-forecast-item"><div class="weather-forecast-day">--</div><div class="weather-forecast-icon">--</div><div class="weather-forecast-temp">--</div></div>
-                <div class="weather-forecast-item"><div class="weather-forecast-day">--</div><div class="weather-forecast-icon">--</div><div class="weather-forecast-temp">--</div></div>
-            </div>
-        </div>
-    </div>
 </body>
 
 </html>
 `;
+
+async function resolveAutoFaviconCandidates(targetUrl) {
+    const parsedUrl = new URL(targetUrl);
+    const candidates = [];
+
+    try {
+        const response = await fetch(parsedUrl.toString());
+
+        if (response.ok) {
+            const html = await response.text();
+            const iconPatterns = [
+            /<link[^>]+rel=["'][^"']*icon[^"']*["'][^>]*href=["']([^"']+)["']/i,
+            /<link[^>]+rel=["'][^"']*shortcut icon[^"']*["'][^>]*href=["']([^"']+)["']/i,
+            /<link[^>]+rel=["'][^"']*apple-touch-icon[^"']*["'][^>]*href=["']([^"']+)["']/i
+            ];
+
+            for (const pattern of iconPatterns) {
+                const match = html.match(pattern);
+                if (match && match[1]) {
+                    try {
+                        candidates.push(new URL(match[1], parsedUrl.origin).href);
+                    } catch {
+                        continue;
+                    }
+                }
+            }
+        }
+    } catch {
+        // 忽略解析失败，使用默认 favicon 地址
+    }
+
+    candidates.push(
+        parsedUrl.origin + '/favicon.ico',
+        'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(parsedUrl.hostname) + '&sz=64',
+        'https://icons.duckduckgo.com/ip3/' + encodeURIComponent(parsedUrl.hostname) + '.ico'
+    );
+
+    return candidates;
+}
 
 // 常量时间比较函数，防止时序攻击
 function constantTimeCompare(a, b) {
@@ -4695,6 +4410,11 @@ async function validateAdminToken(authToken, env) {
     };
 }
 
+function sanitizeLinkForPublic(link) {
+    const { privateNote, ...publicLink } = link;
+    return publicLink;
+}
+
 export default {
     async fetch(request, env) {
       const url = new URL(request.url);
@@ -4703,117 +4423,6 @@ export default {
         return new Response(HTML_CONTENT, {
           headers: { 'Content-Type': 'text/html' }
         });
-      }
-
-      // ========== 天气代理 API ==========
-      const normalizeBaseUrl = (raw) => {
-        const value = (raw || '').trim();
-        if (!value) return null;
-        const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
-        return withScheme.replace(/\/+$/, '');
-      };
-
-      // 公告说明：公共 API 域名将逐步停服，建议改用你的 API Host（形如：xxx.yyy.qweatherapi.com）
-      // - devapi.qweather.com 已于 2026-01-01 停止服务
-      // - GeoAPI 使用 API Host 时需从 /v2/... 变更为 /geo/v2/...
-      const qweatherHost = normalizeBaseUrl(env.WEATHER_API_HOST);
-      const qweatherApiBase = qweatherHost || 'https://api.qweather.com';
-      const qweatherGeoBase = qweatherHost ? `${qweatherApiBase}/geo` : 'https://geoapi.qweather.com';
-
-      const proxyQWeatherJson = async (targetUrl) => {
-        const redactedUrl = targetUrl.replace(/([?&]key=)[^&]*/i, '$1***');
-        let res;
-        try {
-          res = await fetch(targetUrl);
-        } catch (err) {
-          return new Response(JSON.stringify({
-            code: '502',
-            error: 'qweather_fetch_failed',
-            upstreamUrl: redactedUrl,
-            message: String(err)
-          }), { status: 502, headers: { 'Content-Type': 'application/json' } });
-        }
-
-        const contentType = res.headers.get('content-type') || '';
-        const text = await res.text();
-
-        if (!res.ok) {
-          return new Response(JSON.stringify({
-            code: String(res.status),
-            error: 'qweather_upstream_error',
-            upstreamStatus: res.status,
-            upstreamContentType: contentType,
-            upstreamUrl: redactedUrl,
-            upstreamBody: (text || '').slice(0, 800)
-          }), { status: 502, headers: { 'Content-Type': 'application/json' } });
-        }
-
-        try {
-          if (!text) throw new Error('empty response body');
-          const data = JSON.parse(text);
-          return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
-        } catch (err) {
-          return new Response(JSON.stringify({
-            code: '502',
-            error: 'qweather_invalid_json',
-            upstreamContentType: contentType,
-            upstreamUrl: redactedUrl,
-            upstreamBody: (text || '').slice(0, 800),
-            message: String(err)
-          }), { status: 502, headers: { 'Content-Type': 'application/json' } });
-        }
-      };
-
-      if (url.pathname === '/api/weather/now') {
-        if (!env.WEATHER_API_KEY) {
-          return new Response(JSON.stringify({ code: '503', error: 'weather_not_configured' }), {
-            status: 503, headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        const location = url.searchParams.get('location');
-        if (!location) {
-          return new Response(JSON.stringify({ code: '400', error: 'missing location' }), {
-            status: 400, headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        return await proxyQWeatherJson(
-          `${qweatherApiBase}/v7/weather/now?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}`
-        );
-      }
-
-      if (url.pathname === '/api/weather/3d') {
-        if (!env.WEATHER_API_KEY) {
-          return new Response(JSON.stringify({ code: '503', error: 'weather_not_configured' }), {
-            status: 503, headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        const location = url.searchParams.get('location');
-        if (!location) {
-          return new Response(JSON.stringify({ code: '400', error: 'missing location' }), {
-            status: 400, headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        return await proxyQWeatherJson(
-          `${qweatherApiBase}/v7/weather/3d?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}`
-        );
-      }
-
-      if (url.pathname === '/api/weather/geo') {
-        if (!env.WEATHER_API_KEY) {
-          return new Response(JSON.stringify({ code: '503', error: 'weather_not_configured' }), {
-            status: 503, headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        const location = url.searchParams.get('location');
-        const number = url.searchParams.get('number') || '8';
-        if (!location) {
-          return new Response(JSON.stringify({ code: '400', error: 'missing location' }), {
-            status: 400, headers: { 'Content-Type': 'application/json' }
-          });
-        }
-        return await proxyQWeatherJson(
-          `${qweatherGeoBase}/v2/city/lookup?location=${encodeURIComponent(location)}&key=${env.WEATHER_API_KEY}&number=${number}`
-        );
       }
 
       if (url.pathname === '/api/getLinks') {
@@ -4842,10 +4451,14 @@ export default {
             }
 
             // 未提供 token，只返回公开数据
-            const filteredLinks = parsedData.links.filter(link => !link.isPrivate);
+            const filteredLinks = parsedData.links
+                .filter(link => !link.isPrivate)
+                .map(sanitizeLinkForPublic);
             const filteredCategories = {};
             Object.keys(parsedData.categories).forEach(category => {
-                filteredCategories[category] = parsedData.categories[category].filter(link => !link.isPrivate);
+                filteredCategories[category] = parsedData.categories[category]
+                    .filter(link => !link.isPrivate)
+                    .map(sanitizeLinkForPublic);
             });
 
             return new Response(JSON.stringify({
@@ -4864,6 +4477,37 @@ export default {
             status: 200,
             headers: { 'Content-Type': 'application/json' }
         });
+      }
+
+      if (url.pathname === '/api/favicon') {
+        const targetUrl = url.searchParams.get('url');
+        if (!targetUrl) {
+          return new Response('Missing url', { status: 400 });
+        }
+
+        try {
+          const candidates = await resolveAutoFaviconCandidates(targetUrl);
+          for (const faviconUrl of candidates) {
+            try {
+              const upstream = await fetch(faviconUrl);
+              const contentType = upstream.headers.get('content-type') || '';
+              if (upstream.ok && contentType.startsWith('image/')) {
+                return new Response(upstream.body, {
+                  status: 200,
+                  headers: {
+                    'Content-Type': contentType,
+                    'Cache-Control': 'public, max-age=86400'
+                  }
+                });
+              }
+            } catch {
+              // Try the next candidate.
+            }
+          }
+          return new Response('Favicon unavailable', { status: 404 });
+        } catch {
+          return new Response('Favicon unavailable', { status: 404 });
+        }
       }
 
       if (url.pathname === '/api/saveOrder' && request.method === 'POST') {
